@@ -1,0 +1,26 @@
+{
+  "name": "@tadeo/ai-kit-cli",
+  "version": "1.0.0",
+  "description": "CLI for @tadeo/ai-starter-kit",
+  "type": "commonjs",
+  "bin": {
+    "ai-kit": "./dist/bin/ai-kit.js"
+  },
+  "main": "./dist/src/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tadeo/ai-kit-core": "workspace:*",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.5",
+    "typescript": "^5.4.5"
+  }
+}

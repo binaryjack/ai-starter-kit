@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quality-gates>
+  <checks>
+    <check id="qg-1">
+      <tool>tsc</tool>
+      <required>true</required>
+    </check>
+    <check id="qg-2">
+      <tool>eslint</tool>
+      <required>true</required>
+    </check>
+    <check id="qg-3">
+      <tool>jest</tool>
+      <required>true</required>
+    </check>
+  </checks>
+  <coverage>
+    <min>95</min>
+    <unit>percent</unit>
+  </coverage>
+  <performance>
+    <target>&lt;=10% solid-js</target>
+  </performance>
+  <reject>
+    <pattern>useImperativeHandle</pattern>
+    <pattern>class </pattern>
+    <pattern> any </pattern>
+    <pattern>camelCase</pattern>
+    <pattern>verbose</pattern>
+  </reject>
+</quality-gates>

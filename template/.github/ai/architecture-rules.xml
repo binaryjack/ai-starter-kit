@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<architecture-rules>
+  <naming>
+    <rule id="naming-1">kebab-case for all file names</rule>
+    <rule id="naming-2">one item per file</rule>
+    <rule id="naming-3">no camelCase in file names</rule>
+  </naming>
+  <structure>
+    <rule id="struct-1">types in *.types.ts</rule>
+    <rule id="struct-2">constructor in feature.ts</rule>
+    <rule id="struct-3">factory in create-feature.ts</rule>
+    <rule id="struct-4">exports in index.ts</rule>
+  </structure>
+  <react>
+    <rule id="react-1">declarative-only style</rule>
+    <rule id="react-2">class components forbidden</rule>
+    <rule id="react-3">no useImperativeHandle</rule>
+  </react>
+  <proto>
+    <rule id="proto-1">export const Name = function(...) { ... }</rule>
+    <rule id="proto-2">methods on prototype</rule>
+    <rule id="proto-3">non-enumerable properties via Object.defineProperty</rule>
+  </proto>
+  <types>
+    <rule id="type-1">no any</rule>
+    <rule id="type-2">strict union types</rule>
+  </types>
+</architecture-rules>
