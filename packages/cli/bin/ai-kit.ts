@@ -60,18 +60,22 @@ program
 program
   .command('agent:plan')
   .description('Run the interactive 5-phase Plan System (Discovery → Synthesize → Decompose → Wire → Execute)')
-  .option('-p, --project <path>',     'Project root directory (default: cwd)')
-  .option('-a, --agents-dir <path>',  'Directory containing agent/supervisor JSON files (default: <project>/agents)')
-  .option('--start-from <phase>',     'Resume from a specific phase: discover · synthesize · decompose · wire · execute')
-  .option('--skip-approval',          'Skip user approval gates (non-interactive / CI mode)')
-  .option('-v, --verbose',            'Enable verbose DAG output during execution phase')
+  .option('-p, --project <path>',           'Project root directory (default: cwd)')
+  .option('-a, --agents-dir <path>',        'Directory containing agent/supervisor JSON files (default: <project>/agents)')
+  .option('--start-from <phase>',           'Resume from a specific phase: discover · synthesize · decompose · wire · execute')
+  .option('--skip-approval',                'Skip user approval gates (non-interactive / CI mode)')
+  .option('-v, --verbose',                  'Enable verbose DAG output during execution phase')
+  .option('--provider <name>',              'LLM provider to use: anthropic · openai · vscode (auto-detect from env if omitted)')
+  .option('--model-router-config <path>',   'Path to a custom model-router.json config file')
   .action((options) =>
     runPlan({
-      project:      options.project,
-      agentsDir:    options.agentsDir,
-      startFrom:    options.startFrom,
-      skipApproval: options.skipApproval,
-      verbose:      options.verbose,
+      project:           options.project,
+      agentsDir:         options.agentsDir,
+      startFrom:         options.startFrom,
+      skipApproval:      options.skipApproval,
+      verbose:           options.verbose,
+      provider:          options.provider,
+      modelRouterConfig: options.modelRouterConfig,
     }),
   );
 
