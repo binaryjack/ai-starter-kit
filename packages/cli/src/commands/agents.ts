@@ -2,17 +2,29 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { workflowOrchestrator } from '@ai-agencee/ai-kit-agent-executor';
 
-export const runBreakdown = async (specFile: string): Promise<void> => {
+export const runBreakdown = async (input: string): Promise<void> => {
   try {
-    const specContent = await fs.readFile(specFile, 'utf-8');
+    // Check if input is a file path or a description
+    let specContent: string;
+    let featureName: string;
+
+    try {
+      // Try to read as file first
+      specContent = await fs.readFile(input, 'utf-8');
+      featureName = path.basename(input);
+    } catch {
+      // If file doesn't exist, treat as inline description
+      specContent = input;
+      featureName = input.substring(0, 50).replace(/[^a-z0-9]/gi, '-').toLowerCase();
+    }
 
     console.log('\n📋 Business Analyst Agent - Specification Breakdown\n');
     console.log('Processing specification...');
-    console.log(`File: ${specFile}`);
+    console.log(`Input: ${input}`);
     console.log(`Size: ${specContent.length} bytes\n`);
 
     const workflow = await workflowOrchestrator.createWorkflow(
-      path.basename(specFile),
+      featureName,
       specContent
     );
 
@@ -27,15 +39,27 @@ export const runBreakdown = async (specFile: string): Promise<void> => {
   }
 };
 
-export const runWorkflow = async (specFile: string): Promise<void> => {
+export const runWorkflow = async (input: string): Promise<void> => {
   try {
-    const specContent = await fs.readFile(specFile, 'utf-8');
+    // Check if input is a file path or a description
+    let specContent: string;
+    let featureName: string;
+
+    try {
+      // Try to read as file first
+      specContent = await fs.readFile(input, 'utf-8');
+      featureName = path.basename(input);
+    } catch {
+      // If file doesn't exist, treat as inline description
+      specContent = input;
+      featureName = input.substring(0, 50).replace(/[^a-z0-9]/gi, '-').toLowerCase();
+    }
 
     console.log('\n🚀 Full Workflow Orchestrator\n');
     console.log('Specification Breakdown → Architecture → Backend → Frontend → Testing → E2E\n');
 
     const workflow = await workflowOrchestrator.createWorkflow(
-      path.basename(specFile),
+      featureName,
       specContent
     );
 

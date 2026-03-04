@@ -497,6 +497,260 @@ Profiling → Bottleneck Analysis → Optimization → Benchmarking → Verifica
 
 ---
 
+## Example 4: Evaluate Your Codebase Architecture
+
+This is a practical example showing how to use the agent system to analyze and evaluate an existing codebase.
+
+### Phase 1: Business Analyst - Understand Project Context
+
+**Command:**
+```bash
+$ ai-kit agent:breakdown "Analyze the resume project monorepo structure, packages, and responsibilities"
+```
+
+**What it does:**
+- Reads your `package.json` and workspace configuration
+- Identifies all packages and their dependencies
+- Maps feature boundaries and responsibilities
+- Creates feature breakdown for architecture analysis
+
+**Sample context it gathers:**
+```
+Project: Resume Application Monorepo
+├── packages/
+│   ├── cvt (CV generation)
+│   ├── backend (API server)
+│   ├── frontend (React UI)
+│   └── ...
+└── Structure: pnpm workspace with shared configs
+```
+
+### Phase 2: Architecture Agent - Design Review
+
+**Command:**
+```bash
+$ ai-kit agent:workflow "Evaluate current architecture for the resume project"
+```
+
+**Checklist the architecture agent reviews:**
+- [ ] Package dependencies (circular deps, isolation)
+- [ ] TypeScript configuration consistency
+- [ ] Module boundaries and exports
+- [ ] Build optimization opportunities
+- [ ] Code organization patterns
+- [ ] Monorepo structure best practices
+
+**Output example:**
+```
+Architecture Analysis: Resume Project
+├── ✅ Good
+│   ├── Clean package isolation
+│   ├── Shared configs reduce duplication
+│   └── TypeScript strict mode enabled
+├── ⚠️  Review Points
+│   ├── Backend imports from frontend (bad pattern)
+│   ├── Missing barrel exports in utils
+│   └── Dev dependencies not isolated
+└── 🔴 Issues
+    └── Potential circular dependency: cvt ↔ backend
+```
+
+### Phase 3: Backend Agent - Technical Deep Dive
+
+**Command:**
+```bash
+$ ai-kit agent:workflow "Analyze backend API structure, endpoints, and data flow"
+```
+
+**What it evaluates:**
+- REST/GraphQL endpoint organization
+- Database connection pooling and query optimization
+- Middleware chain and request handling
+- Error handling consistency
+- Authentication/authorization patterns
+- Logging and observability
+
+**Generates report on:**
+```
+Backend Evaluation
+├── API Structure
+│   ├── Endpoints: 23 routes across 5 controllers
+│   ├── Middleware chain: 8 layers
+│   └── Response consistency: 85% (varies by endpoint)
+├── Data Access
+│   ├── ORM/Query builder: Prisma
+│   ├── Connection pool: 10-20 connections
+│   └── Query performance: Needs N+1 query audit
+└── Recommendations
+    ├── Add DataLoader for relation queries
+    ├── Implement request caching layer
+    └── Add metrics collection for slow queries
+```
+
+### Phase 4: Frontend Agent - UI/UX & Component Review
+
+**Command:**
+```bash
+$ ai-kit agent:workflow "Evaluate frontend component architecture and state management"
+```
+
+**Analyzes:**
+- Component hierarchy and composition patterns
+- State management approach (Redux, Context, Zustand)
+- Bundle size and code splitting
+- CSS/Styling consistency
+- Performance metrics (Lighthouse)
+- Accessibility compliance (WCAG)
+
+**Example findings:**
+```
+Frontend Evaluation
+├── Components
+│   ├── Total: 47 components
+│   ├── Reusable: 28 (60%)
+│   ├── Monolithic: 19 (40%)
+│   └── Recommendation: Extract 8 components for reuse
+├── State Management
+│   ├── Approach: Redux + Context (dual patterns - unify!)
+│   ├── Boilerplate: High, consider Redux Toolkit
+│   └── Performance: 2 unnecessary re-renders on page load
+└── Bundle
+    ├── Total: 450KB gzipped
+    ├── Target: 300KB (30KB reduction possible)
+    └── Opportunity: Remove unused libraries from dependencies
+```
+
+### Phase 5: Testing Agent - Coverage & Quality Review
+
+**Command:**
+```bash
+$ ai-kit agent:workflow "Audit test coverage, quality, and suggest improvements"
+```
+
+**Evaluates:**
+- Unit test coverage % for each package
+- Integration test strategy
+- E2E test coverage
+- Test quality (mutation testing)
+- CI/CD pipeline effectiveness
+
+**Report:**
+```
+Testing Audit
+├── Coverage
+│   ├── Backend: 72% (needs +15% for ULTRA_HIGH)
+│   ├── Frontend: 45% (critical components only)
+│   ├── Utils: 95% (excellent)
+│   └── Overall: 62%
+├── Quality Issues
+│   ├── Mocked tests: 40% (too many mocks)
+│   ├── Flaky tests: 2 identified (timing issues)
+│   └── Missing coverage: Edge cases, error paths
+└── Recommendations
+    ├── Add integration tests for API routes
+    ├── Increase component integration tests
+    └── Fix flaky tests before deploying
+```
+
+### Phase 6: E2E Agent - User Journey Validation
+
+**Command:**
+```bash
+$ ai-kit agent:workflow "Create and validate critical user journeys"
+```
+
+**Validates:**
+- Critical user flows work end-to-end
+- Performance under realistic conditions
+- Error recovery paths
+- Data persistence across features
+
+**Journey examples to test:**
+```
+E2E Workflows to Validate
+├── User Registration → CV Upload → Resume Download
+├── CV Template Selection → PDF Generation → Email
+├── Authentication → Dashboard Load → Data Export
+├── Error Recovery (network timeout, invalid input)
+└── Performance (large file upload, pagination)
+```
+
+### Phase 7: Supervisor Agent - Final Approval & Recommendations
+
+**Command:**
+```bash
+$ ai-kit agent:workflow --status
+```
+
+**Supervisor reviews:**
+- ✅ All agents completed their analysis
+- 📊 Aggregates findings across all domains
+- 🎯 Prioritizes recommendations
+- 📋 Creates actionable improvement plan
+
+**Consolidated Report:**
+```
+ARCHITECTURE EVALUATION SUMMARY
+├── 🟢 Strengths (Keep doing)
+│   ├── Monorepo structure is clean
+│   ├── Build times are fast
+│   └── TypeScript coverage is comprehensive
+├── 🟡 Improvements (Next sprint)
+│   ├── [P0] Fix circular dependencies
+│   ├── [P1] Increase test coverage to 80%
+│   ├── [P2] Reduce frontend bundle by 150KB
+│   └── [P3] Add API rate limiting
+└── 🔴 Critical (Do immediately)
+    ├── [URGENT] Security: Update vulnerable deps
+    └── [URGENT] Performance: Fix N+1 queries in backend
+```
+
+### Running the Complete Workflow
+
+```bash
+# Run all agents in sequence with supervisor approval gates:
+$ ai-kit agent:workflow "Complete architecture evaluation"
+
+# This will:
+# 1. Start with Business Analyst
+# 2. Feed output to Architecture Agent
+# 3. Branch to: Backend, Frontend, Testing agents (parallel)
+# 4. Route results to E2E agent
+# 5. Consolidate with Supervisor
+# 6. Save .agents/codebase-evaluation/ for reference
+
+# Check status anytime:
+$ ai-kit agent:status
+
+# View results:
+$ cat .agents/codebase-evaluation/results/supervisor-summary.json
+```
+
+### Integration with Your Workflow
+
+**In your CV/Resume project:**
+
+```bash
+# 1. Clone your project (if not already done)
+cd /path/to/resume-project
+
+# 2. Install the agents
+pnpm add -D @ai-agencee/ai-kit-cli @ai-agencee/ai-kit-mcp
+
+# 3. Run architecture analysis
+pnpm ai-kit agent:breakdown "Evaluate our monorepo"
+
+# 4. Use in Claude (MCP server)
+# Start the MCP server in one terminal:
+node node_modules/@ai-agencee/ai-kit-mcp/dist/index.js
+
+# 5. In Claude conversation:
+# "Use @agent-workflow to analyze my project architecture"
+# Claude will call the MCP tool and run the analysis
+```
+
+---
+
 That's it! You now have comprehensive examples of how to use the multi-agent orchestration system.
 
 For more information, see:
