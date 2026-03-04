@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@ai-agencee/ai-kit-core": "^1.1.0",
+    "@ai-agencee/ai-kit-agent-executor": "file:../agent-executor",
     "@modelcontextprotocol/sdk": "^0.7.0"
   },
   "devDependencies": {
