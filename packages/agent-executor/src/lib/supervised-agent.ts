@@ -1,12 +1,11 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import { AgentDefinition, CheckDefinition } from './agent-types.js';
-import { AgentResult } from './types.js';
+import { AgentDefinition, AgentResult, CheckDefinition } from './agent-types.js';
 import {
-  CheckpointMode,
-  CheckpointPayload,
-  ContractSnapshot,
-  SupervisorVerdict,
+    CheckpointMode,
+    CheckpointPayload,
+    ContractSnapshot,
+    SupervisorVerdict,
 } from './dag-types.js';
 
 // ─── Internal check runner (mirrors agent-chain.ts; kept local to avoid coupling) ──

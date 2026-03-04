@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
-import { runInit } from '../src/commands/init.js';
-import { runSync } from '../src/commands/sync.js';
+import { runDag } from '../src/commands/agents.js';
 import { runCheck } from '../src/commands/check.js';
+import { runInit } from '../src/commands/init.js';
 import { runMcp } from '../src/commands/mcp.js';
-import { runBreakdown, runWorkflow, runValidate, runStatus, runDag } from '../src/commands/agents.js';
+import { runSync } from '../src/commands/sync.js';
 
 const program = new Command();
 
@@ -35,26 +35,6 @@ program
   .action(runMcp);
 
 // Agent commands
-program
-  .command('agent:breakdown <spec-file>')
-  .description('Break down specification using Business Analyst agent')
-  .action(runBreakdown);
-
-program
-  .command('agent:workflow <spec-file>')
-  .description('Run full workflow: BA → Architecture → Backend → Frontend → Testing → E2E')
-  .action(runWorkflow);
-
-program
-  .command('agent:validate <output-file>')
-  .description('Validate output against ULTRA_HIGH standards using Supervisor agent')
-  .action(runValidate);
-
-program
-  .command('agent:status <session-id>')
-  .description('Check workflow status')
-  .action(runStatus);
-
 program
   .command('agent:dag [dag-file]')
   .description('Run multi-lane supervised DAG execution (default: agents/dag.json)')

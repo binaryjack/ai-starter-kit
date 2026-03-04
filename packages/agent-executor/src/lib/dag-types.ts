@@ -7,12 +7,12 @@
  *   contract-registry.ts  ← dag-types
  *   barrier-coordinator.ts ← dag-types + contract-registry
  *   intra-supervisor.ts   ← dag-types
- *   supervised-agent.ts   ← dag-types + agent-chain
+ *   supervised-agent.ts   ← dag-types + agent-types
  *   lane-executor.ts      ← all of the above
  *   dag-orchestrator.ts   ← lane-executor + contract-registry
  */
 
-import { AgentResult } from './types.js';
+import { AgentResult } from './agent-types.js';
 
 // ─── Verdict System ───────────────────────────────────────────────────────────
 

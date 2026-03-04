@@ -1,13 +1,13 @@
 import * as fs from 'fs/promises';
+import { AgentResult } from './agent-types.js';
 import {
-  SupervisorVerdict,
-  SupervisorConfig,
-  SupervisorCheckpointRule,
-  ExpectRules,
-  BarrierResolution,
-  VerdictType,
+    BarrierResolution,
+    ExpectRules,
+    SupervisorCheckpointRule,
+    SupervisorConfig,
+    SupervisorVerdict,
+    VerdictType,
 } from './dag-types.js';
-import { AgentResult } from './types.js';
 
 // ─── IntraSupervisor ──────────────────────────────────────────────────────────
 
@@ -125,6 +125,14 @@ export class IntraSupervisor {
 
   get retryBudget(): number {
     return this.config.retryBudget;
+  }
+
+  /**
+   * Return the checkpoint rule for a given checkpointId, or undefined if no rule exists.
+   * Used by LaneExecutor to drive the BarrierCoordinator with the correct mode/waitFor.
+   */
+  getRuleFor(checkpointId: string): SupervisorCheckpointRule | undefined {
+    return this.config.checkpoints.find((c) => c.checkpointId === checkpointId);
   }
 
   // ─── Expect Rule Evaluators ───────────────────────────────────────────────

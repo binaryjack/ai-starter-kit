@@ -1,20 +1,20 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import {
-  LaneDefinition,
-  LaneResult,
-  CheckpointRecord,
-  CheckpointPayload,
-  SupervisorVerdict,
-  BarrierResolution,
-  ContractSnapshot,
-  ContractExports,
-} from './dag-types.js';
-import { AgentResult } from './types.js';
-import { SupervisedAgent, EscalationError } from './supervised-agent.js';
-import { IntraSupervisor } from './intra-supervisor.js';
+import { AgentResult } from './agent-types.js';
 import { BarrierCoordinator } from './barrier-coordinator.js';
 import { ContractRegistry } from './contract-registry.js';
+import {
+    BarrierResolution,
+    CheckpointPayload,
+    CheckpointRecord,
+    ContractExports,
+    ContractSnapshot,
+    LaneDefinition,
+    LaneResult,
+    SupervisorVerdict,
+} from './dag-types.js';
+import { IntraSupervisor } from './intra-supervisor.js';
+import { EscalationError, SupervisedAgent } from './supervised-agent.js';
 
 // ─── LaneExecutor ─────────────────────────────────────────────────────────────
 
@@ -156,8 +156,21 @@ export class LaneExecutor {
         this.registry.publish(lane.id, payload.contracts);
       }
 
+      // Merge supervisor rule's mode/waitFor/timeoutMs into the payload so the
+      // BarrierCoordinator uses the declarative config rather than the agent's
+      // defaultMode ('self'). The agent generator doesn't know about supervisor rules.
+      const supervisorRule = supervisor.getRuleFor(payload.checkpointId);
+      const effectivePayload: CheckpointPayload = supervisorRule
+        ? {
+            ...payload,
+            mode: supervisorRule.mode,
+            waitFor: supervisorRule.waitFor ?? payload.waitFor,
+            timeoutMs: supervisorRule.timeoutMs ?? payload.timeoutMs,
+          }
+        : payload;
+
       // Resolve barriers / read contracts from other lanes
-      const barrierResolution: BarrierResolution = await this.coordinator.resolve(payload);
+      const barrierResolution: BarrierResolution = await this.coordinator.resolve(effectivePayload);
 
       // Get verdict from supervisor
       let verdict: SupervisorVerdict = supervisor.evaluate(
@@ -198,7 +211,7 @@ export class LaneExecutor {
 
             // Record the handoff checkpoint
             checkpoints.push(
-              this.buildRecord(payload, verdict, retryCount, barrierResolution, checkpointStartMs),
+              this.buildRecord(effectivePayload, verdict, retryCount, barrierResolution, checkpointStartMs),
             );
 
             // Merge specialist result into generator and advance with APPROVE
@@ -222,7 +235,7 @@ export class LaneExecutor {
 
       // Record the checkpoint
       checkpoints.push(
-        this.buildRecord(payload, verdict, retryCount, barrierResolution, checkpointStartMs),
+        this.buildRecord(effectivePayload, verdict, retryCount, barrierResolution, checkpointStartMs),
       );
 
       if (verdict.type === 'ESCALATE') {

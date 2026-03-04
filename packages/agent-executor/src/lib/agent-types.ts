@@ -60,3 +60,18 @@ export interface AgentDefinition {
   /** Ordered list of checks to execute */
   checks: CheckDefinition[];
 }
+
+// ─── Agent Result ─────────────────────────────────────────────────────────────
+
+/**
+ * Output produced when an agent (or lane) finishes running its checks.
+ * Used as the return value of a completed SupervisedAgent generator.
+ */
+export interface AgentResult {
+  agentName: string;
+  status: 'success' | 'error';
+  findings: string[];
+  recommendations: string[];
+  details: Record<string, unknown>;
+  timestamp: string;
+}
