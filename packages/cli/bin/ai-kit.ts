@@ -4,7 +4,7 @@ import { runInit } from '../src/commands/init.js';
 import { runSync } from '../src/commands/sync.js';
 import { runCheck } from '../src/commands/check.js';
 import { runMcp } from '../src/commands/mcp.js';
-import { runBreakdown, runWorkflow, runValidate, runStatus } from '../src/commands/agents.js';
+import { runBreakdown, runWorkflow, runValidate, runStatus, runDag } from '../src/commands/agents.js';
 
 const program = new Command();
 
@@ -54,5 +54,19 @@ program
   .command('agent:status <session-id>')
   .description('Check workflow status')
   .action(runStatus);
+
+program
+  .command('agent:dag [dag-file]')
+  .description('Run multi-lane supervised DAG execution (default: agents/dag.json)')
+  .option('-p, --project <path>', 'Project root directory (default: cwd)')
+  .option('-v, --verbose', 'Enable verbose output with per-checkpoint details')
+  .option('--dry-run', 'Validate the DAG config and print execution plan without running')
+  .action((dagFile, options) =>
+    runDag(dagFile ?? 'agents/dag.json', {
+      project: options.project,
+      verbose: options.verbose,
+      dryRun: options.dryRun,
+    }),
+  );
 
 program.parse(process.argv);

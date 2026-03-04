@@ -1,0 +1,70 @@
+{
+  "name": "Project Analysis DAG",
+  "description": "Multi-lane supervised analysis of a full-stack AI project: BA → Architecture → (Backend + Frontend in parallel) → Testing → E2E",
+  "lanes": [
+    {
+      "id": "business-analyst",
+      "agentFile": "agents/01-business-analyst.agent.json",
+      "supervisorFile": "agents/business-analyst.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["requirements-analysis", "feature-breakdown"]
+    },
+    {
+      "id": "architecture",
+      "agentFile": "agents/02-architecture.agent.json",
+      "supervisorFile": "agents/architecture.supervisor.json",
+      "dependsOn": ["business-analyst"],
+      "capabilities": ["architecture-design", "schema-design"]
+    },
+    {
+      "id": "backend",
+      "agentFile": "agents/03-backend.agent.json",
+      "supervisorFile": "agents/backend.supervisor.json",
+      "dependsOn": ["architecture"],
+      "capabilities": ["backend-implementation", "api-design"]
+    },
+    {
+      "id": "frontend",
+      "agentFile": "agents/04-frontend.agent.json",
+      "supervisorFile": "agents/frontend.supervisor.json",
+      "dependsOn": ["architecture"],
+      "capabilities": ["frontend-implementation", "component-design"]
+    },
+    {
+      "id": "testing",
+      "agentFile": "agents/05-testing.agent.json",
+      "supervisorFile": "agents/testing.supervisor.json",
+      "dependsOn": ["backend", "frontend"],
+      "capabilities": ["unit-testing", "integration-testing"]
+    },
+    {
+      "id": "e2e",
+      "agentFile": "agents/06-e2e.agent.json",
+      "supervisorFile": "agents/e2e.supervisor.json",
+      "dependsOn": ["testing"],
+      "capabilities": ["e2e-testing", "acceptance-testing"]
+    }
+  ],
+  "globalBarriers": [
+    {
+      "name": "backend-frontend-sync",
+      "participants": ["backend", "frontend"],
+      "timeoutMs": 10000
+    }
+  ],
+  "capabilityRegistry": {
+    "requirements-analysis": ["business-analyst"],
+    "feature-breakdown": ["business-analyst"],
+    "architecture-design": ["architecture"],
+    "schema-design": ["architecture"],
+    "backend-implementation": ["backend"],
+    "api-design": ["backend"],
+    "frontend-implementation": ["frontend"],
+    "component-design": ["frontend"],
+    "unit-testing": ["testing"],
+    "integration-testing": ["testing"],
+    "e2e-testing": ["e2e"],
+    "acceptance-testing": ["e2e"]
+  },
+  "modelRouterFile": "agents/model-router.json"
+}

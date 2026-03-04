@@ -1,0 +1,32 @@
+{
+  "laneId": "business-analyst",
+  "retryBudget": 2,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": {
+        "minFindings": 1
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Re-examine the project root for spec files, README, or package.json to build findings."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "noErrorFindings": false
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Look for workspace config files (pnpm-workspace.yaml, lerna.json) to establish monorepo structure."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": {
+        "minFindings": 1
+      },
+      "onFail": "ESCALATE"
+    }
+  ]
+}
