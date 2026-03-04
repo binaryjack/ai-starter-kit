@@ -1,18 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-  ARCHITECTURE RULES - Define coding standards and patterns
-  
-  Example:
-  <rules>
-    <rule id="naming">
-      <description>Use camelCase for variables and PascalCase for classes</description>
-    </rule>
-    <rule id="imports">
-      <description>Group imports: React, libraries, local files</description>
-    </rule>
-  </rules>
--->
 <architecture-rules>
-  <!-- Define your architectural constraints, naming conventions, and patterns -->
-  <!-- Include layer separation, dependency rules, and best practices -->
+  <standards level="ULTRA_HIGH">
+    <standard id="naming">
+      <rule type="REQUIRED">Use kebab-case for file names</rule>
+      <rule type="FORBIDDEN">Never use camelCase for files</rule>
+      <example correct="true">my-feature.ts</example>
+      <example correct="false">myFeature.ts</example>
+    </standard>
+    
+    <standard id="file-organization">
+      <rule type="REQUIRED">One export per file</rule>
+      <rule type="REQUIRED">Type definitions in *.types.ts files</rule>
+      <rule type="REQUIRED">Factory functions in create-*.ts files</rule>
+      <rule type="REQUIRED">Only exports in index.ts (no logic)</rule>
+    </standard>
+    
+    <standard id="type-safety">
+      <rule type="FORBIDDEN">No 'any' type</rule>
+      <rule type="REQUIRED">Strict null checks enabled</rule>
+      <rule type="REQUIRED">Explicit union type handling</rule>
+      <rule type="REQUIRED">All types in *.types.ts files</rule>
+    </standard>
+    
+    <standard id="functions">
+      <rule type="REQUIRED">Use function expression pattern: export const Name = function(...) { ... }</rule>
+      <rule type="FORBIDDEN">No class declarations</rule>
+      <rule type="FORBIDDEN">No arrow functions at module level</rule>
+      <rule type="REQUIRED">Use prototype/* for methods</rule>
+    </standard>
+    
+    <standard id="react">
+      <rule type="REQUIRED">Declarative components only</rule>
+      <rule type="FORBIDDEN">Never use useImperativeHandle</rule>
+      <rule type="FORBIDDEN">No class components</rule>
+      <rule type="REQUIRED">Functional components only</rule>
+    </standard>
+    
+    <standard id="testing">
+      <rule type="REQUIRED">Minimum 95% code coverage</rule>
+      <rule type="REQUIRED">Test file naming: {feature}.test.ts</rule>
+      <rule type="REQUIRED">Tests in __tests__ directory</rule>
+      <rule type="REQUIRED">All business logic must be tested</rule>
+    </standard>
+  </standards>
+  
+  <layers>
+    <layer name="types" description="Type definitions only" />
+    <layer name="core" description="Business logic and utilities" />
+    <layer name="index" description="Public exports only" />
+  </layers>
+  
+  <dependencies>
+    <rule type="REQUIRED">Document all external dependencies</rule>
+    <rule type="REQUIRED">Minimize third-party packages</rule>
+    <rule type="REQUIRED">Update security vulnerabilities immediately</rule>
+  </dependencies>
 </architecture-rules>

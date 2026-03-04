@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-  MANIFEST - Define your project structure and capabilities
-  
-  Example:
-  <project name="My App" version="1.0">
-    <capabilities>
-      <capability name="api">REST API endpoints</capability>
-      <capability name="database">PostgreSQL integration</capability>
-    </capabilities>
-  </project>
--->
 <manifest>
-  <!-- Add your project manifest configuration here -->
-  <!-- Include project name, version, capabilities, and technology stack -->
+  <project>
+    <name>Your Project Name</name>
+    <version>1.0.0</version>
+    <description>Project description here</description>
+    
+    <technology-stack>
+      <language>TypeScript</language>
+      <runtime>Node.js 18+</runtime>
+      <framework><!-- Add framework if applicable --></framework>
+      <package-manager>npm / pnpm</package-manager>
+    </technology-stack>
+    
+    <structure>
+      <directory path="src" description="Source code" />
+      <directory path="src/.ai" description="AI guidance files" />
+      <directory path="tests" description="Test files" />
+      <directory path=".github/ai" description="Architecture configuration" />
+    </structure>
+    
+    <capabilities>
+      <capability name="type-safety">Full TypeScript with strict mode</capability>
+      <capability name="testing">Jest with 95% coverage requirement</capability>
+      <capability name="linting">ESLint for code quality</capability>
+      <capability name="performance">Optimized for <=10% solid-js benchmark</capability>
+    </capabilities>
+    
+    <entry-points>
+      <entry path="src/index.ts" type="main" description="Main export" />
+    </entry-points>
+  </project>
 </manifest>
