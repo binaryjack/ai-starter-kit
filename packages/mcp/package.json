@@ -1,22 +1,19 @@
 {
-  "name": "@ai-agencee/ai-kit-cli",
+  "name": "@ai-agencee/ai-kit-mcp",
   "version": "1.3.0",
-  "description": "CLI for @ai-agencee/ai-starter-kit",
+  "description": "MCP Server for @ai-agencee/ai-starter-kit",
   "type": "commonjs",
-  "bin": {
-    "ai-kit": "./dist/bin/ai-kit.js"
-  },
   "main": "./dist/src/index.js",
   "scripts": {
     "build": "tsc",
+    "start": "node dist/src/index.js",
+    "dev": "tsc --watch",
     "test": "jest",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@ai-agencee/ai-kit-core": "workspace:*",
-    "@ai-agencee/ai-kit-mcp": "workspace:*",
-    "@ai-agencee/ai-kit-agent-executor": "workspace:*",
-    "commander": "^12.1.0"
+    "@ai-agencee/ai-kit-core": "^1.1.0",
+    "@modelcontextprotocol/sdk": "^0.7.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
