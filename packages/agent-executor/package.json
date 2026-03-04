@@ -12,11 +12,15 @@
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node scripts/copy-agents.js",
     "test": "jest",
     "lint": "tsc --noEmit",
     "dev": "tsc --watch"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "dependencies": {
     "@ai-agencee/ai-kit-core": "^1.1.0"
   },

@@ -1,0 +1,62 @@
+{
+  "name": "E2E Agent",
+  "icon": "🌐",
+  "description": "Checks end-to-end test setup, configuration and test file presence",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "playwright.config.ts",
+      "pass": "✅ Playwright E2E framework configured"
+    },
+    {
+      "type": "file-exists",
+      "path": "playwright.config.js",
+      "pass": "✅ Playwright E2E framework configured (JS)"
+    },
+    {
+      "type": "file-exists",
+      "path": "cypress.config.ts",
+      "pass": "✅ Cypress E2E framework configured"
+    },
+    {
+      "type": "file-exists",
+      "path": "cypress.config.js",
+      "pass": "✅ Cypress E2E framework configured (JS)"
+    },
+    {
+      "type": "dir-exists",
+      "path": "e2e",
+      "pass": "✅ E2E tests directory found (e2e/)",
+      "fail": "ℹ️  No e2e/ directory found",
+      "failRecommendations": ["Consider adding Playwright or Cypress for end-to-end testing"]
+    },
+    {
+      "type": "dir-exists",
+      "path": "cypress",
+      "pass": "✅ Cypress tests directory found (cypress/)"
+    },
+    {
+      "type": "dir-exists",
+      "path": "tests/e2e",
+      "pass": "✅ E2E tests organized in tests/e2e/"
+    },
+    {
+      "type": "count-files",
+      "path": ".",
+      "glob": "**/*.e2e.ts",
+      "pass": "✅ {count} E2E test file(s) found (*.e2e.ts)"
+    },
+    {
+      "type": "count-files",
+      "path": ".",
+      "glob": "**/*.e2e-spec.ts",
+      "pass": "✅ {count} E2E spec file(s) found (*.e2e-spec.ts)"
+    },
+    {
+      "type": "count-files",
+      "path": ".",
+      "glob": "**/playwright/**/*.spec.ts",
+      "pass": "✅ {count} Playwright spec file(s) found"
+    }
+  ]
+}

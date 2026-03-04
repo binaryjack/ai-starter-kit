@@ -41,6 +41,15 @@ export interface AgentConfig {
   requiresSupervisorApproval: boolean;
 }
 
+export interface AgentResult {
+  agentName: string;
+  status: 'success' | 'error';
+  findings: string[];
+  recommendations: string[];
+  details: Record<string, unknown>;
+  timestamp: string;
+}
+
 export const AGENT_CONFIGS: Record<AgentType, AgentConfig> = {
   'business-analyst': {
     name: 'business-analyst',

@@ -1,0 +1,94 @@
+{
+  "name": "Frontend Agent",
+  "icon": "🎨",
+  "description": "Detects frontend frameworks, component patterns and UI configuration",
+  "checks": [
+    {
+      "type": "count-files",
+      "path": "src",
+      "glob": "**/*.tsx",
+      "pass": "✅ {count} React TSX component(s) found",
+      "fail": "ℹ️  No .tsx files found"
+    },
+    {
+      "type": "count-files",
+      "path": "src",
+      "glob": "**/*.jsx",
+      "pass": "✅ {count} React JSX component(s) found"
+    },
+    {
+      "type": "count-files",
+      "path": "src",
+      "glob": "**/*.vue",
+      "pass": "✅ {count} Vue component(s) found — Vue.js project detected"
+    },
+    {
+      "type": "count-files",
+      "path": "src",
+      "glob": "**/*.svelte",
+      "pass": "✅ {count} Svelte component(s) found — Svelte project detected"
+    },
+    {
+      "type": "file-exists",
+      "path": "vite.config.ts",
+      "pass": "✅ Vite bundler configured (vite.config.ts)"
+    },
+    {
+      "type": "file-exists",
+      "path": "vite.config.js",
+      "pass": "✅ Vite bundler configured (vite.config.js)"
+    },
+    {
+      "type": "file-exists",
+      "path": "next.config.js",
+      "pass": "✅ Next.js framework detected"
+    },
+    {
+      "type": "file-exists",
+      "path": "next.config.ts",
+      "pass": "✅ Next.js framework detected (TypeScript config)"
+    },
+    {
+      "type": "file-exists",
+      "path": "nuxt.config.ts",
+      "pass": "✅ Nuxt framework detected"
+    },
+    {
+      "type": "file-exists",
+      "path": "tailwind.config.js",
+      "pass": "✅ Tailwind CSS configured"
+    },
+    {
+      "type": "file-exists",
+      "path": "tailwind.config.ts",
+      "pass": "✅ Tailwind CSS configured (TypeScript)"
+    },
+    {
+      "type": "dir-exists",
+      "path": "src/components",
+      "pass": "✅ Component library organized in src/components/",
+      "fail": "ℹ️  No src/components directory",
+      "failRecommendations": ["Organize reusable components in src/components/"]
+    },
+    {
+      "type": "dir-exists",
+      "path": "src/pages",
+      "pass": "✅ Page components found in src/pages/"
+    },
+    {
+      "type": "dir-exists",
+      "path": "src/hooks",
+      "pass": "✅ Custom React hooks organized in src/hooks/"
+    },
+    {
+      "type": "dir-exists",
+      "path": "src/store",
+      "pass": "✅ State management store found in src/store/"
+    },
+    {
+      "type": "dir-exists",
+      "path": "public",
+      "pass": "✅ Public assets directory found"
+    }
+  ]
+}

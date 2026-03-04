@@ -1,0 +1,74 @@
+{
+  "name": "Testing Agent",
+  "icon": "🧪",
+  "description": "Checks unit and integration test coverage, configuration and tooling",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "jest.config.js",
+      "pass": "✅ Jest configured (jest.config.js)"
+    },
+    {
+      "type": "file-exists",
+      "path": "jest.config.ts",
+      "pass": "✅ Jest configured (jest.config.ts)"
+    },
+    {
+      "type": "file-exists",
+      "path": "vitest.config.ts",
+      "pass": "✅ Vitest configured"
+    },
+    {
+      "type": "file-exists",
+      "path": "vitest.config.js",
+      "pass": "✅ Vitest configured (JS)"
+    },
+    {
+      "type": "count-files",
+      "path": ".",
+      "glob": "**/*.test.ts",
+      "pass": "✅ {count} TypeScript test file(s) found (*.test.ts)",
+      "fail": "⚠️  No *.test.ts files found",
+      "failSeverity": "warning",
+      "failRecommendations": ["Add unit tests with Jest or Vitest (*.test.ts files)"]
+    },
+    {
+      "type": "count-files",
+      "path": ".",
+      "glob": "**/*.spec.ts",
+      "pass": "✅ {count} TypeScript spec file(s) found (*.spec.ts)"
+    },
+    {
+      "type": "count-files",
+      "path": ".",
+      "glob": "**/*.test.tsx",
+      "pass": "✅ {count} React component test(s) found (*.test.tsx)"
+    },
+    {
+      "type": "count-files",
+      "path": ".",
+      "glob": "**/*.spec.tsx",
+      "pass": "✅ {count} React component spec(s) found (*.spec.tsx)"
+    },
+    {
+      "type": "dir-exists",
+      "path": "tests",
+      "pass": "✅ Dedicated tests/ directory found"
+    },
+    {
+      "type": "dir-exists",
+      "path": "__tests__",
+      "pass": "✅ Jest __tests__/ directory found"
+    },
+    {
+      "type": "file-exists",
+      "path": ".nycrc",
+      "pass": "✅ Istanbul coverage config found (.nycrc)"
+    },
+    {
+      "type": "file-exists",
+      "path": ".nycrc.json",
+      "pass": "✅ Istanbul coverage config found (.nycrc.json)"
+    }
+  ]
+}

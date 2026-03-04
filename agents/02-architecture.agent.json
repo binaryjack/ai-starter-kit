@@ -1,0 +1,63 @@
+{
+  "name": "Architecture Agent",
+  "icon": "🏗️",
+  "description": "Checks TypeScript configuration, module structure and design patterns",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "tsconfig.json",
+      "pass": "✅ TypeScript configured at root",
+      "fail": "⚠️  No tsconfig.json at root",
+      "failSeverity": "warning",
+      "failRecommendations": ["Add a root tsconfig.json for consistent TypeScript settings"]
+    },
+    {
+      "type": "json-has-key",
+      "path": "tsconfig.json",
+      "field": "compilerOptions.strict",
+      "pass": "✅ TypeScript strict mode declared",
+      "fail": "⚠️  TypeScript strict mode not set",
+      "failSeverity": "warning",
+      "failRecommendations": ["Enable 'strict: true' in tsconfig.json for better type safety"]
+    },
+    {
+      "type": "json-has-key",
+      "path": "tsconfig.json",
+      "field": "compilerOptions.paths",
+      "pass": "✅ TypeScript path aliases configured",
+      "fail": "ℹ️  No TypeScript path aliases - consider adding for cleaner imports"
+    },
+    {
+      "type": "dir-exists",
+      "path": "src",
+      "pass": "✅ Source files organized in src/",
+      "fail": "⚠️  No src/ directory found",
+      "failSeverity": "warning",
+      "failRecommendations": ["Organize all source code inside a src/ directory"]
+    },
+    {
+      "type": "file-exists",
+      "path": ".eslintrc.json",
+      "pass": "✅ ESLint configured (.eslintrc.json)",
+      "fail": "ℹ️  No .eslintrc.json found",
+      "failRecommendations": ["Add ESLint configuration to enforce code quality"]
+    },
+    {
+      "type": "file-exists",
+      "path": ".eslintrc.js",
+      "pass": "✅ ESLint configured (.eslintrc.js)"
+    },
+    {
+      "type": "file-exists",
+      "path": "eslint.config.js",
+      "pass": "✅ ESLint v9 flat config found"
+    },
+    {
+      "type": "file-exists",
+      "path": ".prettierrc",
+      "pass": "✅ Prettier configured",
+      "fail": "ℹ️  No Prettier config found",
+      "failRecommendations": ["Add .prettierrc to enforce consistent code formatting"]
+    }
+  ]
+}

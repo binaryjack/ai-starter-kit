@@ -2,17 +2,9 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { AgentResult } from './types.js';
 
 const execAsync = promisify(exec);
-
-export interface AgentResult {
-  agentName: string;
-  status: 'success' | 'error';
-  findings: string[];
-  recommendations: string[];
-  details: Record<string, unknown>;
-  timestamp: string;
-}
 
 /**
  * Business Analyst Agent - Understands project structure and requirements
@@ -564,50 +556,25 @@ export async function runSupervisorAgent(agentResults: AgentResult[]): Promise<A
 }
 
 /**
- * Run all agents in sequence
+ * Run all agents in sequence — uses JSON-driven agent chain + Supervisor
  */
 export async function runAllAgents(projectRoot: string): Promise<AgentResult[]> {
-  const results: AgentResult[] = [];
+  const { AgentChainExecutor } = await import('./agent-chain.js');
 
   console.log('🤖 Starting agent analysis...\n');
 
-  // Business Analyst
-  console.log('📋 Business Analyst analyzing project structure...');
-  const baResult = await runBusinessAnalystAgent(projectRoot);
-  results.push(baResult);
-  console.log(`   ✅ Complete (${baResult.findings.length} findings)\n`);
+  // Load and run all *.agent.json definitions bundled with this package
+  const agentsDir = path.resolve(__dirname, '../agents');
+  const executor = new AgentChainExecutor();
+  await executor.loadFromDirectory(agentsDir);
+  const results = await executor.execute(projectRoot);
 
-  // Architecture
-  console.log('🏗️  Architecture Agent analyzing design patterns...');
-  const archResult = await runArchitectureAgent(projectRoot);
-  results.push(archResult);
-  console.log(`   ✅ Complete (${archResult.findings.length} findings)\n`);
+  // Legacy agents kept for backward compatibility (skipped if JSON covers them)
+  // Keeping Business Analyst just as a reference — remove once JSON fully replaces it
+  // const baResult = await runBusinessAnalystAgent(projectRoot);
+  // results.push(baResult);
 
-  // Backend
-  console.log('🔧 Backend Agent analyzing server code...');
-  const backendResult = await runBackendAgent(projectRoot);
-  results.push(backendResult);
-  console.log(`   ✅ Complete (${backendResult.findings.length} findings)\n`);
-
-  // Frontend
-  console.log('🎨 Frontend Agent analyzing components...');
-  const frontendResult = await runFrontendAgent(projectRoot);
-  results.push(frontendResult);
-  console.log(`   ✅ Complete (${frontendResult.findings.length} findings)\n`);
-
-  // Testing
-  console.log('🧪 Testing Agent analyzing test coverage...');
-  const testingResult = await runTestingAgent(projectRoot);
-  results.push(testingResult);
-  console.log(`   ✅ Complete (${testingResult.findings.length} findings)\n`);
-
-  // E2E
-  console.log('🔄 E2E Agent planning test strategies...');
-  const e2eResult = await runE2EAgent(projectRoot);
-  results.push(e2eResult);
-  console.log(`   ✅ Complete (${e2eResult.findings.length} findings)\n`);
-
-  // Supervisor
+  // Supervisor consolidates all JSON-agent results
   console.log('✔️  Supervisor consolidating results...');
   const supervisorResult = await runSupervisorAgent(results);
   results.push(supervisorResult);

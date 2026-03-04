@@ -1,0 +1,58 @@
+{
+  "name": "Business Analyst",
+  "icon": "📋",
+  "description": "Checks project structure, workspace setup and dependency health",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "✅ package.json found",
+      "fail": "❌ No package.json - this does not look like a Node.js project",
+      "failSeverity": "error"
+    },
+    {
+      "type": "file-exists",
+      "path": "pnpm-workspace.yaml",
+      "pass": "✅ Monorepo structure detected (pnpm workspace)",
+      "fail": "📦 Single package project (no pnpm-workspace.yaml)"
+    },
+    {
+      "type": "count-dirs",
+      "path": "packages",
+      "pass": "📚 {count} packages found",
+      "fail": "ℹ️  No packages/ directory found",
+      "recommendations": ["Keep packages isolated with clear boundaries"]
+    },
+    {
+      "type": "json-field",
+      "path": "package.json",
+      "field": "dependencies",
+      "pass": "📦 {count} production dependencies",
+      "fail": "ℹ️  No production dependencies declared",
+      "recommendations": ["Review and audit all dependencies regularly"]
+    },
+    {
+      "type": "json-field",
+      "path": "package.json",
+      "field": "devDependencies",
+      "pass": "🔧 {count} dev dependencies",
+      "recommendations": ["Keep dev and production dependencies clearly separated"]
+    },
+    {
+      "type": "file-exists",
+      "path": "README.md",
+      "pass": "✅ README.md present",
+      "fail": "⚠️  No README.md found",
+      "failSeverity": "warning",
+      "failRecommendations": ["Add a README.md documenting project setup and usage"]
+    },
+    {
+      "type": "file-exists",
+      "path": ".gitignore",
+      "pass": "✅ .gitignore present",
+      "fail": "🔴 No .gitignore - secrets and build artifacts may be committed",
+      "failSeverity": "error",
+      "failRecommendations": ["Add a .gitignore immediately to avoid leaking secrets or committing build outputs"]
+    }
+  ]
+}

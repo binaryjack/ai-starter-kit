@@ -1,0 +1,70 @@
+{
+  "name": "Backend Agent",
+  "icon": "⚙️",
+  "description": "Detects backend patterns: controllers, services, middleware and API routes",
+  "checks": [
+    {
+      "type": "count-files",
+      "path": "src",
+      "glob": "**/*.controller.ts",
+      "pass": "✅ {count} controller(s) found",
+      "fail": "ℹ️  No controllers found (*.controller.ts)",
+      "recommendations": ["Controllers are optional - some projects use route handlers directly"]
+    },
+    {
+      "type": "count-files",
+      "path": "src",
+      "glob": "**/*.service.ts",
+      "pass": "✅ {count} service(s) found",
+      "fail": "ℹ️  No services found (*.service.ts)",
+      "recommendations": ["Consider extracting business logic into dedicated service classes"]
+    },
+    {
+      "type": "count-files",
+      "path": "src",
+      "glob": "**/*.middleware.ts",
+      "pass": "✅ {count} middleware file(s) found",
+      "fail": "ℹ️  No middleware files found (*.middleware.ts)"
+    },
+    {
+      "type": "count-files",
+      "path": "src",
+      "glob": "**/*.resolver.ts",
+      "pass": "✅ {count} GraphQL resolver(s) found — GraphQL API detected"
+    },
+    {
+      "type": "dir-exists",
+      "path": "src/routes",
+      "pass": "✅ Route definitions organized in src/routes/",
+      "fail": "ℹ️  No src/routes directory"
+    },
+    {
+      "type": "dir-exists",
+      "path": "src/controllers",
+      "pass": "✅ Controllers organized in src/controllers/"
+    },
+    {
+      "type": "file-exists",
+      "path": "src/app.ts",
+      "pass": "✅ Main app entry point found (app.ts)"
+    },
+    {
+      "type": "file-exists",
+      "path": "src/main.ts",
+      "pass": "✅ Main entry point found (main.ts)"
+    },
+    {
+      "type": "file-exists",
+      "path": "src/server.ts",
+      "pass": "✅ Server entry point found (server.ts)"
+    },
+    {
+      "type": "file-exists",
+      "path": ".env.example",
+      "pass": "✅ Environment variables documented (.env.example)",
+      "fail": "⚠️  No .env.example found",
+      "failSeverity": "warning",
+      "failRecommendations": ["Add .env.example to document required environment variables"]
+    }
+  ]
+}
