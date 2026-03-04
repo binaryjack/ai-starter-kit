@@ -56,32 +56,66 @@ export const runWorkflow = async (input: string): Promise<void> => {
     }
 
     console.log('\n🚀 Full Workflow Orchestrator\n');
-    console.log('Specification Breakdown → Architecture → Backend → Frontend → Testing → E2E\n');
+    console.log('Analyzing: ' + featureName + '\n');
 
-    const workflow = await workflowOrchestrator.createWorkflow(
-      featureName,
-      specContent
-    );
+    const projectRoot = process.cwd();
+    const workflow = await workflowOrchestrator.createWorkflow(featureName, specContent);
 
     console.log(`✅ Workflow started: ${workflow.sessionId}`);
-    console.log('\n📋 Workflow Sequence:');
-    console.log('1. 👤 @Agent:BusinessAnalyst - Break down specification');
-    console.log('   ↓');
-    console.log('2. 🏗️  @Agent:Architecture - Design system architecture');
-    console.log('   ↓');
-    console.log('3. 🔧 @Agent:Backend - Implement backend services');
-    console.log('   ↓');
-    console.log('4. 🎨 @Agent:Frontend - Build frontend components');
-    console.log('   ↓');
-    console.log('5. 🧪 @Agent:Testing - Create test suites');
-    console.log('   ↓');
-    console.log('6. 🔄 @Agent:E2E - End-to-end testing');
-    console.log('   ↓');
-    console.log('7. ✔️  @Agent:Supervisor - Approve and validate\n');
+    console.log('\n📋 Running Agents:\n');
 
-    const summary = await workflowOrchestrator.getWorkflowSummary(workflow.sessionId);
-    console.log(summary);
-    console.log(`\n💾 Session stored: .agents/state/workflow-${workflow.sessionId}.json\n`);
+    // Load agents module directly
+    let agents: any;
+    try {
+      agents = require('@ai-agencee/ai-kit-agent-executor');
+    } catch (e) {
+      console.error('Failed to load agent executor:', e);
+      throw e;
+    }
+
+    console.log('✓ Agents module loaded\n');
+
+    // Now run all agents
+    const runAllAgents = agents.runAllAgents;
+    if (typeof runAllAgents !== 'function') {
+      console.error('Debug: agents keys =', Object.keys(agents));
+      throw new Error(`runAllAgents is not a function: ${typeof runAllAgents}`);
+    }
+
+    const results = await runAllAgents(projectRoot);
+
+    // Save results
+    await fs.mkdir('.agents/results', { recursive: true });
+    await fs.writeFile(
+      path.join('.agents/results', `workflow-${workflow.sessionId}.json`),
+      JSON.stringify(
+        {
+          sessionId: workflow.sessionId,
+          featureName,
+          timestamp: new Date().toISOString(),
+          agentResults: results,
+        },
+        null,
+        2
+      )
+    );
+
+    // Display supervisor summary
+    const supervisor = results.find((r: any) => r.agentName === 'Supervisor');
+    if (supervisor) {
+      console.log('\n' + '='.repeat(60));
+      console.log('📊 ANALYSIS SUMMARY');
+      console.log('='.repeat(60) + '\n');
+
+      supervisor.findings.forEach((f: string) => console.log(f));
+
+      if (supervisor.recommendations.length > 0) {
+        console.log('\n💡 Key Recommendations:');
+        supervisor.recommendations.forEach((r: string) => console.log(`  • ${r}`));
+      }
+    }
+
+    console.log(`\n💾 Full results: .agents/results/workflow-${workflow.sessionId}.json\n`);
   } catch (error) {
     console.error('❌ Failed to start workflow:', error);
     process.exit(1);

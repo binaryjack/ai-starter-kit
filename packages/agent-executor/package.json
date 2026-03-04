@@ -1,6 +1,6 @@
 {
   "name": "@ai-agencee/ai-kit-agent-executor",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Agent orchestration and execution engine for @ai-agencee/ai-starter-kit",
   "type": "commonjs",
   "main": "./dist/index.js",
