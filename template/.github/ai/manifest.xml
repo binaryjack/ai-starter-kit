@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <core>
+    <user>TADEO</user>
+    <standard>ULTRA_HIGH</standard>
+    <communication>BRUTAL</communication>
+    <verbosity>0</verbosity>
+    <polite>0</polite>
+    <prose>0</prose>
+    <headless>1</headless>
+    <delegate>0</delegate>
+  </core>
+  <naming>
+    <convention>kebab</convention>
+    <file>one-item-per-file</file>
+    <any>0</any>
+    <union>strict</union>
+  </naming>
+  <react>
+    <style>declarative-only</style>
+    <class>forbidden</class>
+  </react>
+  <proto>
+    <constructor>export const Name = function(...) { ... }</constructor>
+    <methods>prototype/*</methods>
+    <visibility>Object.defineProperty(this,'x',{enumerable:false})</visibility>
+  </proto>
+  <map>
+    <types>*.types.ts</types>
+    <ctor>feature.ts</ctor>
+    <factory>create-feature.ts</factory>
+    <exports>index.ts</exports>
+  </map>
+  <test>
+    <min-coverage>95</min-coverage>
+  </test>
+  <perf>
+    <target>&lt;=10% solid-js</target>
+  </perf>
+  <checks>
+    <item>tsc</item>
+    <item>eslint</item>
+    <item>jest</item>
+  </checks>
+  <reject>
+    <item>useImperativeHandle</item>
+    <item>class </item>
+    <item> any </item>
+    <item>camelCase</item>
+    <item>verbose</item>
+  </reject>
+</manifest>

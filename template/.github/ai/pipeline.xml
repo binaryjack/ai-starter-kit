@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <step order="1">
+    <name>SCAN</name>
+    <target>types/*</target>
+  </step>
+  <step order="2">
+    <name>AST_CHECK</name>
+    <target>core/*</target>
+  </step>
+  <step order="3">
+    <name>BUILD</name>
+    <target>*</target>
+  </step>
+  <step order="4">
+    <name>VALIDATE</name>
+    <target>*</target>
+  </step>
+  <step order="5">
+    <name>OUTPUT</name>
+    <target>*</target>
+  </step>
+</pipeline>
