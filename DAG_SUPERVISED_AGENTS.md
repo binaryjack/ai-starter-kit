@@ -1,7 +1,7 @@
 # Multi-Lane Supervised Agent DAG — Implementation Specification
 
-> **Status:** Design finalized — Ready to implement  
-> **Version:** 1.0  
+> **Status:** Design finalized — Phase 0 implemented, Phases 1-7 pending  
+> **Version:** 1.1  
 > **Date:** March 4, 2026  
 > **Builds on:** existing `JsonAgentStrategy` + `AgentChainExecutor` in `packages/agent-executor`
 
@@ -9,6 +9,7 @@
 
 ## Table of Contents
 
+0. [Model Routing Layer (Phase 0)](#0-model-routing-layer-phase-0)
 1. [Problem Statement](#1-problem-statement)
 2. [Architecture Overview](#2-architecture-overview)
 3. [Core Concepts](#3-core-concepts)
@@ -22,6 +23,110 @@
 11. [Edge Cases & Invariants](#11-edge-cases--invariants)
 12. [Testing Strategy](#12-testing-strategy)
 13. [CLI Integration](#13-cli-integration)
+
+---
+
+## 0. Model Routing Layer (Phase 0)
+
+> ✅ **IMPLEMENTED** — all files created, `pnpm build` passing.
+
+### 0.1 Why Model Routing?
+
+Every agent framework sends everything to the same model. That is economically broken at scale.
+The formula for a killer app is:
+
+```
+Right Model × Right Prompt × Right Context = Minimum Cost + Maximum Quality
+```
+
+### 0.2 Task → Model Family Matrix
+
+| Task Type | Model Family | Reason |
+|---|---|---|
+| `file-analysis`, `contract-extraction`, `validation` | **Haiku** | Pattern recognition, no deep reasoning needed |
+| `code-generation`, `refactoring`, `api-design`, `prompt-synthesis` | **Sonnet** | Best code quality / cost ratio |
+| `architecture-decision`, `hard-barrier-resolution`, `security-review` | **Opus** | Long-range consequences, adversarial thinking |
+
+### 0.3 Provider Hierarchy
+
+```
+Runtime context        Provider selected
+─────────────────────  ─────────────────────────────────────────────
+VS Code + MCP          VSCodeSamplingProvider  (no API key, uses user's Copilot)
+CLI + ANTHROPIC_API_KEY  AnthropicProvider      (direct API, metered billing)
+CLI + OPENAI_API_KEY     OpenAIProvider         (direct API, metered billing)
+Test environment       MockProvider             (zero cost, deterministic)
+```
+
+**VS Code Sampling** is the killer feature: routes through `server.createMessage()` in the MCP
+protocol — no API keys, no config, uses whatever model the user has in VS Code.
+
+### 0.4 Files Created (Phase 0)
+
+```
+packages/agent-executor/src/lib/
+├── llm-provider.ts       ✅  LLMProvider interface + Anthropic, OpenAI, VSCodeSampling, Mock
+├── model-router.ts       ✅  Task-type → family → model ID routing + cost estimation
+├── prompt-registry.ts    ✅  Loads *.prompt.md with frontmatter, resolves by agent+family
+└── cost-tracker.ts       ✅  Token counting, budget enforcement, per-run cost report
+
+packages/mcp/src/
+└── vscode-lm-bridge.ts   ✅  createVSCodeSamplingBridge(server) → SamplingCallback
+
+agents/
+├── model-router.json     ✅  Declarative task→family→provider config + budget caps
+└── prompts/
+    ├── file-analysis.haiku.prompt.md         ✅
+    ├── backend-agent.sonnet.prompt.md        ✅
+    ├── frontend-agent.sonnet.prompt.md       ✅
+    ├── supervisor.opus.prompt.md             ✅
+    └── architecture-decision.opus.prompt.md ✅
+```
+
+### 0.5 Cost Visibility (unique feature)
+
+Every DAG run produces a cost breakdown no other tool provides:
+
+```
+💰 Cost Report — Run abc-123
+   Total: $0.00231 USD  (1,240 in / 380 out tokens)
+
+   By lane:
+     sql-lane             $0.00080  (2 calls)
+     react-lane           $0.00051  (1 call)
+     backend-lane         $0.00100  (3 calls)
+
+   By task type:
+     file-analysis             $0.00031  (4 calls)   ← Haiku
+     code-generation           $0.00180  (2 calls)   ← Sonnet
+     hard-barrier-resolution   $0.00020  (1 call)    ← Opus
+```
+
+Users optimize their DAGs based on this data. Budget caps auto-abort runs that exceed limits.
+
+### 0.6 Fully Declarative (no TypeScript to add new models/providers)
+
+```json
+// agents/model-router.json — add a new provider: zero TypeScript
+{
+  "providers": {
+    "ollama": {
+      "models": { "haiku": "llama3.2", "sonnet": "codestral", "opus": "deepseek-r1" },
+      "costs":  { "inputPerMillion": 0, "outputPerMillion": 0 }
+    }
+  }
+}
+```
+
+```markdown
+<!-- agents/prompts/my-agent.sonnet.prompt.md — add a new prompt: zero TypeScript -->
+---
+agent: my-agent
+modelFamily: sonnet
+task: code-generation
+---
+You are ...
+```
 
 ---
 
@@ -46,6 +151,12 @@ Required state: A **multi-lane parallel execution model** where:
 ┌──────────────────────────────────────────────────────────────────────┐
 │                        DAG ORCHESTRATOR                               │
 │                                                                      │
+│  ┌────────────────────────────────────────────────────────────────┐  │
+│  │  PHASE 0 — MODEL ROUTING LAYER                                 │  │
+│  │  ModelRouter → PromptRegistry → CostTracker → LLMProvider     │  │
+│  │  (Haiku / Sonnet / Opus) × (Anthropic / OpenAI / VSCode / Mock)│  │
+│  └────────────────────────────┬───────────────────────────────────┘  │
+│                               │ every LLM call routes through here   │
 │  Reads dag.json ──► spawns lanes ──► drives to completion            │
 │                                                                      │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐               │
@@ -319,20 +430,33 @@ type SupervisedAgent = AsyncGenerator<CheckpointPayload, AgentResult, Supervisor
 
 ```
 packages/agent-executor/src/lib/
-├── dag-types.ts              ← All new TypeScript interfaces (Section 5.1)
-├── contract-registry.ts      ← ContractRegistry implementation
-├── barrier-coordinator.ts    ← Resolves soft-align and hard-barrier checkpoints
-├── lane-executor.ts          ← Runs one lane: drives AsyncGenerator, calls supervisor
-├── supervised-agent.ts       ← Base class / wrapper to convert JSON agent → generator
-├── intra-supervisor.ts       ← Reads *.supervisor.json, applies RETRY/HANDOFF/ESCALATE
-└── dag-orchestrator.ts       ← Top-level: loads dag.json, spawns lanes in parallel
+├── llm-provider.ts       ✅ DONE  LLMProvider interface + 4 implementations
+├── model-router.ts       ✅ DONE  Task-type routing + cost estimation
+├── prompt-registry.ts    ✅ DONE  *.prompt.md loader with frontmatter parser
+├── cost-tracker.ts       ✅ DONE  Token counting, budget, run summary
+├── dag-types.ts          ⏳ P1    All DAG TypeScript interfaces
+├── contract-registry.ts  ⏳ P1    Versioned live contract snapshots
+├── barrier-coordinator.ts ⏳ P2   Resolves all 4 checkpoint modes
+├── intra-supervisor.ts   ⏳ P3    RETRY/HANDOFF/ESCALATE verdict logic
+├── supervised-agent.ts   ⏳ P4    AsyncGenerator protocol adapter
+├── lane-executor.ts      ⏳ P4    Drives one lane, calls supervisor
+└── dag-orchestrator.ts   ⏳ P5    Top-level: loads dag.json, spawns lanes
+
+packages/mcp/src/
+└── vscode-lm-bridge.ts   ✅ DONE  MCP sampling → SamplingCallback bridge
 
 agents/
-├── dag.json                  ← DAG wiring configuration
-├── sql.supervisor.json       ← SQL lane supervisor rules
-├── react.supervisor.json     ← React lane supervisor rules
-├── backend.supervisor.json   ← Backend lane supervisor rules
-└── (future: add *.supervisor.json per new lane, zero TypeScript)
+├── model-router.json     ✅ DONE  Declarative model routing config
+├── dag.json              ⏳ P7    DAG wiring configuration
+├── sql.supervisor.json   ⏳ P7    SQL lane supervisor rules
+├── react.supervisor.json ⏳ P7    React lane supervisor rules
+├── backend.supervisor.json ⏳ P7  Backend lane supervisor rules
+└── prompts/
+    ├── file-analysis.haiku.prompt.md         ✅ DONE
+    ├── backend-agent.sonnet.prompt.md        ✅ DONE
+    ├── frontend-agent.sonnet.prompt.md       ✅ DONE
+    ├── supervisor.opus.prompt.md             ✅ DONE
+    └── architecture-decision.opus.prompt.md ✅ DONE
 ```
 
 ---
@@ -411,6 +535,39 @@ ai-kit agent:dag <dag-file>    Run a multi-lane supervised DAG workflow
 ---
 
 ## 9. Implementation Phases
+
+### Phase 0a — LLM Provider Abstraction ✅ DONE
+- [x] Create `llm-provider.ts` — `LLMProvider` interface, `TaskType`, `ModelFamily`
+- [x] Implement `AnthropicProvider` — direct Anthropic API via fetch
+- [x] Implement `OpenAIProvider` — direct OpenAI API via fetch
+- [x] Implement `VSCodeSamplingProvider` — delegates via injected `SamplingCallback`
+- [x] Implement `MockProvider` — deterministic responses for testing
+
+### Phase 0b — Model Router ✅ DONE
+- [x] Create `model-router.ts` — `ModelRouter` class with `route()`, `profileFor()`, `modelIdFor()`
+- [x] `ModelRouter.fromFile('agents/model-router.json')` factory
+- [x] `autoRegister()` — scans env vars, registers available providers silently
+- [x] Cost estimation per call
+- [x] Create `agents/model-router.json` — full declarative config with 4 providers + budget caps
+
+### Phase 0c — Prompt Registry ✅ DONE
+- [x] Create `prompt-registry.ts` — `PromptRegistry` with `loadAll()`, `resolve()`, frontmatter parser
+- [x] `agents/prompts/file-analysis.haiku.prompt.md`
+- [x] `agents/prompts/backend-agent.sonnet.prompt.md`
+- [x] `agents/prompts/frontend-agent.sonnet.prompt.md`
+- [x] `agents/prompts/supervisor.opus.prompt.md`
+- [x] `agents/prompts/architecture-decision.opus.prompt.md`
+
+### Phase 0d — VS Code LM Bridge ✅ DONE
+- [x] Create `packages/mcp/src/vscode-lm-bridge.ts`
+- [x] `createVSCodeSamplingBridge(server)` → `SamplingCallback`
+- [x] `isSamplingSupported(server)` — capability check
+- [x] `modelPreferences` priority mapping (haiku=speed, opus=intelligence)
+
+### Phase 0e — Cost Tracker ✅ DONE
+- [x] Create `cost-tracker.ts` — `CostTracker` with `record()`, `summary()`, `formatReport()`, `save()`
+- [x] Per-lane and per-task-type breakdowns
+- [x] Budget cap enforcement with `onBudgetExceeded` callback
 
 ### Phase 1 — Types & Registry (no breaking changes)
 **Goal:** Lay the foundation. Existing chain still works untouched.
@@ -671,6 +828,12 @@ Arguments:
 ## Implementation Order Summary
 
 ```
+Phase 0a: llm-provider.ts                             ✅ DONE
+Phase 0b: model-router.ts + agents/model-router.json  ✅ DONE
+Phase 0c: prompt-registry.ts + agents/prompts/        ✅ DONE
+Phase 0d: vscode-lm-bridge.ts (MCP package)           ✅ DONE
+Phase 0e: cost-tracker.ts                             ✅ DONE
+─────────────────────────────────────────────────────────────
 Phase 1: dag-types.ts + contract-registry.ts          (foundation, no risk)
 Phase 2: barrier-coordinator.ts                        (pure logic, easy to test)
 Phase 3: intra-supervisor.ts                           (reads JSON, applies rules)
@@ -680,6 +843,6 @@ Phase 6: CLI agent:dag command                         (user-facing)
 Phase 7: JSON supervisor files for existing 6 agents   (declarative config)
 ```
 
-Each phase is independently testable.
-No phase breaks existing `AgentChainExecutor` behavior.
+Each phase is independently testable.  
+No phase breaks existing `AgentChainExecutor` behavior.  
 The full system is backward-compatible — existing `agent:workflow` command is untouched.

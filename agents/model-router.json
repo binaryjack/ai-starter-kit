@@ -1,0 +1,66 @@
+{
+  "defaultProvider": "anthropic",
+  "taskProfiles": {
+    "file-analysis":           { "family": "haiku",  "maxTokens": 1024  },
+    "contract-extraction":     { "family": "haiku",  "maxTokens": 2048  },
+    "validation":              { "family": "haiku",  "maxTokens": 1024  },
+    "code-generation":         { "family": "sonnet", "maxTokens": 4096  },
+    "refactoring":             { "family": "sonnet", "maxTokens": 4096  },
+    "api-design":              { "family": "sonnet", "maxTokens": 4096  },
+    "prompt-synthesis":        { "family": "sonnet", "maxTokens": 2048  },
+    "architecture-decision":   { "family": "opus",   "maxTokens": 8192  },
+    "hard-barrier-resolution": { "family": "opus",   "maxTokens": 8192  },
+    "security-review":         { "family": "opus",   "maxTokens": 8192  }
+  },
+  "providers": {
+    "anthropic": {
+      "models": {
+        "haiku":  "claude-haiku-4-5",
+        "sonnet": "claude-sonnet-4-5",
+        "opus":   "claude-opus-4-5"
+      },
+      "costs": {
+        "inputPerMillion":  3.00,
+        "outputPerMillion": 15.00
+      }
+    },
+    "openai": {
+      "models": {
+        "haiku":  "gpt-4o-mini",
+        "sonnet": "gpt-4o",
+        "opus":   "o3"
+      },
+      "costs": {
+        "inputPerMillion":  2.50,
+        "outputPerMillion": 10.00
+      }
+    },
+    "vscode": {
+      "models": {
+        "haiku":  "copilot/claude-haiku",
+        "sonnet": "copilot/claude-sonnet",
+        "opus":   "copilot/claude-opus"
+      },
+      "costs": {
+        "inputPerMillion":  0,
+        "outputPerMillion": 0
+      }
+    },
+    "mock": {
+      "models": {
+        "haiku":  "mock-haiku",
+        "sonnet": "mock-sonnet",
+        "opus":   "mock-opus"
+      },
+      "costs": {
+        "inputPerMillion":  0,
+        "outputPerMillion": 0
+      }
+    }
+  },
+  "budgetCap": {
+    "perRun":  0.50,
+    "perLane": 0.10,
+    "currency": "USD"
+  }
+}
