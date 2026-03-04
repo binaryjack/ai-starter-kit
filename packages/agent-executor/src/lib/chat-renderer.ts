@@ -7,13 +7,11 @@
 
 import * as readline from 'readline';
 import type {
-  ActorId,
-  ACTORS as ActorsMap,
-  ChatMessage,
-  BacklogItem,
-  PendingDecision,
-  PlanPhase,
-  ChecklistDisplayItem,
+    ActorId,
+    BacklogItem,
+    ChecklistDisplayItem,
+    PendingDecision,
+    PlanPhase
 } from './plan-types.js';
 import { ACTORS } from './plan-types.js';
 

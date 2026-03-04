@@ -1,23 +1,23 @@
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import * as readline from 'readline';
-import { AgentResult } from './agent-types.js';
-import { BarrierCoordinator } from './barrier-coordinator.js';
-import { ContractRegistry } from './contract-registry.js';
-import { CostTracker } from './cost-tracker.js';
+import * as fs from 'fs/promises'
+import * as path from 'path'
+import * as readline from 'readline'
+import { AgentResult } from './agent-types.js'
+import { BarrierCoordinator } from './barrier-coordinator.js'
+import { ContractRegistry } from './contract-registry.js'
+import { CostTracker } from './cost-tracker.js'
 import {
-    BarrierResolution,
-    CheckpointPayload,
-    CheckpointRecord,
-    ContractExports,
-    ContractSnapshot,
-    LaneDefinition,
-    LaneResult,
-    SupervisorVerdict,
-} from './dag-types.js';
-import { IntraSupervisor } from './intra-supervisor.js';
-import { ModelRouter, RoutedResponse } from './model-router.js';
-import { EscalationError, SupervisedAgent } from './supervised-agent.js';
+  BarrierResolution,
+  CheckpointPayload,
+  CheckpointRecord,
+  ContractExports,
+  ContractSnapshot,
+  LaneDefinition,
+  LaneResult,
+  SupervisorVerdict,
+} from './dag-types.js'
+import { IntraSupervisor } from './intra-supervisor.js'
+import { ModelRouter, RoutedResponse } from './model-router.js'
+import { EscalationError, SupervisedAgent } from './supervised-agent.js'
 // ─── Interactive approval prompt ───────────────────────────────────────────────────
 
 async function promptHumanApproval(

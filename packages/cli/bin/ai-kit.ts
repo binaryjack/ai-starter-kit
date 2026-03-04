@@ -4,6 +4,7 @@ import { runDag } from '../src/commands/agents.js';
 import { runCheck } from '../src/commands/check.js';
 import { runInit } from '../src/commands/init.js';
 import { runMcp } from '../src/commands/mcp.js';
+import { runPlan } from '../src/commands/plan.js';
 import { runSync } from '../src/commands/sync.js';
 
 const program = new Command();
@@ -52,6 +53,25 @@ program
       interactive: options.interactive,
       budget: options.budget,
       provider: options.provider,
+    }),
+  );
+
+// Plan commands
+program
+  .command('agent:plan')
+  .description('Run the interactive 5-phase Plan System (Discovery → Synthesize → Decompose → Wire → Execute)')
+  .option('-p, --project <path>',     'Project root directory (default: cwd)')
+  .option('-a, --agents-dir <path>',  'Directory containing agent/supervisor JSON files (default: <project>/agents)')
+  .option('--start-from <phase>',     'Resume from a specific phase: discover · synthesize · decompose · wire · execute')
+  .option('--skip-approval',          'Skip user approval gates (non-interactive / CI mode)')
+  .option('-v, --verbose',            'Enable verbose DAG output during execution phase')
+  .action((options) =>
+    runPlan({
+      project:      options.project,
+      agentsDir:    options.agentsDir,
+      startFrom:    options.startFrom,
+      skipApproval: options.skipApproval,
+      verbose:      options.verbose,
     }),
   );
 

@@ -1,5 +1,13 @@
 export * from './lib/agent-types.js';
 export * from './lib/check-runner.js';
+// Plan System — types + rendering + all phases
+export * from './lib/plan-types.js';
+export * from './lib/chat-renderer.js';
+export * from './lib/discovery-session.js';
+export * from './lib/backlog.js';
+export * from './lib/plan-synthesizer.js';
+export * from './lib/arbiter.js';
+export * from './lib/plan-orchestrator.js';
 // Phase 0 — Model routing, prompt management, cost tracking
 export * from './lib/cost-tracker.js';
 export * from './lib/llm-provider.js';
