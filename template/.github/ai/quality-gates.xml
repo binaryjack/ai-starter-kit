@@ -22,7 +22,6 @@
     <target>&lt;=10% solid-js</target>
   </performance>
   <reject>
-    <pattern>useImperativeHandle</pattern>
     <pattern>class </pattern>
     <pattern> any </pattern>
     <pattern>camelCase</pattern>
