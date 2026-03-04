@@ -15,8 +15,8 @@ importers:
   packages/cli:
     dependencies:
       '@ai-agencee/ai-kit-core':
-        specifier: workspace:*
-        version: link:../core
+        specifier: ^1.0.0
+        version: 1.0.0
       commander:
         specifier: ^12.1.0
         version: 12.1.0
@@ -56,6 +56,9 @@ importers:
         version: 5.9.3
 
 packages:
+
+  '@ai-agencee/ai-kit-core@1.0.0':
+    resolution: {integrity: sha512-PvtIfZnHlVrfxRDB5JDBGCtAK/e0OgjLeDUnyrdweKhNXuffWkXJmZBoxsTorG7Tu73n2OIdBRxa++jiie1ssQ==}
 
   '@babel/code-frame@7.29.0':
     resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
@@ -1210,6 +1213,8 @@ packages:
     engines: {node: '>=10'}
 
 snapshots:
+
+  '@ai-agencee/ai-kit-core@1.0.0': {}
 
   '@babel/code-frame@7.29.0':
     dependencies:

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  PIPELINE - Define your CI/CD workflow and build process
+  
+  Example:
+  <pipeline>
+    <stage name="build">
+      <step command="npm install" />
+      <step command="npm run build" />
+    </stage>
+    <stage name="test">
+      <step command="npm test" />
+    </stage>
+  </pipeline>
+-->
+<pipeline>
+  <!-- Define your build, test, and deployment stages -->
+  <!-- Include CI/CD steps, environment variables, and deployment targets -->
+</pipeline>

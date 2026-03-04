@@ -1,6 +1,6 @@
 {
   "name": "@ai-agencee/ai-kit-cli",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "CLI for @ai-agencee/ai-starter-kit",
   "type": "commonjs",
   "bin": {
@@ -13,7 +13,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@ai-agencee/ai-kit-core": "workspace:*",
+    "@ai-agencee/ai-kit-core": "^1.0.4",
     "commander": "^12.1.0"
   },
   "devDependencies": {

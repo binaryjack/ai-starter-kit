@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  QUALITY GATES - Define minimum quality standards
+  
+  Example:
+  <gates>
+    <gate name="test-coverage" threshold="80%" />
+    <gate name="lint-errors" threshold="0" />
+    <gate name="build-time" threshold="5m" />
+  </gates>
+-->
+<quality-gates>
+  <!-- Define code coverage requirements, performance thresholds -->
+  <!-- Include linting rules, test coverage minimums, and build time limits -->
+</quality-gates>

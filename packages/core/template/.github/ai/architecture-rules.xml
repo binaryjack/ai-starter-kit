@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  ARCHITECTURE RULES - Define coding standards and patterns
+  
+  Example:
+  <rules>
+    <rule id="naming">
+      <description>Use camelCase for variables and PascalCase for classes</description>
+    </rule>
+    <rule id="imports">
+      <description>Group imports: React, libraries, local files</description>
+    </rule>
+  </rules>
+-->
+<architecture-rules>
+  <!-- Define your architectural constraints, naming conventions, and patterns -->
+  <!-- Include layer separation, dependency rules, and best practices -->
+</architecture-rules>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  MANIFEST - Define your project structure and capabilities
+  
+  Example:
+  <project name="My App" version="1.0">
+    <capabilities>
+      <capability name="api">REST API endpoints</capability>
+      <capability name="database">PostgreSQL integration</capability>
+    </capabilities>
+  </project>
+-->
+<manifest>
+  <!-- Add your project manifest configuration here -->
+  <!-- Include project name, version, capabilities, and technology stack -->
+</manifest>
