@@ -1,6 +1,6 @@
 {
   "name": "@ai-agencee/ai-kit-mcp",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "MCP Server for @ai-agencee/ai-starter-kit",
   "type": "commonjs",
   "main": "./dist/index.js",
