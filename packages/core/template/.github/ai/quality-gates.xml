@@ -1,15 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-  QUALITY GATES - Define minimum quality standards
-  
-  Example:
-  <gates>
-    <gate name="test-coverage" threshold="80%" />
-    <gate name="lint-errors" threshold="0" />
-    <gate name="build-time" threshold="5m" />
-  </gates>
--->
 <quality-gates>
-  <!-- Define code coverage requirements, performance thresholds -->
-  <!-- Include linting rules, test coverage minimums, and build time limits -->
+  <gate id="code-coverage" type="REQUIRED">
+    <name>Code Coverage</name>
+    <description>Minimum code coverage requirement</description>
+    <threshold type="percentage" value="95" />
+    <tool>jest</tool>
+    <fail-on-violation>true</fail-on-violation>
+  </gate>
+  
+  <gate id="type-safety" type="REQUIRED">
+    <name>Type Safety</name>
+    <description>TypeScript compilation must succeed with no errors</description>
+    <threshold type="count" value="0" />
+    <tool>tsc</tool>
+    <fail-on-violation>true</fail-on-violation>
+  </gate>
+  
+  <gate id="linting" type="REQUIRED">
+    <name>Linting</name>
+    <description>No ESLint errors allowed</description>
+    <threshold type="count" value="0" />
+    <tool>eslint</tool>
+    <rules>
+      <rule>no-any</rule>
+      <rule>kebab-case-files</rule>
+      <rule>one-export-per-file</rule>
+      <rule>no-classes</rule>
+      <rule>no-imperative-handle</rule>
+    </rules>
+    <fail-on-violation>true</fail-on-violation>
+  </gate>
+  
+  <gate id="performance" type="RECOMMENDED">
+    <name>Performance</name>
+    <description>Application performance benchmarks</description>
+    <threshold type="percentage" value="10" unit="solid-js" />
+    <tool>lighthouse</tool>
+    <metrics>
+      <metric name="build-time" max="30s" />
+      <metric name="bundle-size" max="500kb" />
+      <metric name="first-contentful-paint" max="3s" />
+    </metrics>
+  </gate>
+  
+  <gate id="security" type="REQUIRED">
+    <name>Security</name>
+    <description>No known security vulnerabilities</description>
+    <tool>npm-audit</tool>
+    <threshold type="vulnerability-count" value="0" />
+    <severity-levels>
+      <critical fail="true" />
+      <high fail="true" />
+      <medium fail="false" />
+      <low fail="false" />
+    </severity-levels>
+    <fail-on-violation>true</fail-on-violation>
+  </gate>
+  
+  <gate id="code-style" type="REQUIRED">
+    <name>Code Style</name>
+    <description>Consistent code formatting</description>
+    <tool>prettier</tool>
+    <rules>
+      <rule>kebab-case naming</rule>
+      <rule>no-camelCase</rule>
+      <rule>strict-type-annotations</rule>
+      <rule>no-verbose-code</rule>
+    </rules>
+    <fail-on-violation>true</fail-on-violation>
+  </gate>
 </quality-gates>
