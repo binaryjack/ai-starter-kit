@@ -14,7 +14,7 @@ importers:
 
   packages/cli:
     dependencies:
-      '@tadeo/ai-kit-core':
+      '@ai-agencee/ai-kit-core':
         specifier: workspace:*
         version: link:../core
       commander:

@@ -1,4 +1,4 @@
-import { checkProject, CheckResult } from '@tadeo/ai-kit-core';
+import { checkProject, CheckResult } from '@ai-agencee/ai-kit-core';
 
 export const runCheck = async (): Promise<void> => {
   const dest = process.cwd();

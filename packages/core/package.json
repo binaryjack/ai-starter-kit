@@ -1,7 +1,7 @@
 {
-  "name": "@tadeo/ai-kit-core",
+  "name": "@ai-agencee/ai-kit-core",
   "version": "1.0.0",
-  "description": "Core utilities for @tadeo/ai-starter-kit",
+  "description": "Core utilities for @ai-agencee/ai-starter-kit",
   "type": "commonjs",
   "main": "./dist/src/index.js",
   "exports": {

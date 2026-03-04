@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as readline from 'readline';
-import { copyTemplateFiles, fileExists } from '@tadeo/ai-kit-core';
-import { TEMPLATE_DIR } from '@tadeo/ai-kit-core';
+import { copyTemplateFiles, fileExists } from '@ai-agencee/ai-kit-core';
+import { TEMPLATE_DIR } from '@ai-agencee/ai-kit-core';
 
 const ask = (question: string): Promise<string> =>
   new Promise((resolve) => {

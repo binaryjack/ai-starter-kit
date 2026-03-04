@@ -1,7 +1,7 @@
 {
-  "name": "@tadeo/ai-kit-cli",
+  "name": "@ai-agencee/ai-kit-cli",
   "version": "1.0.0",
-  "description": "CLI for @tadeo/ai-starter-kit",
+  "description": "CLI for @ai-agencee/ai-starter-kit",
   "type": "commonjs",
   "bin": {
     "ai-kit": "./dist/bin/ai-kit.js"
@@ -13,7 +13,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@tadeo/ai-kit-core": "workspace:*",
+    "@ai-agencee/ai-kit-core": "workspace:*",
     "commander": "^12.1.0"
   },
   "devDependencies": {
