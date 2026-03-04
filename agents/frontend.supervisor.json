@@ -1,0 +1,37 @@
+{
+  "laneId": "frontend",
+  "retryBudget": 3,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": ["architecture"],
+      "expect": {
+        "minFindings": 1
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Check for src/components/, pages/, app/ or any React/Vue/Angular entry files."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "noErrorFindings": false
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Look for index.html, vite.config.ts, next.config.js, or tailwind.config.js to confirm frontend setup."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "soft-align",
+      "waitFor": ["backend"],
+      "timeoutMs": 8000,
+      "fallback": "proceed-with-snapshot",
+      "expect": {
+        "minFindings": 1
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Verify frontend source files exist before cross-referencing with backend contracts."
+    }
+  ]
+}

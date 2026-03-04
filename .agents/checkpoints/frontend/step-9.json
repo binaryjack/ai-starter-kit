@@ -1,0 +1,36 @@
+{
+  "checkpointId": "step-9",
+  "stepIndex": 9,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-9",
+    "mode": "self",
+    "stepIndex": 9,
+    "partialResult": {
+      "agentName": "Frontend Agent",
+      "status": "success",
+      "findings": [
+        "ℹ️ ℹ️  No .tsx files found"
+      ],
+      "recommendations": [],
+      "details": {
+        "src": 0
+      },
+      "timestamp": "2026-03-04T15:23:12.692Z"
+    },
+    "contracts": {
+      "laneId": "frontend",
+      "version": 9,
+      "timestamp": "2026-03-04T15:23:12.692Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "APPROVE"
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-04T15:23:12.692Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}

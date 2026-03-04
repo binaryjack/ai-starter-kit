@@ -1,0 +1,33 @@
+{
+  "laneId": "e2e",
+  "retryBudget": 2,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": ["testing"],
+      "expect": {
+        "minFindings": 1
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Check for e2e/, cypress/, playwright/ directories or *.e2e.ts files."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "noErrorFindings": false
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Look for playwright.config.ts, cypress.config.ts, or .github/workflows/ with e2e jobs."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": {
+        "minFindings": 1
+      },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

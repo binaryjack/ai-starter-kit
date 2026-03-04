@@ -1,0 +1,33 @@
+{
+  "laneId": "architecture",
+  "retryBudget": 2,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": ["business-analyst"],
+      "expect": {
+        "minFindings": 1
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Check for tsconfig.json, package.json, or src/ directory to infer architectural patterns."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "noErrorFindings": false
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Look deeper into directory structure — check for packages/, apps/, libs/ to detect monorepo layout."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": {
+        "minFindings": 1
+      },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

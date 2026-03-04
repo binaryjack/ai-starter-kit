@@ -1,0 +1,34 @@
+{
+  "laneId": "testing",
+  "retryBudget": 2,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "hard-barrier",
+      "waitFor": ["backend", "frontend"],
+      "timeoutMs": 12000,
+      "fallback": "escalate",
+      "expect": {
+        "minFindings": 1
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "noErrorFindings": false
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Check tests/ directory for *.test.ts, *.spec.ts, or jest.config.js to confirm test infrastructure."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": {
+        "minFindings": 1
+      },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "checkpointId": "step-2",
+  "stepIndex": 2,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-2",
+    "mode": "self",
+    "stepIndex": 2,
+    "partialResult": {
+      "agentName": "Architecture Agent",
+      "status": "success",
+      "findings": [
+        "✅ TypeScript configured at root",
+        "✅ TypeScript strict mode declared",
+        "ℹ️ ℹ️  No TypeScript path aliases - consider adding for cleaner imports"
+      ],
+      "recommendations": [],
+      "details": {},
+      "timestamp": "2026-03-04T15:23:12.686Z"
+    },
+    "contracts": {
+      "laneId": "architecture",
+      "version": 2,
+      "timestamp": "2026-03-04T15:23:12.685Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "APPROVE"
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-04T15:23:12.686Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}

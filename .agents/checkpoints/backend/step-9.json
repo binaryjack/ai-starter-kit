@@ -1,0 +1,44 @@
+{
+  "checkpointId": "step-9",
+  "stepIndex": 9,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-9",
+    "mode": "self",
+    "stepIndex": 9,
+    "partialResult": {
+      "agentName": "Backend Agent",
+      "status": "success",
+      "findings": [
+        "ℹ️ ℹ️  No controllers found (*.controller.ts)",
+        "ℹ️ ℹ️  No services found (*.service.ts)",
+        "ℹ️ ℹ️  No middleware files found (*.middleware.ts)",
+        "ℹ️ ℹ️  No src/routes directory",
+        "⚠️ ⚠️  No .env.example found"
+      ],
+      "recommendations": [
+        "Controllers are optional - some projects use route handlers directly",
+        "Consider extracting business logic into dedicated service classes",
+        "Add .env.example to document required environment variables"
+      ],
+      "details": {
+        "src": 0
+      },
+      "timestamp": "2026-03-04T15:23:12.692Z"
+    },
+    "contracts": {
+      "laneId": "backend",
+      "version": 9,
+      "timestamp": "2026-03-04T15:23:12.692Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "APPROVE"
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-04T15:23:12.692Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}

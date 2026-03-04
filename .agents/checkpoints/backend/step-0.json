@@ -1,0 +1,38 @@
+{
+  "checkpointId": "step-0",
+  "stepIndex": 0,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-0",
+    "mode": "self",
+    "stepIndex": 0,
+    "partialResult": {
+      "agentName": "Backend Agent",
+      "status": "success",
+      "findings": [
+        "ℹ️ ℹ️  No controllers found (*.controller.ts)"
+      ],
+      "recommendations": [
+        "Controllers are optional - some projects use route handlers directly"
+      ],
+      "details": {
+        "src": 0
+      },
+      "timestamp": "2026-03-04T15:23:12.691Z"
+    },
+    "contracts": {
+      "laneId": "backend",
+      "version": 0,
+      "timestamp": "2026-03-04T15:23:12.691Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "APPROVE"
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-04T15:23:12.691Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}

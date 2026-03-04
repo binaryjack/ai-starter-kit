@@ -1,0 +1,50 @@
+{
+  "checkpointId": "step-0",
+  "stepIndex": 0,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-0",
+    "mode": "self",
+    "stepIndex": 0,
+    "partialResult": {
+      "agentName": "Testing Agent",
+      "status": "success",
+      "findings": [],
+      "recommendations": [],
+      "details": {},
+      "timestamp": "2026-03-04T15:23:12.700Z"
+    },
+    "contracts": {
+      "laneId": "testing",
+      "version": 0,
+      "timestamp": "2026-03-04T15:23:12.700Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "ESCALATE",
+    "reason": "Expected at least 1 findings, got 0",
+    "evidence": {
+      "checkpointId": "step-0",
+      "rule": {
+        "checkpointId": "step-0",
+        "mode": "hard-barrier",
+        "waitFor": [
+          "backend",
+          "frontend"
+        ],
+        "timeoutMs": 12000,
+        "fallback": "escalate",
+        "expect": {
+          "minFindings": 1
+        },
+        "onFail": "ESCALATE"
+      }
+    }
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-04T15:23:12.700Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}

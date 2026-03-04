@@ -1,0 +1,37 @@
+{
+  "laneId": "backend",
+  "retryBudget": 3,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": ["architecture"],
+      "expect": {
+        "minFindings": 1
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Check src/ for TypeScript or JavaScript files, especially controllers/, routes/, services/."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "noErrorFindings": false
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Scan for API definition files: openapi.yaml, swagger.json, or *.routes.ts patterns."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "soft-align",
+      "waitFor": ["frontend"],
+      "timeoutMs": 8000,
+      "fallback": "proceed-with-snapshot",
+      "expect": {
+        "minFindings": 1
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Verify backend source files exist before cross-referencing with frontend."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "checkpointId": "step-0",
+  "stepIndex": 0,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-0",
+    "mode": "self",
+    "stepIndex": 0,
+    "partialResult": {
+      "agentName": "E2E Agent",
+      "status": "success",
+      "findings": [],
+      "recommendations": [],
+      "details": {},
+      "timestamp": "2026-03-04T15:23:12.702Z"
+    },
+    "contracts": {
+      "laneId": "e2e",
+      "version": 2,
+      "timestamp": "2026-03-04T15:23:12.702Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "ESCALATE",
+    "reason": "Retry budget exhausted (2 retries) for checkpoint \"step-0\". Last failure: Expected at least 1 findings, got 0",
+    "evidence": {
+      "checkpointId": "step-0",
+      "failureReason": "Expected at least 1 findings, got 0",
+      "retries": 2
+    }
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-04T15:23:12.702Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}

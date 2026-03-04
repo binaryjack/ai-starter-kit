@@ -1,0 +1,40 @@
+{
+  "checkpointId": "step-2",
+  "stepIndex": 2,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-2",
+    "mode": "self",
+    "stepIndex": 2,
+    "partialResult": {
+      "agentName": "Business Analyst",
+      "status": "success",
+      "findings": [
+        "✅ package.json found",
+        "✅ Monorepo structure detected (pnpm workspace)",
+        "📚 4 packages found"
+      ],
+      "recommendations": [
+        "Keep packages isolated with clear boundaries"
+      ],
+      "details": {
+        "packages": 4
+      },
+      "timestamp": "2026-03-04T15:23:12.678Z"
+    },
+    "contracts": {
+      "laneId": "business-analyst",
+      "version": 2,
+      "timestamp": "2026-03-04T15:23:12.678Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "APPROVE"
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-04T15:23:12.678Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}
