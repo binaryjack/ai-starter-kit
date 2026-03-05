@@ -58,9 +58,12 @@ export * from './lib/distillation.js'
 export * from './lib/code-sandbox.js'
 // LLM-as-judge eval harness (G-50)
 export * from './lib/eval-harness.js'
-// Enterprise readiness (E1-E3, E6, E8, E10, E13)
+// Enterprise readiness (E1-E3, E6, E8-E13)
+export * from './lib/issue-sync.js'
+export * from './lib/notification-sink.js'
 export * from './lib/pii-scrubber.js'
 export * from './lib/prompt-injection-detector.js'
+export * from './lib/python-mcp-bridge.js'
 export * from './lib/rate-limiter.js'
 export * from './lib/run-advisor.js'
 export * from './lib/tenant-registry.js'
