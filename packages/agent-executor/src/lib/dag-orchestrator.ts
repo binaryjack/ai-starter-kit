@@ -19,8 +19,8 @@ import { ModelRouterFactory } from './model-router-factory.js'
 import { ModelRouter } from './model-router.js'
 import { getGlobalTracer } from './otel.js'
 import { RbacPolicy } from './rbac.js'
-import { createDefaultSecretsProvider, injectSecretsToEnv, SecretsProvider } from './secrets.js'
 import { RunRegistry } from './run-registry.js'
+import { createDefaultSecretsProvider, injectSecretsToEnv, SecretsProvider } from './secrets.js'
 
 // ─── DagRunOptions ──────────────────────────────────────────────────────────────
 
