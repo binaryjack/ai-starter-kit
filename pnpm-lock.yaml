@@ -169,26 +169,26 @@ importers:
         specifier: ^1.0.0
         version: 1.0.56
       '@xyflow/react':
-        specifier: ^12.4.4
+        specifier: ^12.7.0
         version: 12.10.1(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       next:
         specifier: 15.3.3
         version: 15.3.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react:
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.2.4
       react-dom:
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.2.4(react@19.2.4)
     devDependencies:
       '@types/node':
         specifier: ^22.0.0
         version: 22.19.13
       '@types/react':
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.2.14
       '@types/react-dom':
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.2.3(@types/react@19.2.14)
       autoprefixer:
         specifier: ^10.4.21
@@ -197,10 +197,10 @@ importers:
         specifier: ^8.5.3
         version: 8.5.8
       tailwindcss:
-        specifier: ^4.1.8
-        version: 4.2.1
+        specifier: ^3.4.17
+        version: 3.4.19
       typescript:
-        specifier: ^5.8.3
+        specifier: ^5.4.5
         version: 5.9.3
 
   packages/ui:
@@ -2468,9 +2468,6 @@ packages:
     resolution: {integrity: sha512-3ofp+LL8E+pK/JuPLPggVAIaEuhvIz4qNcf3nA1Xn2o/7fb7s/TYpHhwGDv1ZU3PkBluUVaF8PyCHcm48cKLWQ==}
     engines: {node: '>=14.0.0'}
     hasBin: true
-
-  tailwindcss@4.2.1:
-    resolution: {integrity: sha512-/tBrSQ36vCleJkAOsy9kbNTgaxvGbyOamC30PRePTQe/o1MFwEKHQk4Cn7BNGaPtjp+PuUrByJehM1hgxfq4sw==}
 
   test-exclude@6.0.0:
     resolution: {integrity: sha512-cAGWPIyOHU6zlmg88jwm7VRyXnMN7iV68OGAbYDk/Mh/xC/pzVPlQtY6ngoIH/5/tciuhGfvESU8GrHrcxD56w==}
@@ -5065,8 +5062,6 @@ snapshots:
     transitivePeerDependencies:
       - tsx
       - yaml
-
-  tailwindcss@4.2.1: {}
 
   test-exclude@6.0.0:
     dependencies:
