@@ -41,7 +41,11 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 - **Best for**: Project review, acceptance criteria verification
 - **Covers**: What was built, deliverables checklist, next steps
 - **Time**: ~10 minutes for status overview
-
+### 🎬 **Advanced Demo Scenarios** (30 minutes)
+- **File**: [docs/demo-scenarios.md](demo-scenarios.md)
+- **Best for**: Engineers who want to see the DAG engine's full behaviour surface without API keys
+- **Covers**: 6 runnable scenarios (RETRY, HANDOFF, ESCALATE, soft-align, hard-barrier, needs-human-review), the 5-Phase Plan system, mock vs real LLM differences
+- **Time**: ~10 minutes to read; run any scenario in under 60 seconds
 ### 🔒 **Enterprise Readiness** (15 minutes)
 - **File**: [docs/enterprise-readiness.md](enterprise-readiness.md)
 - **Best for**: Security engineers, enterprise architects, SOC2 preparation
@@ -64,6 +68,12 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 3. Review [WORKFLOW_EXAMPLES.md](WORKFLOW_EXAMPLES.md) (10 min)
 4. Try some examples
 
+### Path 5: **I Want to See the Engine Under Stress** (20 min)
+1. Run `pnpm demo:06` — watch all 8 error types fire in parallel (2 min)
+2. Read [docs/demo-scenarios.md](demo-scenarios.md) — understand each lane (10 min)
+3. Run `pnpm demo:plan:01` — watch the 5-phase plan system from Phase 1 (5 min)
+4. Run your own `.dag.json` with `pnpm run:dag` (3 min)
+
 ### Path 3: **I Want to Build on It** (1.5 hours)
 1. Complete Path 2 (45 min)
 2. Read [EXTENDING_AGENTS.md](EXTENDING_AGENTS.md) (30 min)
@@ -81,6 +91,12 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 ## 🔍 Find What You Need
 
 ### By Use Case
+
+**"I want to see failures, retries, and escalations"**
+→ [docs/demo-scenarios.md](demo-scenarios.md) — run `pnpm demo:06` for the full showcase
+
+**"I want to understand the 5-phase plan system"**
+→ [docs/demo-scenarios.md](demo-scenarios.md) > The 5-Phase Plan Demo; run `pnpm demo:plan`
 
 **"I want to break down a specification"**
 → [AGENT_QUICKSTART.md](AGENT_QUICKSTART.md) > Run `agent:breakdown`
@@ -134,10 +150,17 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 
 ### CLI Commands
 ```bash
-ai-kit agent:breakdown <spec-file>      # Break down specification
-ai-kit agent:workflow <spec-file>       # Run full workflow
-ai-kit agent:validate <output-file>     # Validate output
-ai-kit agent:status <session-id>        # Check progress
+# Demo scenarios (no API keys)
+pnpm demo:menu                          # interactive picker
+pnpm demo:01 … demo:06                  # run a specific scenario
+pnpm demo:plan                          # 5-phase plan demo
+
+# DAG execution
+ai-kit agent:dag <dag-file>             # run a DAG
+ai-kit agent:breakdown <spec-file>      # break down specification
+ai-kit agent:workflow <spec-file>       # run full workflow
+ai-kit agent:validate <output-file>     # validate output
+ai-kit agent:status <session-id>        # check progress
 ```
 
 ### File Structure
