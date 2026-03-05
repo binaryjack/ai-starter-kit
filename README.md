@@ -72,13 +72,27 @@ pnpm build
 ### 2. Run the Zero-Key Demo
 
 ```sh
-# Run the 3-lane demo — NO API keys required
+# Run the original 3-lane demo — NO API keys required
 pnpm demo
+
+# Interactive menu — pick from 6 advanced scenarios
+pnpm demo:menu
+
+# Run a specific advanced scenario directly
+pnpm demo:01   # App Boilerplate    — RETRY × 2, hard-barrier
+pnpm demo:02   # Enterprise Skeleton — HANDOFF, needs-human-review
+pnpm demo:03   # Website Build       — ESCALATE terminal 🚨
+pnpm demo:04   # Feature in Context  — soft-align, read-contract
+pnpm demo:05   # MVP Sprint          — flaky lane, mixed results
+pnpm demo:06   # Resilience Showcase — every error type at once
+
+# 5-Phase Plan Demo (seed Phase 0, start from SYNTHESIZE)
+pnpm demo:plan
 ```
 
-The demo spins up three parallel lanes (code-review, security-scan, summary) using the mock provider with real-time streaming output.
+All demos run on the built-in `MockProvider` — **zero API keys required**.
 
-**📖 See**: [Demo Mode Guide](docs/features/25-demo-mode.md)
+**📖 See**: [Advanced Demo Scenarios](docs/demo-scenarios.md)
 
 ### 3. Run a Real DAG
 
@@ -250,9 +264,26 @@ Comprehensive feature guides are available in [`docs/features/`](docs/features/I
 ```sh
 pnpm install          # install all workspace deps
 pnpm build            # compile all packages (tsc)
-pnpm test             # run all Jest suites (396 tests: 358 agent-executor + 12 cli + 26 mcp)
-pnpm demo             # build + run the mock demo
-pnpm run:plan         # start interactive planning session
+pnpm test             # run all Jest suites (424 tests)
+pnpm demo             # build + run the original 3-lane mock demo
+
+# Advanced demo scenarios (no API keys)
+pnpm demo:menu        # interactive scenario picker
+pnpm demo:all         # run all 6 scenarios in sequence
+pnpm demo:01          # App Boilerplate  (RETRY × 2, hard-barrier)
+pnpm demo:02          # Enterprise       (HANDOFF, needs-human-review)
+pnpm demo:03          # Website Build    (ESCALATE terminal)
+pnpm demo:04          # Feature-in-ctx   (soft-align, read-contract)
+pnpm demo:05          # MVP Sprint       (flaky lane)
+pnpm demo:06          # Resilience       (all error types)
+
+# 5-Phase Plan system
+pnpm demo:plan        # seed Phase 0 → launch plan from SYNTHESIZE
+pnpm demo:plan:01     # App Boilerplate seed
+pnpm demo:plan:04     # Feature-in-context seed (billing on existing platform)
+pnpm run:plan         # start fully interactive planning session
+
+# DAG execution
 pnpm run:dag agents/dag.json      # execute a DAG
 pnpm visualize agents/dag.json    # output Mermaid/DOT diagram
 ```
@@ -293,13 +324,18 @@ pnpm visualize agents/dag.json    # output Mermaid/DOT diagram
 | Plugin System | Core | ✅ | Custom check types and provider extensions |
 | Human Review Gate | Core | ✅ | Manual approval checkpoints in DAG execution |
 
-### Planned (E9, E11, E12, E14)
+### Recently Shipped (E9, E11, E12)
+
+| ID | Feature | Status | Details |
+|----|---------|--------|----------|
+| **E9** | Python MCP Bridge | ✅ | JSON-RPC 2.0 subprocess bridge; `PythonMcpProvider` LLM adapter |
+| **E11** | Jira/Linear Sync | ✅ | Post issues on DAG lane failure via REST/GraphQL; `fromEnv()` |
+| **E12** | Slack/Teams Notifications | ✅ | Incoming webhooks on DAG/lane end + budget exceeded; parallel delivery |
+
+### Planned (E14)
 
 | ID | Feature | Priority | Status |
 |----|---------|----------|--------|
-| **E9** | Python MCP Bridge | P2 | 🔜 Subprocess bridge for Python tool registration |
-| **E11** | Jira/Linear Sync | P3 | 🔜 Webhook → create issues on agent run failure |
-| **E12** | Slack/Teams Notifications | P3 | 🔜 Outbound webhooks on DAG completion/failure |
 | **E14** | Visual DAG Editor | P3 | 🔜 React-based browser UI for editing `.dag.json` files |
 
 **📖 See**: [Enterprise Readiness](docs/enterprise-readiness.md) for detailed roadmap
@@ -314,6 +350,6 @@ MIT — see [LICENSE](LICENSE).
 ## Support & Resources
 
 - 📚 **Full Documentation**: [docs/features/INDEX.md](docs/features/INDEX.md)
-- 🚀 **Getting Started**: [docs/features/25-demo-mode.md](docs/features/25-demo-mode.md)
+- 🎬 **Advanced Demo Scenarios**: [docs/demo-scenarios.md](docs/demo-scenarios.md)
 - 📋 **Enterprise Readiness**: [docs/enterprise-readiness.md](docs/enterprise-readiness.md)
 - 🏗️ **Architecture**: [agents/](agents/)
