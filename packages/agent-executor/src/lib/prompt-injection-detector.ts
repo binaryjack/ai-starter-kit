@@ -123,7 +123,7 @@ const BUILT_IN_SIGNATURES: InjectionSignature[] = [
     name: 'IGNORE_INSTRUCTIONS',
     patterns: [
       /ignore\s+(all\s+)?(previous|prior|above|your|the\s+previous)\s+(instructions?|prompts?|directives?|guidelines?|rules?)/i,
-      /disregard\s+(all\s+)?(previous|prior|above|your|the)\s+(instructions?|prompts?|directives?)/i,
+      /disregard\s+(?:all\s+)?(?:\w+\s+){0,2}(instructions?|prompts?|directives?)/i,
     ],
   },
   {

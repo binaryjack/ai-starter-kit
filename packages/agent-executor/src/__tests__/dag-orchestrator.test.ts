@@ -50,6 +50,10 @@ jest.mock('../lib/rate-limiter', () => ({
   })),
 }));
 
+jest.mock('../lib/prompt-injection-detector', () => ({
+  createInjectionSafeProvider: jest.fn((p) => p), // identity wrapper — no-op in unit tests
+}));
+
 jest.mock('../lib/run-registry', () => ({
   RunRegistry: jest.fn().mockImplementation(() => ({
     create: jest.fn().mockResolvedValue({
