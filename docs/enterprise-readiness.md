@@ -4,7 +4,7 @@ Status as of latest commit. All **E1–E6** items are shipped and actively enfor
 
 ---
 
-## Completed (E1–E7)
+## Completed (E1–E8)
 
 | ID | Feature | File(s) | Status |
 |----|---------|---------|--------|
@@ -15,8 +15,24 @@ Status as of latest commit. All **E1–E6** items are shipped and actively enfor
 | E5 | OIDC JWT auth | `mcp/src/oidc-auth.ts` → **wired into** `mcp/src/sse-server.ts` | ✅ RS256/ES256 Bearer token enforced on `/events`; `/health` open |
 | E6 | Rate limiting | `agent-executor/src/lib/rate-limiter.ts` → **wired into** `agent-executor/src/lib/dag-orchestrator.ts` | ✅ `assertWithinLimits()` + `acquireRun()` before each DAG execution |
 | E7 | DAG visualizer | `cli/src/commands/visualize.ts` | ✅ Mermaid + DOT output from DAG JSON |
+| E8 | Prompt injection detection | `agent-executor/src/lib/prompt-injection-detector.ts` → **wired via** `ModelRouter.wrapAllProviders()` | ✅ 10 signature families; `warn`/`block` mode; `DagRunOptions.injectionDetection` |
 
-**Test coverage**: 324 tests passing across all packages.
+**Test coverage**: 359 tests passing across all packages (8 core + 313 agent-executor + 12 cli + 26 mcp).
+
+---
+
+## E8 Runtime Enforcement Detail
+
+`prompt-injection-detector.ts` + `dag-orchestrator.ts`:
+- Enabled via `DagRunOptions.injectionDetection.enabled = true`
+- After model router is built, `modelRouter.wrapAllProviders(createInjectionSafeProvider)` wraps every registered provider
+- On each LLM call: `PromptInjectionDetector.enforce(prompt, mode)` scans all non-skipped message roles
+- **10 detection families**: IGNORE_INSTRUCTIONS, SYSTEM_OVERRIDE, ROLE_JAILBREAK, NEW_DIRECTIVE, PROMPT_LEAK, CONTEXT_FENCE, INDIRECT_INJECTION, TASK_OVERRIDE, DATA_ESCAPE, SUDO_COMMAND
+- **Confidence**: 1 family → 0.3 (low), 2 → 0.6 (medium), 3+ → 0.9 (high)
+- **`warn` mode** (default): structured JSON warning to stderr, request continues — backwards compatible
+- **`block` mode**: throws `PromptInjectionError` before the LLM call, carries full `InjectionScanResult`
+- `skipRoles` option lets you exclude trusted system messages from scanning
+- `customSignatures` extension point for project-specific injection patterns
 
 ---
 
@@ -38,11 +54,10 @@ Status as of latest commit. All **E1–E6** items are shipped and actively enfor
 
 ---
 
-## Backlog (E8–E14)
+## Backlog (E9–E14)
 
 | ID | Feature | Priority | Notes |
 |----|---------|----------|-------|
-| E8 | Prompt injection detection | P1 | Heuristic + regex layer before LLM call |
 | E9 | Python MCP bridge | P2 | `subprocess` bridge so Python tools register as MCP servers |
 | E10 | AWS Bedrock provider | P2 | Implement `BedrockProvider` in `agent-executor` |
 | E11 | Jira/Linear sync | P3 | Webhook → create issue on agent run failure |
