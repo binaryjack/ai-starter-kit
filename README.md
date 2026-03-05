@@ -584,6 +584,11 @@ pnpm install          # install all workspace deps
 pnpm build            # compile all packages (tsc)
 pnpm test             # run all Jest suites (424 tests)
 
+# Web apps
+pnpm dev:dag-editor   # DAG Visual Editor   → http://localhost:5174
+pnpm dev:showcase     # Showcase site        → http://localhost:3001
+pnpm dev:sites        # both in parallel
+
 # Advanced demo scenarios (no API keys)
 pnpm demo             # original 3-lane mock demo
 pnpm demo:menu        # interactive scenario picker
