@@ -9,6 +9,7 @@
 import * as path from 'path'
 import type { SamplingCallback } from './llm-provider.js'
 import { ModelRouter } from './model-router.js'
+import { BedrockProvider } from './providers/bedrock.provider.js'
 import { GeminiProvider } from './providers/gemini.provider.js'
 import { MockProvider } from './providers/mock.provider.js'
 import { OllamaProvider } from './providers/ollama.provider.js'
@@ -78,6 +79,15 @@ export class ModelRouterFactory {
           if (await gemini.isAvailable()) {
             modelRouter.registerProvider(gemini);
             log(`   ✨ Gemini provider auto-registered`);
+          }
+        }
+        // Auto-register Bedrock when AWS credentials are set
+        if (process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
+          const bedrock = new BedrockProvider();
+          if (await bedrock.isAvailable()) {
+            modelRouter.registerProvider(bedrock);
+            const region = process.env['AWS_REGION'] ?? process.env['AWS_DEFAULT_REGION'] ?? 'us-east-1';
+            log(`   ☁️  Bedrock provider auto-registered (region: ${region})`);
           }
         }
         await modelRouter.autoRegister();

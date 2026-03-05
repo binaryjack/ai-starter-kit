@@ -2,13 +2,12 @@
  * E8 — PromptInjectionDetector unit tests
  */
 
-import {
-  createInjectionSafeProvider,
-  InjectionDetectorOptions,
-  PromptInjectionDetector,
-  PromptInjectionError,
-} from '../lib/prompt-injection-detector';
 import type { LLMPrompt, LLMProvider, LLMResponse } from '../lib/llm-provider';
+import {
+    createInjectionSafeProvider,
+    PromptInjectionDetector,
+    PromptInjectionError
+} from '../lib/prompt-injection-detector';
 
 // ─── Test helpers ─────────────────────────────────────────────────────────────
 

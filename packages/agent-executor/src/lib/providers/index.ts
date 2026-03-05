@@ -10,4 +10,5 @@ export { OllamaProvider } from './ollama.provider.js'
 export { OpenAIProvider } from './openai.provider.js'
 export { VSCodeSamplingProvider } from './vscode-sampling.provider.js'
 export type { SamplingCallback } from './vscode-sampling.provider.js'
+export { BedrockProvider } from './bedrock.provider.js'
 
