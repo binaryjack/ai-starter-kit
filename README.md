@@ -2,20 +2,79 @@
 
 > **Enterprise-grade multi-agent orchestration engine** — DAG-supervised parallel agents with streaming LLM output, intelligent model routing, resilience patterns, cost tracking, RBAC, audit logging, and a zero-API-key demo mode.
 
-**Status**: ✅ Production-Ready | **Tests**: 396 passing (358 agent-executor + 12 cli + 26 mcp) | **Enterprise Features**: 10 completed (E1-E10, E13)
+**Status**: ✅ Production-Ready | **Tests**: 424 passing | **Enterprise Features**: 13 completed (E1–E13)
 
 ---
 
-## What this is
+## Who is this for?
+
+| Audience | Why they use it |
+|----------|-----------------|
+| **Individual developers** | Run the full AI-assisted development loop — from idea to wired sprint plan — without leaving the terminal and without paying for API calls during exploration |
+| **Feature squads (2–8 people)** | Coordinate parallel workstreams with hard sync points, automated handoffs between agents, and supervisor-gated quality checks |
+| **Platform / enterprise teams** | Roll out AI-assisted workflows to multiple squads with RBAC, multi-tenant isolation, audit trails, cost controls, and CI integration — all enforced at the engine level |
+| **AI tooling builders** | Use the DAG engine, MCP bridge, plugin system, and TypeScript Builder API as infrastructure for custom AI products |
+
+---
+
+## What problem does it solve?
+
+> **"I want AI to help me build real software — not just generate snippets."**
+
+Most AI coding tools stop at the file level. `ai-starter-kit` operates at the **project level**:
+
+- A structured **5-phase discovery process** turns a vague requirement into a precise, wired sprint plan — with every agent knowing their scope, dependencies, and acceptance criteria before writing a line
+- A **DAG execution engine** runs specialised agents in parallel, detects conflicts via alignment barriers, retries on failure, hands off between agents, and escalates to a human when it can't recover automatically
+- **Supervisor checkpoints** enforce quality at every step — not just at the end — so regressions surface during planning, not in production
+- **Zero API-key demo mode** means the entire system can be evaluated, tested in CI, and learned without spending anything
+
+It ships two execution paths that compose seamlessly:
+
+| Path | Entry point | When to use |
+|------|------------|-------------|
+| **Plan System** | `pnpm run:plan` | Discovery → synthesis → decomposition → wiring → DAG hand-off for a new project or feature |
+| **DAG Engine** | `pnpm run:dag <dag.json>` | Run any defined agent graph directly: code review, security audit, migration, documentation, CI gate |
+
+---
+
+## Why ai-agencee and not another tool?
+
+| Need | Generic AI chat | Code-gen copilots | ai-starter-kit |
+|------|----------------|------------------|----------------|
+| Structured multi-step plan from a vague idea | ❌ Hallucinated | ⚠️ Single-file suggestions | ✅ 5-phase BA-led discovery → wired sprint plan |
+| Parallel agent coordination with sync points | ❌ | ❌ | ✅ DAG barriers, soft-align, read-contract |
+| Automatic retry + escalation on failure | ❌ | ❌ | ✅ `retryBudget`, `HANDOFF`, `ESCALATE` verdicts |
+| Human-in-the-loop approval gates | ❌ | ❌ | ✅ `needs-human-review` checkpoint |
+| Enterprise: RBAC, audit, multi-tenant, PII, OIDC | ❌ | ❌ | ✅ E1–E13 enforced at runtime |
+| Zero-cost evaluation + CI integration | ❌ | ❌ | ✅ Mock provider, $0.00, no keys |
+| Extensible: custom agents, checks, providers | ⚠️ | ⚠️ | ✅ Plugin system + TypeScript Builder API |
+
+---
+
+## ⚡ Quickies — Get a result in under 5 minutes
+
+Copy-paste recipes for the most common tasks. No reading required.
+
+| I want to… | Command |
+|------------|---------|
+| **See the engine run** right now | `pnpm demo` |
+| **See failures, retries, escalations** in one run | `pnpm demo:06` |
+| **Plan a new app** from scratch | `pnpm run:plan` |
+| **Add a feature** to an existing codebase | `pnpm demo:plan:04` then `pnpm run:plan` |
+| **Security audit** my project | `pnpm run:dag agents/security-review.agent.json --provider mock` |
+| **Generate docs** for an existing app | `pnpm run:plan` → type `spike`, stories = "generate architecture doc" |
+| **Create a custom agent** in 5 min | [Q4 in Quickies →](docs/quickies.md#q4) |
+| **Set up a CI quality gate** | [Q18 in Quickies →](docs/quickies.md#q18) |
+| **Enterprise adoption** checklist | [Q13 in Quickies →](docs/quickies.md#q13) |
+| **Data migration** plan + cutover gate | [Q19 in Quickies →](docs/quickies.md#q19) |
+
+**📖 Full recipe list (19 quickies)**: [docs/quickies.md](docs/quickies.md)
+
+---
+
+## What it is (technical)
 
 `ai-starter-kit` is a TypeScript monorepo that turns JSON-defined agent graphs into production-ready AI workflows with enterprise-grade security, compliance, and observability.
-
-It ships two separate execution paths that compose seamlessly:
-
-| Path | Entry | When to use |
-|---|---|---|
-| **DAG Engine** | `agent:dag <dag.json>` | Parallel multi-lane analysis / review / generation with supervised checkpoints |
-| **Plan System** | `plan` interactive CLI | Discovery → Sprint planning → Architecture decisions → DAG hand-off |
 
 **Full Documentation**: Start with [📚 Features Index](docs/features/INDEX.md) for all capabilities.
 
@@ -209,21 +268,117 @@ All implemented and enforced at runtime:
 
 ---
 
-## Plan System (5-Phase Interactive Discovery)
+## Plan System — 5-Phase Discovery to Execution
+
+A single `pnpm run:plan` session takes you from a vague idea to running agent tasks.
+Each phase is distinct, inspectable, and resumable.
+
+---
+
+### Phase 0 — DISCOVER
+**What:** The BA agent interviews you with ~12 structured questions across 4 blocks:  
+problem definition · primary users · stories (feature/fix/migration/spike) · stack constraints.
+
+**You do:** Answer in plain English. The BA probes and clarifies.  
+**Output:** `.agents/plan-state/discovery.json` — a complete `DiscoveryResult` capturing every answer.
 
 ```
-Phase 0  Discovery       → BA questionnaire, saved to .agents/plan-state/discovery.json
-Phase 1  Synthesize       → LLM produces PlanDefinition → plan.json
-Phase 2  Decompose/Backlog → Sprint planning board → backlog.json
-Phase 3  Wire/Arbiter     → Cross-agent decisions → decisions.json
-Phase 4  DAG Hand-off     → Auto-generates dag.json + runs the DAG engine
+🧠 BA › What problem are you solving?
+👤 You › Users can't track their subscription status in real time.
+🧠 BA › Who is the primary user — consumer or internal team?
+👤 You › Consumer, B2C SaaS, ~50k MAU.
+🧠 BA › I'll capture: real-time subscription status for 50k MAU consumer SaaS…
+         What quality grade? (mvp / enterprise / poc-stub)
 ```
 
-Start the interactive plan session:
+> **Skip this phase** with a pre-seeded discovery: `pnpm demo:plan:01` through `pnpm demo:plan:05`
+
+---
+
+### Phase 1 — SYNTHESIZE
+**What:** The BA reads the discovery result and produces a **plan skeleton** — Steps with
+rough Tasks, ownership, and acceptance criteria. You review and approve.
+
+**Output:** `.agents/plan-state/plan.json` at phase `synthesize` — Steps defined, Tasks stubbed.
+
+```
+🧠 BA › Draft plan for "Real-time Subscription Status":
+         Step 1: Webhook ingestion (Backend)   — receive Stripe events
+         Step 2: Status store (Database)        — idempotent event log
+         Step 3: SSE endpoint (Backend)         — stream status to clients
+         Step 4: UI widget (Frontend)           — live status badge
+         Step 5: Test suite (Testing + E2E)     — contract + acceptance tests
+
+         Approve? [y / edit / add story]
+```
+
+---
+
+### Phase 2 — DECOMPOSE
+**What:** Each specialist agent (Architecture, Backend, Frontend, Testing, E2E) expands
+their Steps into detailed Tasks **in parallel**. Each task gets: description, acceptance
+criteria, estimated effort, and output artefacts.
+
+**Output:** `.agents/plan-state/plan.json` fully populated — every task defined.
+
+```
+🏗️  Architecture  › Decomposing Step 1…
+⚙️  Backend       › Decomposing Step 2, 3…     ← parallel
+🎨  Frontend      › Decomposing Step 4…        ← parallel
+🧪  Testing       › Decomposing Step 5…        ← parallel
+```
+
+---
+
+### Phase 3 — WIRE
+**What:** The engine computes the **dependency graph** across all tasks, detects
+conflicts between agent plans, injects **alignment gates** at conflict points, and
+produces the execution order.
+
+**Output:** `.agents/plan-state/plan.json` at phase `wire` — dependencies set,
+`AlignmentGate` objects injected, the `Arbiter` resolves any cross-agent conflicts.
+
+```
+⚖️  Arbiter › Conflict: Backend Step 3 (SSE schema) ↔ Frontend Step 4 (event type)
+             Resolution: agree on { type: 'subscription.status', payload: StatusEvent }
+             → alignment gate injected after Step 3
+```
+
+---
+
+### Phase 4 — EXECUTE
+**What:** `PlanOrchestrator` feeds the wired plan into the `DagOrchestrator` lane by
+lane, respecting the computed dependency order. Supervisors enforce acceptance criteria
+at every checkpoint. Results land in `.agents/results/`.
+
+**Output:** Execution artefacts per task, findings log, full `DagResult` JSON.
+
+```
+⚡  System  › Executing wired plan — 5 steps, 18 tasks
+▶  Group 1: webhook-ingestion + status-store   ← parallel
+✅  webhook-ingestion  — 3 checkpoints, 0 retries
+✅  status-store       — 2 checkpoints, 0 retries
+▶  Group 2: sse-endpoint
+✅  sse-endpoint        — 2 checkpoints, 1 retry
+▶  Group 3: ui-widget + test-suite             ← parallel
+...
+```
+
+---
 
 ```sh
+# Start the full interactive session:
 pnpm run:plan
+
+# Jump to Phase 1 with a pre-seeded discovery (no Q&A):
+pnpm demo:plan          # interactive seed picker
+pnpm demo:plan:01       # App Boilerplate seed
+pnpm demo:plan:02       # Enterprise Skeleton seed
+pnpm demo:plan:04       # Feature-in-context seed (billing on existing platform)
+pnpm demo:plan:05       # MVP Sprint seed (2-week solo)
 ```
+
+**📖 See**: [demo-scenarios.md — 5-Phase Plan Demo](docs/demo-scenarios.md#the-5-phase-plan-demo)
 
 ---
 
