@@ -3,10 +3,12 @@ import { Command } from 'commander'
 import { runDag } from '../src/commands/agents.js'
 import { runBenchmark } from '../src/commands/benchmark.js'
 import { runCheck } from '../src/commands/check.js'
+import { runDataDelete, runDataExport, runDataListTenants } from '../src/commands/data.js'
 import { runInit } from '../src/commands/init.js'
 import { runMcp } from '../src/commands/mcp.js'
 import { runPlan } from '../src/commands/plan.js'
 import { runSync } from '../src/commands/sync.js'
+import { runVisualize } from '../src/commands/visualize.js'
 
 const program = new Command();
 
@@ -100,5 +102,48 @@ program
       output: options.output,
     }),
   );
+
+// DAG visualizer (E7)
+program
+  .command('dag:visualize <dag-file>')
+  .description('Render a DAG JSON as a Mermaid flowchart or Graphviz DOT diagram')
+  .option('-o, --output <file>', 'Write diagram to a file instead of printing to stdout')
+  .option('-f, --format <fmt>', 'Output format: mermaid (default) or dot', 'mermaid')
+  .action((dagFile, options) =>
+    runVisualize(dagFile, {
+      output: options.output,
+      format: options.format,
+    }),
+  );
+
+// GDPR data commands (E4)
+program
+  .command('data:export')
+  .description('Export all run data for a tenant (GDPR Art. 20 — Data Portability)')
+  .option('-t, --tenant <id>', 'Tenant ID (default: AIKIT_TENANT_ID env var or "default")')
+  .requiredOption('-d, --dest <dir>', 'Destination directory for the export')
+  .action((options) =>
+    runDataExport({
+      tenant: options.tenant,
+      dest: options.dest,
+    }),
+  );
+
+program
+  .command('data:delete')
+  .description('Permanently delete all run data for a tenant (GDPR Art. 17 — Erasure)')
+  .option('-t, --tenant <id>', 'Tenant ID (default: AIKIT_TENANT_ID env var or "default")')
+  .option('--confirm', 'Required: confirm you intend to delete all data irreversibly')
+  .action((options) =>
+    runDataDelete({
+      tenant: options.tenant,
+      confirm: options.confirm,
+    }),
+  );
+
+program
+  .command('data:list-tenants')
+  .description('List all tenant IDs stored under .agents/tenants/')
+  .action(runDataListTenants);
 
 program.parse(process.argv);

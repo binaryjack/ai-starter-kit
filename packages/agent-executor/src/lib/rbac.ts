@@ -71,6 +71,19 @@ export interface RbacPrincipalDefinition {
   role: string;
   /** Per-lane overrides: { "<laneId>": "allow" | "deny" } */
   laneRestrictions?: Record<string, LaneRestriction>;
+  /**
+   * Optional rate-limit budgets for this principal.
+   * Enforced by RateLimiter in packages/agent-executor/src/lib/rate-limiter.ts.
+   * All fields are optional — omit to apply no limit on that axis.
+   */
+  rateLimits?: {
+    /** Maximum total tokens (input + output) consumed per calendar day (UTC) */
+    tokenBudgetPerDay?: number;
+    /** Maximum simultaneous DAG runs */
+    maxConcurrentRuns?: number;
+    /** Maximum DAG run starts within any rolling 60-minute window */
+    maxRunsPerHour?: number;
+  };
 }
 
 export interface RbacPolicyFile {
