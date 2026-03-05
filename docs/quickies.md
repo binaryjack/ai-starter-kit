@@ -69,7 +69,8 @@ wire → execute) → ready-to-build task breakdown.
 # Interactive: the BA agent interviews you (Phase 0 Q&A → through Phase 4)
 ai-kit plan
 
-# OR skip the Q&A with a pre-seeded discovery and watch Phases 1–4 only:
+# OR skip the Q&A with a pre-seeded discovery and watch Phases 1–4 only
+# (requires the monorepo — see README → Explore Without Code):
 pnpm demo:plan:01    # App Boilerplate seed  (greenfield API + SPA)
 pnpm demo:plan:02    # Enterprise Skeleton   (auth, RBAC, multi-tenancy)
 pnpm demo:plan:05    # MVP Sprint seed       (2-week solo product)
@@ -1059,40 +1060,39 @@ ai-kit agent:dag agents/data-migration.dag.json --provider mock
 ## Cheat-sheet
 
 ```sh
-# Zero-API-key demo
-pnpm demo                          # 3-lane original demo
-pnpm demo:menu                     # pick from 6 advanced scenarios
-pnpm demo:06                       # all error types in parallel (best first run)
+# ── Install ────────────────────────────────────────────────────────────────
+npm install @ai-agencee/ai-kit-agent-executor   # engine (programmatic API)
+npm install -g @ai-agencee/ai-kit-cli           # CLI
 
-# Plan system
-ai-kit plan                      # full interactive 5-phase plan
-pnpm demo:plan                     # seed Phase 0, start from SYNTHESIZE
-pnpm demo:plan:01 … demo:plan:05   # specific project-type seeds
-
-# DAG execution
+# ── DAG execution ──────────────────────────────────────────────────────────
 ai-kit agent:dag <dag.json>                         # run any DAG (mock default)
 ai-kit agent:dag <dag.json> --provider anthropic    # real LLM
 ai-kit agent:dag <dag.json> --verbose               # show all findings live
 ai-kit agent:dag <dag.json> --interactive           # pause at needs-human-review gates
-
-# Visualise
-node packages/cli/dist/bin/ai-kit.js dag:visualize <dag.json>             # Mermaid
-node packages/cli/dist/bin/ai-kit.js dag:visualize <dag.json> --format dot  # Graphviz
-
-# Results
-ls .agents/results/                # browse run outputs
-cat .agents/results/<run-id>.json  # full result JSON
-
-# Enterprise
 ai-kit agent:dag <dag.json> --principal <squad-id>  # isolate results per squad/tenant
-ai-kit agent:dag <dag.json> --interactive           # pause at needs-human-review gates
-pnpm audit --audit-level=high                  # dependency CVE scan
+
+# ── Plan system ────────────────────────────────────────────────────────────
+ai-kit plan                                     # full interactive 5-phase plan
+
+# ── Visualise ──────────────────────────────────────────────────────────────
+ai-kit dag:visualize <dag.json>                 # Mermaid (paste into PR)
+ai-kit dag:visualize <dag.json> --format dot    # Graphviz
+
+# ── Results ────────────────────────────────────────────────────────────────
+ls .agents/results/                             # browse run outputs
+cat .agents/results/<run-id>.json               # full result JSON
 cat .agents/results/dag-<id>.json \
   | jq '[.lanes[]|select(.status=="escalated")]' # list escalated lanes in CI
 
-# Visualise
-node packages/cli/dist/bin/ai-kit.js dag:visualize <dag.json>              # Mermaid (paste into PR)
-node packages/cli/dist/bin/ai-kit.js dag:visualize <dag.json> --format dot # Graphviz
+# ── Enterprise ─────────────────────────────────────────────────────────────
+pnpm audit --audit-level=high                   # dependency CVE scan (in your project)
+
+# ── Explore without code (requires monorepo clone) ─────────────────────────
+pnpm demo                          # 3-lane original demo
+pnpm demo:menu                     # pick from 6 advanced scenarios
+pnpm demo:06                       # all error types in parallel (best first run)
+pnpm demo:plan                     # seed Phase 0, start from SYNTHESIZE
+pnpm demo:plan:01 … demo:plan:05   # specific project-type seeds
 ```
 
 ---
