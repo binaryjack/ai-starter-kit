@@ -51,7 +51,7 @@ export function DagCanvas({
   onNodeClick,
   className = '',
 }: DagCanvasProps) {
-  const { nodes: layoutedNodes, edges: layoutedEdges } = useDagLayout(nodes, edges)
+  const { nodes: layoutedNodes, edges: layoutedEdges } = useDagLayout(nodes, edges, 'TB', readonly)
 
   const handleNodesChange = useCallback(
     (changes: NodeChange<DagNode>[]) => {

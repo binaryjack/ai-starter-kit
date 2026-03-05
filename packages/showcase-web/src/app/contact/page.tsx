@@ -2,6 +2,7 @@
 
 import { Button, Divider, Heading, Text } from '@ai-agencee/ui/atoms'
 import { CheckBox, FormProvider, Input, Select } from '@ai-agencee/ui/formular-bridge'
+import type { IFormularLike } from '@ai-agencee/ui/formular-bridge'
 import { createForm, DirectSubmissionStrategy, f } from '@pulsar-framework/formular.dev'
 import { useEffect, useState } from 'react'
 
@@ -22,7 +23,7 @@ const contactSchema = f.object({
 
 export default function ContactPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [form, setForm] = useState<any>(null)
+  const [form, setForm] = useState<IFormularLike | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -31,13 +32,12 @@ export default function ContactPage() {
       defaultValues: {
         name: '', email: '', topic: 'general', message: '', subscribeUpdates: false,
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      submissionStrategy: new DirectSubmissionStrategy(async (data: any) => {
+      submissionStrategy: new DirectSubmissionStrategy(async (data: Record<string, unknown>) => {
         console.info('Contact form submitted', data)
-        alert(`Thanks, ${data.name}! (demo — nothing was sent)`)
+        alert(`Thanks, ${data['name']}! (demo — nothing was sent)`)
       }) as never,
     }).then((f) => {
-      if (!cancelled) setForm(f)
+      if (!cancelled) setForm(f as unknown as IFormularLike)
     })
     return () => { cancelled = true }
   }, [])

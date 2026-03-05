@@ -1,6 +1,7 @@
 import { Button } from '@ai-agencee/ui/atoms'
 import type { SupervisorNodeData } from '@ai-agencee/ui/dag'
 import { FormProvider, Input, Select } from '@ai-agencee/ui/formular-bridge'
+import type { IFormularLike } from '@ai-agencee/ui/formular-bridge'
 import { createForm, DirectSubmissionStrategy, f } from '@pulsar-framework/formular.dev'
 import { useEffect, useState } from 'react'
 
@@ -22,20 +23,18 @@ interface SupervisorNodePanelProps {
 }
 
 export function SupervisorNodePanel({ nodeId, data, onUpdate }: SupervisorNodePanelProps) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [form, setForm] = useState<any>(null)
+  const [form, setForm] = useState<IFormularLike | null>(null)
 
   useEffect(() => {
     let cancelled = false
     createForm({
       schema:        supervisorSchema,
       defaultValues: data as Record<string, unknown>,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      submissionStrategy: new DirectSubmissionStrategy(async (values: any) => {
+      submissionStrategy: new DirectSubmissionStrategy(async (values: Record<string, unknown>) => {
         onUpdate(nodeId, { ...data, ...values } as SupervisorNodeData)
       }) as never,
     }).then((f) => {
-      if (!cancelled) setForm(f)
+      if (!cancelled) setForm(f as unknown as IFormularLike)
     })
     return () => { cancelled = true }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,8 +52,8 @@ export function SupervisorNodePanel({ nodeId, data, onUpdate }: SupervisorNodePa
         <Select name="failBehavior"  label="On fail" options={FAIL_BEHAVIOR_OPTIONS} />
       </div>
       <div className="flex gap-2 px-4 pt-2 border-t border-neutral-700">
-        <Button size="sm" onClick={() => (form as any).submit()}>Apply</Button>
-        <Button size="sm" variant="ghost" onClick={() => (form as any).reset()}>Reset</Button>
+        <Button size="sm" onClick={() => form.submit()}>Apply</Button>
+        <Button size="sm" variant="ghost" onClick={() => form.reset()}>Reset</Button>
       </div>
     </FormProvider>
   )

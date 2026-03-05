@@ -5,5 +5,4 @@ export type {
     AnyNodeData,
     BaseNodeData, BudgetNodeData, DagCanvasProps, DagEdge, DagNode, DagNodeKind, LaneNodeData, SupervisorNodeData, TriggerNodeData, WorkerNodeData
 } from './types.js'
-export { useDagLayout } from './useDagLayout.js'
-
+export { applyDagLayout, useDagLayout } from './useDagLayout.js'

@@ -1,4 +1,5 @@
 import type { DagEdge, DagNode } from '@ai-agencee/ui/dag'
+import { applyDagLayout } from '@ai-agencee/ui/dag'
 import { addEdge, type Connection } from '@xyflow/react'
 import { useCallback, useState } from 'react'
 import { dagFlowToJson, jsonToDagFlow } from '../canvas/dagSerializer.js'
@@ -38,8 +39,11 @@ export function useDagFile() {
       file.text().then((text) => {
         try {
           const { nodes: n, edges: ed } = jsonToDagFlow(JSON.parse(text))
-          setNodesRaw(n)
-          setEdgesRaw(ed)
+          // Apply dagre layout once so nodes start with real positions
+          // (jsonToDagFlow sets all positions to {x:0, y:0}).
+          const { nodes: ln, edges: le } = applyDagLayout(n, ed)
+          setNodesRaw(ln)
+          setEdgesRaw(le)
         } catch {
           alert('Invalid DAG JSON file')
         }

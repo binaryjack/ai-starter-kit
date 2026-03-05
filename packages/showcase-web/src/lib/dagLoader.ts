@@ -2,6 +2,10 @@
  * dagLoader.ts
  * Converts agents/dag.json into ReactFlow nodes + edges for the showcase viewer.
  * Mirrors the logic in dag-editor/dagSerializer.ts but is read-only / no-edit.
+ *
+ * @deprecated No longer imported by any showcase page. The dag page switched to
+ * static `demoDag.ts` to avoid Next.js JSON/path import issues. Safe to delete
+ * once the API stabilises.
  */
 import type { DagEdge, DagNode } from '@ai-agencee/ui/dag'
 

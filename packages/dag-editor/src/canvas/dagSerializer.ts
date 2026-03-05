@@ -29,7 +29,7 @@ export function jsonToDagFlow(raw: RawDagJson): {
   const edges: DagEdge[] = []
 
   // Lane nodes
-  ;(raw.lanes ?? []).forEach((lane, i) => {
+  ;(raw.lanes ?? []).forEach((lane) => {
     nodes.push({
       id:       `lane-${lane.id}`,
       type:     'lane',
