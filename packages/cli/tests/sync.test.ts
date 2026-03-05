@@ -1,14 +1,14 @@
+import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import * as fs from 'fs';
 
-jest.mock('@tadeo/ai-kit-core', () => ({
+jest.mock('@ai-agencee/ai-kit-core', () => ({
   syncTemplateFiles: jest.fn(),
   TEMPLATE_DIR: '/fake/template',
 }));
 
-import { syncTemplateFiles } from '@tadeo/ai-kit-core';
-import type { SyncResult } from '@tadeo/ai-kit-core';
+import type { SyncResult } from '@ai-agencee/ai-kit-core';
+import { syncTemplateFiles } from '@ai-agencee/ai-kit-core';
 
 const mockSync = syncTemplateFiles as jest.MockedFunction<typeof syncTemplateFiles>;
 
@@ -33,7 +33,7 @@ describe('runSync', () => {
     ];
     mockSync.mockResolvedValue(results);
     const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-    const { runSync } = await import('../src/commands/sync');
+    const { runSync } = await import('../src/commands/sync.js');
     await runSync();
     expect(mockSync).toHaveBeenCalledWith('/fake/template', tmpDir);
     expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('synced:'));
@@ -46,7 +46,7 @@ describe('runSync', () => {
     ];
     mockSync.mockResolvedValue(results);
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-    const { runSync } = await import('../src/commands/sync');
+    const { runSync } = await import('../src/commands/sync.js');
     await runSync();
     expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('diverged:'));
     warnSpy.mockRestore();

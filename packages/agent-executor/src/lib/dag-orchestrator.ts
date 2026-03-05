@@ -9,9 +9,9 @@ import { getGlobalEventBus } from './dag-events.js'
 import { DagPlanner } from './dag-planner.js'
 import { DagResultBuilder } from './dag-result-builder.js'
 import {
-  DagDefinition,
-  DagResult,
-  LaneResult,
+    DagDefinition,
+    DagResult,
+    LaneResult,
 } from './dag-types.js'
 import { runLane } from './lane-executor.js'
 import { SamplingCallback } from './llm-provider.js'
@@ -312,7 +312,9 @@ export class DagOrchestrator {
     );
     this.log(`   ${dagResult.findings.length} findings, ${dagResult.recommendations.length} recommendations\n`);
 
-    await DagResultBuilder.save(dagResult, runPaths.resultsDir, this.projectRoot, (m) => this.log(m));
+    // Save result to the configured resultsDir (this.resultsDir already honours the
+    // options.resultsDir option with a sensible default; see constructor).
+    await DagResultBuilder.save(dagResult, this.resultsDir, this.projectRoot, (m) => this.log(m));
 
     // Cost report
     if (costTracker) {

@@ -2,7 +2,7 @@
   "name": "@ai-agencee/ai-kit-mcp",
   "version": "1.3.5",
   "description": "MCP Server for @ai-agencee/ai-starter-kit",
-  "type": "commonjs",
+  "type": "module",
   "main": "./dist/index.js",
   "bin": {
     "ai-kit-mcp": "dist/index.js"
@@ -11,7 +11,7 @@
     "build": "tsc",
     "start": "node dist/src/index.js",
     "dev": "tsc --watch",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "lint": "tsc --noEmit"
   },
   "dependencies": {

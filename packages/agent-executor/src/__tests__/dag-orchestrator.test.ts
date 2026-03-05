@@ -13,6 +13,80 @@ jest.mock('../lib/lane-executor', () => ({
   runLane: jest.fn(),
 }));
 
+// ── Enterprise modules added after initial test was written ───────────────────
+// Mock them all so the orchestrator unit tests stay focused on coordination logic.
+
+jest.mock('../lib/audit-log', () => ({
+  AuditLog: jest.fn().mockImplementation(() => ({
+    open:     jest.fn().mockResolvedValue(undefined),
+    close:    jest.fn().mockResolvedValue(undefined),
+    runStart: jest.fn().mockResolvedValue(undefined),
+    runEnd:   jest.fn().mockResolvedValue(undefined),
+    laneStart: jest.fn().mockResolvedValue(undefined),
+    laneEnd:  jest.fn().mockResolvedValue(undefined),
+    llmCall:  jest.fn().mockResolvedValue(undefined),
+    decision: jest.fn().mockResolvedValue(undefined),
+  })),
+}));
+
+jest.mock('../lib/rbac', () => ({
+  RbacPolicy: {
+    load: jest.fn().mockResolvedValue({
+      checkLanes: jest.fn().mockImplementation((_principal: string, laneIds: string[]) =>
+        Object.fromEntries(laneIds.map((id) => [id, true])),
+      ),
+      summarize: jest.fn().mockReturnValue([]),
+    }),
+    resolvePrincipal: jest.fn().mockReturnValue('test-user'),
+  },
+}));
+
+jest.mock('../lib/run-registry', () => ({
+  RunRegistry: jest.fn().mockImplementation(() => ({
+    create: jest.fn().mockResolvedValue({
+      runRoot:        '/project/.agents/runs/test-run',
+      auditDir:       '/project/.agents/runs/test-run/audit',
+      checkpointsDir: '/project/.agents/runs/test-run/checkpoints',
+      resultsDir:     '/project/.agents/runs/test-run/results',
+      planStateDir:   '/project/.agents/runs/test-run/plan-state',
+    }),
+    complete: jest.fn().mockResolvedValue(undefined),
+  })),
+}));
+
+jest.mock('../lib/secrets', () => ({
+  createDefaultSecretsProvider: jest.fn().mockReturnValue({ get: jest.fn(), has: jest.fn() }),
+  injectSecretsToEnv: jest.fn().mockResolvedValue(undefined),
+}));
+
+jest.mock('../lib/dag-events', () => ({
+  getGlobalEventBus: jest.fn().mockReturnValue({
+    emitDagStart:       jest.fn(),
+    emitDagEnd:         jest.fn(),
+    emitLaneStart:      jest.fn(),
+    emitLaneEnd:        jest.fn(),
+    emitLlmCall:        jest.fn(),
+    emitBudgetExceeded: jest.fn(),
+    emitRbacDenied:     jest.fn(),
+  }),
+}));
+
+jest.mock('../lib/otel', () => ({
+  getGlobalTracer: jest.fn().mockReturnValue({
+    startDagRun: jest.fn().mockReturnValue({
+      setAttribute: jest.fn().mockReturnThis(),
+      setStatus:    jest.fn().mockReturnThis(),
+      end:          jest.fn(),
+    }),
+  }),
+}));
+
+jest.mock('../lib/model-router-factory', () => ({
+  ModelRouterFactory: {
+    create: jest.fn().mockResolvedValue(undefined),
+  },
+}));
+
 import * as fsMod from 'fs/promises';
 import { runLane } from '../lib/lane-executor';
 

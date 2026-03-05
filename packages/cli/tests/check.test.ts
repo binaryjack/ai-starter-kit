@@ -1,13 +1,13 @@
+import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import * as fs from 'fs';
 
-jest.mock('@tadeo/ai-kit-core', () => ({
+jest.mock('@ai-agencee/ai-kit-core', () => ({
   checkProject: jest.fn(),
 }));
 
-import { checkProject } from '@tadeo/ai-kit-core';
-import type { CheckResult } from '@tadeo/ai-kit-core';
+import type { CheckResult } from '@ai-agencee/ai-kit-core';
+import { checkProject } from '@ai-agencee/ai-kit-core';
 
 const mockCheck = checkProject as jest.MockedFunction<typeof checkProject>;
 
@@ -32,7 +32,7 @@ describe('runCheck', () => {
     ];
     mockCheck.mockResolvedValue(results);
     const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => { throw new Error('exit'); });
-    const { runCheck } = await import('../src/commands/check');
+    const { runCheck } = await import('../src/commands/check.js');
     await runCheck();
     expect(exitSpy).not.toHaveBeenCalled();
     exitSpy.mockRestore();
@@ -45,7 +45,7 @@ describe('runCheck', () => {
     mockCheck.mockResolvedValue(results);
     const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => { throw new Error('exit:1'); });
     const errSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    const { runCheck } = await import('../src/commands/check');
+    const { runCheck } = await import('../src/commands/check.js');
     await expect(runCheck()).rejects.toThrow('exit:1');
     expect(exitSpy).toHaveBeenCalledWith(1);
     exitSpy.mockRestore();
