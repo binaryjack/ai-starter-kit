@@ -13,6 +13,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { StateStore } from './state-store.js';
 import { ChatRenderer, promptUser } from './chat-renderer.js';
 import type { ModelRouter } from './model-router.js';
 import type {

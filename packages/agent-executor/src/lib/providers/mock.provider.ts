@@ -1,4 +1,4 @@
-import type { LLMPrompt, LLMProvider, LLMResponse } from '../llm-provider.js'
+import type { LLMPrompt, LLMProvider, LLMResponse, LLMStreamChunk } from '../llm-provider.js'
 
 /**
  * Mock LLM provider for unit tests.
@@ -34,5 +34,20 @@ export class MockProvider implements LLMProvider {
       model:    modelId,
       provider: this.name,
     };
+  }
+
+  /**
+   * Simulate streaming by splitting the response into word-level tokens.
+   * Adds a 1ms delay between tokens so downstream consumers see incremental output.
+   */
+  async *stream(prompt: LLMPrompt, modelId: string): AsyncIterable<LLMStreamChunk> {
+    const response = await this.complete(prompt, modelId);
+    const words    = response.content.split(/(?<= )/);
+    for (const word of words) {
+      yield { token: word, done: false };
+      // tiny async yield so the event loop can interleave other operations
+      await new Promise<void>((r) => setImmediate(r));
+    }
+    yield { token: '', done: true, usage: response.usage };
   }
 }

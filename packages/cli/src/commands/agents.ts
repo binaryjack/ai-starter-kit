@@ -65,6 +65,7 @@ export const runDag = async (
       verbose: options.verbose ?? true,
       budgetCapUSD,
       interactive: options.interactive,
+      forceProvider: options.provider,
     });
     const result: DagResult = await orchestrator.run(dagFilePath);
     printDagSummary(result, projectRoot);

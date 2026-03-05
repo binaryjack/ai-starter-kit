@@ -4,7 +4,11 @@
   "scripts": {
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
-    "lint": "pnpm -r run lint"
+    "lint": "pnpm -r run lint",
+    "demo": "pnpm build && node scripts/demo.js",
+    "demo:dag": "node scripts/demo.js",
+    "run:dag": "node packages/cli/dist/bin/ai-kit.js agent:dag",
+    "run:plan": "node packages/cli/dist/bin/ai-kit.js plan"
   },
   "devDependencies": {
     "typescript": "^5.4.5"

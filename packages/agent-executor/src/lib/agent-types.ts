@@ -14,6 +14,7 @@ export type CheckType =
   | 'run-command'      // Run a shell command and check exit code / output pattern
   | 'llm-generate'     // Generate content via LLM; stores result under outputKey
   | 'llm-review'       // Review a file or directory via LLM and report findings
+  | 'llm-tool'         // LLM generation with full tool-use loop (read_file, list_dir, etc.)
 
 export interface CheckDefinition {
   /** The type of check to perform */
@@ -79,6 +80,26 @@ export interface CheckDefinition {
    * details / ContractExports for downstream lanes to read.
    */
   outputKey?: string;
+
+  // ─── Tool use ──────────────────────────────────────────────────────────────
+
+  /**
+   * When `true`, enables the tool-use loop for `llm-generate`, `llm-review`,
+   * or `llm-tool` checks.
+   *
+   * Built-in tools available: read_file, list_dir, run_shell, grep_project, write_file
+   *
+   * Requires a `ToolExecutorFn` to be present in the context (injected by the
+   * `LaneExecutor` when tools are enabled on the DAG or lane).
+   */
+  enableTools?: boolean;
+
+  /**
+   * Subset of built-in tools to expose to this check.
+   * When omitted (and `enableTools` is true), all built-in tools are available.
+   * Values: 'read_file' | 'list_dir' | 'run_shell' | 'grep_project' | 'write_file'
+   */
+  toolNames?: string[];
 }
 
 export interface AgentDefinition {

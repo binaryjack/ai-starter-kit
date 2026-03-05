@@ -1,0 +1,31 @@
+{
+  "laneId": "security-scan",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "The security review returned no findings. Re-examine the source specifically for unsafe eval, shell injection via exec/spawn with untrusted input, and hardcoded token patterns like 'Bearer ' + variable or sk- prefixed strings."
+    },
+    {
+      "checkpointId": "step-3",
+      "mode": "self",
+      "expect": {},
+      "onFail": "APPROVE"
+    }
+  ]
+}

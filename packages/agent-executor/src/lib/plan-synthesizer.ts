@@ -17,6 +17,7 @@ import * as path from 'path';
 import { BacklogBoard } from './backlog.js';
 import { ChatRenderer, promptUser } from './chat-renderer.js';
 import type { ModelRouter } from './model-router.js';
+import { PromptRegistry } from './prompt-registry.js';
 import type {
     ActorId,
     AlignmentGate,
@@ -207,11 +208,24 @@ export class PlanSynthesizer {
   private readonly renderer: ChatRenderer;
   private readonly stateDir: string;
   private readonly modelRouter?: ModelRouter;
+  /** Directory containing *.prompt.md files. Defaults to <projectRoot>/agents/prompts. */
+  private readonly promptsDir: string;
+  private promptRegistry?: PromptRegistry;
 
-  constructor(renderer: ChatRenderer, projectRoot: string, modelRouter?: ModelRouter) {
+  constructor(renderer: ChatRenderer, projectRoot: string, modelRouter?: ModelRouter, promptsDir?: string) {
     this.renderer    = renderer;
     this.stateDir    = path.join(projectRoot, '.agents', 'plan-state');
     this.modelRouter = modelRouter;
+    this.promptsDir  = promptsDir ?? path.join(projectRoot, 'agents', 'prompts');
+  }
+
+  /** Lazy-load the PromptRegistry on first use. */
+  private async _ensurePromptRegistry(): Promise<PromptRegistry> {
+    if (!this.promptRegistry) {
+      this.promptRegistry = new PromptRegistry(this.promptsDir);
+      await this.promptRegistry.loadAll();
+    }
+    return this.promptRegistry;
   }
 
   async synthesize(discovery: DiscoveryResult): Promise<PlanDefinition> {
@@ -299,82 +313,6 @@ export class PlanSynthesizer {
     return plan;
   }
 
-  // ── Sprint Planning ────────────────────────────────────────────────────────
-
-  /**
-   * Run the live backlog session: seed, display, answer loop.
-   * Returns the populated backlog board.
-   */
-  async runSprintPlanning(
-    plan: PlanDefinition,
-    discovery: DiscoveryResult,
-    board: BacklogBoard,
-  ): Promise<void> {
-    const r = this.renderer;
-
-    r.phaseHeader('decompose');
-    r.say('ba',
-      'Sprint planning session open. Each agent has posted their prerequisite questions. '
-      + 'We\'ll work through them together — you\'re the PO, I\'m the Scrum Master.'
-    );
-    r.newline();
-
-    // Seed backlog with standard items per story
-    if (discovery.stories.length > 0) {
-      for (const story of discovery.stories) {
-        board.seedStandardItems(story.id);
-      }
-    } else {
-      board.seedStandardItems();
-    }
-
-    // Show initial board
-    board.display('INITIAL BACKLOG — all items open');
-
-    // Announce each agent's questions
-    const agentOrder: ActorId[] = ['architecture', 'backend', 'frontend', 'testing', 'e2e', 'security'];
-    for (const agentId of agentOrder) {
-      const items = board.getByOwner(agentId);
-      if (items.length === 0) continue;
-      r.say(agentId, `I need ${items.length} question(s) answered before I can start:`);
-      for (const item of items) {
-        const waiting = item.waitingFor ? ` (waiting on: ${item.waitingFor})` : '';
-        r.system(`  □  ${item.question}${waiting}`);
-      }
-      r.newline();
-    }
-
-    // BA resolves open items interactively
-    r.say('ba', 'Let\'s resolve the open items. I\'ll handle what I can; you\'ll be asked for product decisions.');
-
-    const maxRounds = 50;
-    let round = 0;
-    while (board.getOpen().length > 0 && round < maxRounds) {
-      round++;
-      const openItem = board.getOpen()[0];
-      r.question('ba', `[${openItem.owner.toUpperCase()}]  ${openItem.question}`);
-      const answer = await promptUser(r, '');
-      if (answer) {
-        board.resolve(openItem.id, answer);
-        r.say('ba', `✅ Noted: "${answer.slice(0, 60)}"`);
-      } else {
-        board.skip(openItem.id);
-        r.say('ba', 'Skipped — moving on.');
-      }
-      const prog = board.progress();
-      if (prog.pct % 25 === 0 && prog.pct > 0) {
-        board.display(`BACKLOG UPDATE — ${prog.pct}% resolved`);
-      }
-    }
-
-    board.display('BACKLOG FINAL — sprint planning complete');
-
-    r.phaseSummary('decompose', [
-      `${board.progress().done}/${board.progress().total} backlog items resolved`,
-      `${board.getOpen().length} items still open (will be carried forward)`,
-    ]);
-  }
-
   // ─── LLM-backed helpers ────────────────────────────────────────────────────
 
   /**
@@ -390,23 +328,30 @@ export class PlanSynthesizer {
     if (!this.modelRouter) return deterministic;
 
     try {
+      const reg = await this._ensurePromptRegistry();
+      const resolved = reg.resolve('plan-architect', 'opus');
+      const systemPrompt = resolved?.systemPrompt
+        ?? (
+          'You are a senior software architect building a project plan skeleton. '
+          + 'Given a discovery document, return ONLY a JSON array of step objects. '
+          + 'Each object must have these exact keys: id, name, goal, outputs (string[]), parallel (bool). '
+          + 'Use these step ids: ' + deterministic.map((s) => s.id).join(', ') + '. '
+          + 'Tailor name, goal, and outputs to the specific project. No markdown, no explanation.'
+        );
+
       const resp = await this.modelRouter.route('architecture-decision', {
         messages: [
           {
             role: 'system',
-            content:
-              'You are a senior software architect building a project plan skeleton. '
-              + 'Given a discovery document, return ONLY a JSON array of step objects. '
-              + 'Each object must have these exact keys: id, name, goal, outputs (string[]), parallel (bool). '
-              + 'Use these step ids: ' + deterministic.map((s) => s.id).join(', ') + '. '
-              + 'Tailor name, goal, and outputs to the specific project. No markdown, no explanation.',
+            content: systemPrompt
+              + '\nUse these step ids: ' + deterministic.map((s) => s.id).join(', ') + '.',
           },
           {
             role: 'user',
             content: `Discovery:\n${JSON.stringify(discovery, null, 2)}`,
           },
         ],
-        maxTokens: 800,
+        maxTokens: resolved?.frontmatter.maxTokens ?? 800,
       });
 
       // Strip code fences if model includes them
@@ -439,14 +384,20 @@ export class PlanSynthesizer {
   private async _agentIntroduction(agent: ActorId, discovery: DiscoveryResult): Promise<string> {
     if (this.modelRouter) {
       try {
+        const reg = await this._ensurePromptRegistry();
+        const resolved = reg.resolve('plan-agent-intro', 'haiku');
+        const systemPrompt = resolved?.systemPrompt
+          ?? (
+            'You are roleplaying as a software development agent. '
+            + 'Write ONE sentence (20-40 words) introducing yourself and what you will contribute '
+            + 'to this specific project. Be specific about the project, not generic. No markdown.'
+          );
+
         const resp = await this.modelRouter.route('file-analysis', {
           messages: [
             {
               role: 'system',
-              content:
-                'You are roleplaying as a software development agent. '
-                + 'Write ONE sentence (20-40 words) introducing yourself and what you will contribute '
-                + 'to this specific project. Be specific about the project, not generic. No markdown.',
+              content: systemPrompt,
             },
             {
               role: 'user',
@@ -458,7 +409,7 @@ export class PlanSynthesizer {
                 + `Layers: ${discovery.layers.join(', ')}`,
             },
           ],
-          maxTokens: 80,
+          maxTokens: resolved?.frontmatter.maxTokens ?? 80,
         });
         const text = resp.content.trim();
         if (text.length > 10) return text;
@@ -478,16 +429,22 @@ export class PlanSynthesizer {
   ): Promise<string> {
     if (this.modelRouter) {
       try {
+        const reg = await this._ensurePromptRegistry();
+        const resolved = reg.resolve('plan-ba-feedback', 'sonnet');
+        const systemPrompt = resolved?.systemPrompt
+          ?? (
+            'You are a Business Analyst. The user has requested changes to a plan skeleton. '
+            + 'Acknowledge the change request, explain what would need to change in the plan, '
+            + 'and recommend whether the change requires re-running discovery or can be applied inline. '
+            + 'Be concise (2-3 sentences). No markdown.'
+          );
+
         const stepList = steps.map((s) => `${s.id}: ${s.name} — ${s.goal}`).join('\n');
         const resp = await this.modelRouter.route('api-design', {
           messages: [
             {
               role: 'system',
-              content:
-                'You are a Business Analyst. The user has requested changes to a plan skeleton. '
-                + 'Acknowledge the change request, explain what would need to change in the plan, '
-                + 'and recommend whether the change requires re-running discovery or can be applied inline. '
-                + 'Be concise (2-3 sentences). No markdown.',
+              content: systemPrompt,
             },
             {
               role: 'user',
@@ -497,7 +454,7 @@ export class PlanSynthesizer {
                 + `Project context: ${discovery.problem.slice(0, 200)}`,
             },
           ],
-          maxTokens: 200,
+          maxTokens: resolved?.frontmatter.maxTokens ?? 200,
         });
         const text = resp.content.trim();
         if (text.length > 10) return text;

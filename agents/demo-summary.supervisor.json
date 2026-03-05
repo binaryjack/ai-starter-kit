@@ -1,0 +1,14 @@
+{
+  "laneId": "summary",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": ["code-review", "security-scan"],
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "The executive summary is empty. Consolidate all findings from code-review and security-scan lanes. If upstream results are unavailable, note that and summarise what is known."
+    }
+  ]
+}

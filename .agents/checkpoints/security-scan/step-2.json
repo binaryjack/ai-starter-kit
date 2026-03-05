@@ -1,0 +1,39 @@
+{
+  "checkpointId": "step-2",
+  "stepIndex": 2,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-2",
+    "mode": "self",
+    "stepIndex": 2,
+    "partialResult": {
+      "agentName": "Security Scanner",
+      "status": "success",
+      "findings": [
+        "⚠️  Found 'API_KEY' string in source — verify no secrets are committed",
+        "✅ .gitignore present — secrets unlikely to be committed",
+        "❌ LLM review failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock.",
+        "❌🔴 Security issues detected"
+      ],
+      "recommendations": [],
+      "details": {
+        "_": "DAG_SUPERVISED_AGENTS.md"
+      },
+      "timestamp": "2026-03-04T22:51:04.942Z"
+    },
+    "contracts": {
+      "laneId": "security-scan",
+      "version": 2,
+      "timestamp": "2026-03-04T22:51:04.937Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "APPROVE"
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-04T22:51:04.942Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Executive Summariser",
+  "icon": "📋",
+  "description": "Reads findings from Code Review and Security Scan lanes and generates a concise executive summary with a prioritised action list.",
+  "checks": [
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "You are a senior engineering lead. Based on the code review and security scan findings from the parallel analysis lanes, produce a concise executive summary for the team.\n\nStructure your response as:\n## Executive Summary\n[2-3 sentence overview]\n\n## Top Priorities\n[Numbered list of 1-5 items, ordered by risk]\n\n## Recommended Next Sprint\n[3 concrete tickets the team should create]\n\nContext: {retryContext}\n\nBe direct and specific. No padding.",
+      "outputKey": "executive_summary",
+      "pass": "✅ Executive summary generated"
+    }
+  ]
+}

@@ -1,14 +1,18 @@
 import * as fs from 'fs/promises';
+import { CircuitBreaker } from './circuit-breaker.js';
 import {
-  TaskType,
-  ModelFamily,
-  LLMProvider,
-  LLMPrompt,
-  LLMResponse,
-  AnthropicProvider,
-  OpenAIProvider,
-  MockProvider,
+    AnthropicProvider,
+    LLMPrompt,
+    LLMProvider,
+    LLMResponse,
+    LLMStreamChunk,
+    MockProvider,
+    ModelFamily,
+    OpenAIProvider,
+    TaskType,
+    ToolExecutorFn,
 } from './llm-provider.js';
+import { RetryPolicy } from './retry-policy.js';
 
 // ─── Config Types ─────────────────────────────────────────────────────────────
 
@@ -83,9 +87,20 @@ export interface RoutedResponse extends LLMResponse {
 export class ModelRouter {
   private readonly config: ModelRouterConfig;
   private readonly providers = new Map<string, LLMProvider>();
+  private readonly breakers  = new Map<string, CircuitBreaker>();
+  private readonly retry     = RetryPolicy.forLLM();
 
   constructor(config: ModelRouterConfig) {
     this.config = config;
+  }
+
+  private _breakerFor(providerName: string): CircuitBreaker {
+    let b = this.breakers.get(providerName);
+    if (!b) {
+      b = new CircuitBreaker({ name: providerName });
+      this.breakers.set(providerName, b);
+    }
+    return b;
   }
 
   // ─── Provider Registration ─────────────────────────────────────────────────
@@ -194,7 +209,10 @@ export class ModelRouter {
       temperature: prompt.temperature ?? profile.temperature,
     };
 
-    const response = await provider.complete(mergedPrompt, modelId);
+    const response = await this.retry.execute(
+      () => this._breakerFor(providerName).execute(() => provider.complete(mergedPrompt, modelId)),
+      `${providerName}:${taskType}`,
+    );
     const cost = this.estimateCost(
       response.usage.inputTokens,
       response.usage.outputTokens,
@@ -209,6 +227,151 @@ export class ModelRouter {
     };
   }
 
+  /**
+   * Route a task with tool-use enabled.
+   *
+   * Uses `provider.completeWithTools()` when available (Anthropic, OpenAI).
+   * Falls back to `route()` for providers without native tool support (VS Code, Mock).
+   *
+   * @param taskType         Determines which model family is selected
+   * @param prompt           Must include `prompt.tools` for tools to be registered
+   * @param executor         Built-in or custom `ToolExecutorFn` to handle tool calls
+   * @param overrideProvider Force a specific provider
+   */
+  async routeWithTools(
+    taskType: TaskType,
+    prompt: LLMPrompt,
+    executor: ToolExecutorFn,
+    overrideProvider?: string,
+  ): Promise<RoutedResponse> {
+    const providerName = overrideProvider ?? this.config.defaultProvider;
+    const provider     = this.providers.get(providerName);
+
+    if (!provider) {
+      const available = [...this.providers.keys()];
+      throw new Error(
+        `Provider "${providerName}" not registered for tool-use. Available: ${available.join(', ') || 'none'}.`,
+      );
+    }
+
+    const profile = this.profileFor(taskType);
+    const modelId = this.modelIdFor(taskType, providerName);
+    const merged: LLMPrompt = {
+      ...prompt,
+      maxTokens:   prompt.maxTokens   ?? profile.maxTokens,
+      temperature: prompt.temperature ?? profile.temperature,
+    };
+
+    const response = await this.retry.execute(
+      () => this._breakerFor(providerName).execute(() =>
+        provider.completeWithTools
+          ? provider.completeWithTools(merged, modelId, executor)
+          : provider.complete(merged, modelId),
+      ),
+      `${providerName}:tools:${taskType}`,
+    );
+
+    const cost = this.estimateCost(
+      response.usage.inputTokens,
+      response.usage.outputTokens,
+      providerName,
+      profile.family,
+    );
+    return { ...response, taskType, estimatedCostUSD: cost };
+  }
+
+  /**
+   * Stream a task to the right model, yielding incremental token strings.
+   *
+   * Falls back to `complete()` when the selected provider does not implement
+   * `stream()` — callers treat it as a one-chunk stream in that case.
+   *
+   * The final item contains `usage` for cost tracking; callers should watch for
+   * the `LLMStreamChunk.done === true` sentinel to record cost.
+   *
+   * @param taskType  Determines which model family is selected
+   * @param prompt    The messages + optional token override
+   * @param overrideProvider  Force a specific provider
+   * @param onDone    Callback fired with the final RoutedResponse (for cost tracking)
+   */
+  async *streamRoute(
+    taskType: TaskType,
+    prompt: LLMPrompt,
+    overrideProvider?: string,
+    onDone?: (response: RoutedResponse) => void,
+  ): AsyncIterable<string> {
+    const providerName = overrideProvider ?? this.config.defaultProvider;
+    const provider     = this.providers.get(providerName);
+
+    if (!provider) {
+      const available = [...this.providers.keys()];
+      throw new Error(
+        `Provider "${providerName}" is not registered for streaming. Available: ${available.join(', ') || 'none'}.`,
+      );
+    }
+
+    const profile  = this.profileFor(taskType);
+    const modelId  = this.modelIdFor(taskType, providerName);
+    const merged: LLMPrompt = {
+      ...prompt,
+      maxTokens:   prompt.maxTokens   ?? profile.maxTokens,
+      temperature: prompt.temperature ?? profile.temperature,
+    };
+
+    let inputTokens  = 0;
+    let outputTokens = 0;
+    let fullContent  = '';
+
+    const breaker = this._breakerFor(providerName);
+
+    if (provider.stream) {
+      // Collect the full stream under retry + circuit-breaker protection,
+      // then yield the cached tokens so caller code is non-blocking.
+      const chunks = await this.retry.execute(
+        () => breaker.execute(async () => {
+          const collected: LLMStreamChunk[] = [];
+          for await (const c of provider.stream!(merged, modelId) as AsyncIterable<LLMStreamChunk>) {
+            collected.push(c);
+          }
+          return collected;
+        }),
+        `${providerName}:stream:${taskType}`,
+      );
+      for (const chunk of chunks) {
+        if (!chunk.done && chunk.token) {
+          fullContent += chunk.token;
+          yield chunk.token;
+        }
+        if (chunk.done && chunk.usage) {
+          inputTokens  = chunk.usage.inputTokens;
+          outputTokens = chunk.usage.outputTokens;
+        }
+      }
+    } else {
+      // Fallback: non-streaming provider — complete() and yield full response
+      const response = await this.retry.execute(
+        () => breaker.execute(() => provider.complete(merged, modelId)),
+        `${providerName}:complete:${taskType}`,
+      );
+      fullContent    = response.content;
+      inputTokens    = response.usage.inputTokens;
+      outputTokens   = response.usage.outputTokens;
+      yield fullContent;
+    }
+
+    if (onDone) {
+      const cost = this.estimateCost(inputTokens, outputTokens, providerName, profile.family);
+      onDone({
+        content: fullContent,
+        usage:   { inputTokens, outputTokens },
+        model:   modelId,
+        provider: providerName,
+        taskType,
+        estimatedCostUSD: cost,
+      });
+    }
+  }
+
   // ─── Budget ────────────────────────────────────────────────────────────────
 
   get budgetCap(): BudgetCap | undefined {
@@ -221,6 +384,39 @@ export class ModelRouter {
 
   get registeredProviders(): string[] {
     return [...this.providers.keys()];
+  }
+
+  // ─── Per-lane Provider Scope ──────────────────────────────────────────────
+
+  /**
+   * Return a scoped ModelRouter that forces every route() / routeWithTools() /
+   * streamRoute() call to use `providerId` as the default provider.
+   *
+   * All registered providers and the original config are shared — only the
+   * `defaultProvider` field is overridden. No network I/O; O(n) to copy
+   * the registered provider map.
+   *
+   * Used by LaneExecutor to honour `LaneDefinition.providerOverride`.
+   *
+   * @param providerId  Must match a key in `this.config.providers`.
+   *                    Throws at construction time if the provider is unknown.
+   */
+  withProviderOverride(providerId: string): ModelRouter {
+    if (!this.config.providers[providerId]) {
+      throw new Error(
+        `Cannot override provider to "${providerId}": not found in config. ` +
+        `Known providers: ${Object.keys(this.config.providers).join(', ')}`,
+      );
+    }
+    const scoped = new ModelRouter({ ...this.config, defaultProvider: providerId });
+    // Copy all registered LLMProvider instances so scoped router is fully functional
+    for (const [name, p] of this.providers) {
+      scoped.registerProvider(p);
+      // Also copy circuit-breaker state so we don't reset failure counts
+      const existing = this.breakers.get(name);
+      if (existing) scoped.breakers.set(name, existing);
+    }
+    return scoped;
   }
 
   // ─── Factory ───────────────────────────────────────────────────────────────

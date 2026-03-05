@@ -1,9 +1,11 @@
-﻿import { randomUUID } from 'crypto'
+import { randomUUID } from 'crypto'
 import * as fs from 'fs/promises'
 import * as path from 'path'
+import { AuditLog } from './audit-log.js'
 import { BarrierCoordinator } from './barrier-coordinator.js'
 import { ContractRegistry } from './contract-registry.js'
 import { CostTracker } from './cost-tracker.js'
+import { getGlobalEventBus } from './dag-events.js'
 import { DagPlanner } from './dag-planner.js'
 import { DagResultBuilder } from './dag-result-builder.js'
 import {
@@ -15,8 +17,12 @@ import { runLane } from './lane-executor.js'
 import { SamplingCallback } from './llm-provider.js'
 import { ModelRouterFactory } from './model-router-factory.js'
 import { ModelRouter } from './model-router.js'
+import { getGlobalTracer } from './otel.js'
+import { RbacPolicy } from './rbac.js'
+import { createDefaultSecretsProvider, injectSecretsToEnv, SecretsProvider } from './secrets.js'
+import { RunRegistry } from './run-registry.js'
 
-// â”€â”€â”€ DagRunOptions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── DagRunOptions ──────────────────────────────────────────────────────────────
 
 export interface DagRunOptions {
   verbose?: boolean;
@@ -41,20 +47,47 @@ export interface DagRunOptions {
    * as the default provider, bypassing the need for API keys.
    */
   samplingCallback?: SamplingCallback;
+  /**
+   * Force all lanes to use a specific provider regardless of model-router.json.
+   * Use 'mock' to run without API keys (e.g. pnpm demo, CI dry-runs).
+   * Valid values: 'anthropic' | 'openai' | 'vscode' | 'mock'
+   */
+  forceProvider?: string;
+  /**
+   * Override the resolved principal for RBAC checks.
+   * Defaults to `RbacPolicy.resolvePrincipal()` (env var ? git author ? username).
+   */
+  principal?: string;
+  /**
+   * Pre-loaded RBAC policy.  When not provided the policy is loaded from
+   * `.agents/rbac.json`; permissive if the file is absent.
+   */
+  rbacPolicy?: RbacPolicy;
+  /**
+   * Secrets provider used to inject API keys and credentials.
+   * Defaults to a composite of `process.env` + `.env` / `.env.local` files.
+   * Pass a `StaticSecretsProvider` in tests to avoid touching the filesystem.
+   */
+  secrets?: SecretsProvider;
+  /**
+   * Additional secret key names to inject into `process.env` beyond the
+   * built-in list (ANTHROPIC_API_KEY, OPENAI_API_KEY, etc.).
+   */
+  extraSecretKeys?: string[];
 }
 
-// â”€â”€â”€ DagOrchestrator â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── DagOrchestrator ──────────────────────────────────────────────────────────
 
 /**
  * Top-level DAG execution engine.
  *
  * Responsibilities:
- *   1. Load + validate a dag.json        â†’ delegated to DagPlanner
- *   2. Topological sort â†’ execution groups â†’ delegated to DagPlanner
- *   3. Promise.allSettled per group       â†’ parallel lane execution
+ *   1. Load + validate a dag.json        → delegated to DagPlanner
+ *   2. Topological sort → execution groups → delegated to DagPlanner
+ *   3. Promise.allSettled per group       → parallel lane execution
  *   4. Shared ContractRegistry + BarrierCoordinator across all lanes
- *   5. Merge LaneResults â†’ DagResult     â†’ delegated to DagResultBuilder
- *   6. Persist result to .agents/results/ â†’ delegated to DagResultBuilder
+ *   5. Merge LaneResults → DagResult     → delegated to DagResultBuilder
+ *   6. Persist result to .agents/results/ → delegated to DagResultBuilder
  *
  * Usage:
  *   const result = await DagOrchestrator.run('agents/dag.json', projectRoot);
@@ -73,7 +106,7 @@ export class DagOrchestrator {
       options?.resultsDir ?? path.join(projectRoot, '.agents', 'results');
   }
 
-  // â”€â”€â”€ Public API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Public API ─────────────────────────────────────────────────────────────
 
   /** Load a dag.json file, validate it, then execute all lanes */
   async run(dagFile: string): Promise<DagResult> {
@@ -86,7 +119,7 @@ export class DagOrchestrator {
   /**
    * Execute a pre-loaded DagDefinition.
    * @param dag    Parsed DAG definition
-   * @param dagDir Directory of the dag.json â€” used to resolve agent/supervisor/router paths.
+   * @param dagDir Directory of the dag.json — used to resolve agent/supervisor/router paths.
    *               Defaults to projectRoot when not provided.
    */
   async execute(dag: DagDefinition, dagDir?: string): Promise<DagResult> {
@@ -95,39 +128,75 @@ export class DagOrchestrator {
     const startedAt     = new Date().toISOString();
     const startMs       = Date.now();
 
-    this.log(`\nðŸš€  Starting DAG run: ${dag.name}  [${runId}]`);
+    this.log(`\n🚀  Starting DAG run: ${dag.name}  [${runId}]`);
     this.log(`   ${dag.description}\n`);
+    // �"� Audit log �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"�
+    // Secrets: inject API keys from provider before any lane executes
+    const secretsProvider = this.options.secrets ?? createDefaultSecretsProvider(this.projectRoot);
+    await injectSecretsToEnv(secretsProvider, this.options.extraSecretKeys);
 
-    // â”€ Cost tracking â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Run registry: provision isolated directories for this run
+    const runRegistry = new RunRegistry(this.projectRoot);
+    const runPaths    = await runRegistry.create(runId, dag.name);
+
+    // Event bus: broadcast dag:start to all subscribers
+    getGlobalEventBus().emitDagStart({
+      runId,
+      dagName:   dag.name,
+      laneIds:   dag.lanes.map((l) => l.id),
+      principal: this.options.principal,
+      timestamp: startedAt,
+    });
+
+    const auditLog = new AuditLog(this.projectRoot, runId, runPaths.auditDir);
+    await auditLog.open();
+    await auditLog.runStart({ dagName: dag.name, lanes: dag.lanes.map((l) => l.id) });
+    // �"� RBAC �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"�
+    const principal = this.options.principal ?? RbacPolicy.resolvePrincipal();
+    const rbac      = this.options.rbacPolicy ?? await RbacPolicy.load(this.projectRoot);
+    this.log(`   Principal: ${principal}`);
+    void auditLog.decision(principal, 'run-start', JSON.stringify(rbac.summarize()));
+
+    // �"� OpenTelemetry root span �"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"��"�
+    const rootSpan = getGlobalTracer().startDagRun(runId, dag.name);
+    // ─ Cost tracking ──────────────────────────────────────────────────────────
     let aborted = false;
     const costTracker =
       this.options.budgetCapUSD !== undefined
         ? new CostTracker(runId, this.options.budgetCapUSD, () => {
             aborted = true;
-            this.log(`\nðŸ’¸  Budget cap of $${this.options.budgetCapUSD} USD exceeded â€” aborting remaining lane groups`);
+            this.log(`\n💸  Budget cap of $${this.options.budgetCapUSD} USD exceeded — aborting remaining lane groups`);
+            getGlobalEventBus().emitBudgetExceeded({
+              runId,
+              limitUSD:  this.options.budgetCapUSD!,
+              actualUSD: this.options.budgetCapUSD!, // cost has met or exceeded the cap
+              scope:     'run',
+              timestamp: new Date().toISOString(),
+            });
           })
         : undefined;
 
-    // â”€ Model router â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─ Model router ───────────────────────────────────────────────────────────
     const routerFile = this.options.modelRouterFile ?? dag.modelRouterFile;
     const modelRouter: ModelRouter | undefined = await ModelRouterFactory.create({
       routerFilePath:   routerFile,
       samplingCallback: this.options.samplingCallback,
       agentsBaseDir,
+      forceProvider:    this.options.forceProvider,
       log: (msg) => this.log(msg),
     });
 
-    // â”€ Shared infrastructure â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─ Shared infrastructure ──────────────────────────────────────────────────
     const registry       = new ContractRegistry();
     const coordinator    = new BarrierCoordinator(registry);
     const capabilityRegistry = DagPlanner.buildCapabilityRegistry(dag);
 
-    // â”€ Topological execution order â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─ Topological execution order ────────────────────────────────────────────
     const groups = DagPlanner.topologicalSort(dag.lanes);
     this.log(
       `   Execution plan: ${groups
         .map((g, i) => `Group ${i + 1}: [${g.map((l) => l.id).join(', ')}]`)
-        .join(' â†’ ')}\n`,
+        .join(' → ')}\n`,
     );
 
     const allLaneResults: LaneResult[] = [];
@@ -135,30 +204,46 @@ export class DagOrchestrator {
     for (let gi = 0; gi < groups.length; gi++) {
       if (aborted) break;
 
-      const group = groups[gi];
-      this.log(`â–¶  Group ${gi + 1}/${groups.length}: ${group.map((l) => l.id).join(' + ')}`);
+      const group          = groups[gi];
+      // RBAC: skip lanes the current principal is not permitted to run
+      const lanePerms      = rbac.checkLanes(principal, group.map((l) => l.id));
+      const permittedGroup = group.filter((l) => {
+        if (!lanePerms[l.id]) {
+          this.log(`   ⛔ [${l.id}] skipped — principal "${principal}" does not have run permission`);
+          getGlobalEventBus().emitRbacDenied({
+            runId,
+            principal,
+            action:    `run-lane:${l.id}`,
+            reason:    `Principal "${principal}" does not have run permission for lane "${l.id}"`,
+            timestamp: new Date().toISOString(),
+          });
+          return false;
+        }
+        return true;
+      });
+      this.log(`▶  Group ${gi + 1}/${groups.length}: ${permittedGroup.map((l) => l.id).join(' + ')}`);
 
       const groupStartMs = Date.now();
       const settled = await Promise.allSettled(
-        group.map((lane) =>
+        permittedGroup.map((lane) =>
           runLane(
             lane, this.projectRoot, registry, coordinator,
             capabilityRegistry, modelRouter, costTracker,
-            this.options.interactive, agentsBaseDir,
+            this.options.interactive, agentsBaseDir, auditLog, runPaths.checkpointsDir, runId,
           ),
         ),
       );
 
       for (let li = 0; li < settled.length; li++) {
         const outcome = settled[li];
-        const lane    = group[li];
+        const lane    = permittedGroup[li];
 
         if (outcome.status === 'fulfilled') {
           allLaneResults.push(outcome.value);
           const s    = outcome.value.status;
-          const icon = s === 'success' ? 'âœ…' : s === 'escalated' ? 'ðŸš¨' : 'âŒ';
+          const icon = s === 'success' ? '✅' : s === 'escalated' ? '🚨' : '❌';
           this.log(
-            `   ${icon} [${lane.id}] ${s} â€” ${outcome.value.checkpoints.length} checkpoints, ` +
+            `   ${icon} [${lane.id}] ${s} — ${outcome.value.checkpoints.length} checkpoints, ` +
             `${outcome.value.totalRetries} retries, ${outcome.value.durationMs}ms`,
           );
         } else {
@@ -173,7 +258,7 @@ export class DagOrchestrator {
             durationMs:       Date.now() - groupStartMs,
             error:            String(outcome.reason),
           });
-          this.log(`   âŒ [${lane.id}] failed â€” ${outcome.reason}`);
+          this.log(`   ❌ [${lane.id}] failed — ${outcome.reason}`);
         }
       }
 
@@ -185,15 +270,15 @@ export class DagOrchestrator {
             groupLaneIds.has(p),
           );
           if (barrierParticipantsInGroup.length === barrier.participants.length) {
-            this.log(`â³  Global barrier "${barrier.name}" â€” waiting for all participantsâ€¦`);
+            this.log(`⏳  Global barrier "${barrier.name}" — waiting for all participants…`);
             const resolution = await coordinator.resolveGlobalBarrier(
               barrier.participants,
               barrier.timeoutMs,
             );
             if (!resolution.resolved) {
-              this.log(`âš ï¸   Barrier "${barrier.name}" timed out for: ${resolution.timedOut.join(', ')}`);
+              this.log(`⚠️   Barrier "${barrier.name}" timed out for: ${resolution.timedOut.join(', ')}`);
             } else {
-              this.log(`âœ…  Barrier "${barrier.name}" resolved`);
+              this.log(`✅  Barrier "${barrier.name}" resolved`);
             }
           }
         }
@@ -212,24 +297,48 @@ export class DagOrchestrator {
       totalDurationMs,
     });
 
+    // Event bus: broadcast dag:end to all subscribers
+    getGlobalEventBus().emitDagEnd({
+      runId,
+      dagName:    dag.name,
+      durationMs: totalDurationMs,
+      status:     dagResult.status as 'success' | 'partial' | 'failed',
+      timestamp:  completedAt,
+    });
+
     this.log(
-      `\n${dagResult.status === 'success' ? 'âœ…' : dagResult.status === 'partial' ? 'âš ï¸ ' : 'âŒ'}` +
+      `\n${dagResult.status === 'success' ? '✅' : dagResult.status === 'partial' ? '⚠️ ' : '❌'}` +
       `  DAG complete: ${dagResult.status.toUpperCase()} in ${totalDurationMs}ms`,
     );
     this.log(`   ${dagResult.findings.length} findings, ${dagResult.recommendations.length} recommendations\n`);
 
-    await DagResultBuilder.save(dagResult, this.resultsDir, this.projectRoot, (m) => this.log(m));
+    await DagResultBuilder.save(dagResult, runPaths.resultsDir, this.projectRoot, (m) => this.log(m));
 
     // Cost report
     if (costTracker) {
       this.log(costTracker.formatReport());
-      await costTracker.save(this.resultsDir);
+      await costTracker.save(runPaths.resultsDir);
     }
+
+    // ─ Close OTEL root span ────────────────────────────────────────────────────
+    rootSpan
+      .setAttribute('dag.name', dag.name)
+      .setAttribute('dag.runId', runId)
+      .setAttribute('dag.status', dagResult.status)
+      .setStatus(dagResult.status === 'failed' ? 'error' : 'ok')
+      .end();
+
+    // ─ Close audit log ─────────────────────────────────────────────────────────
+    await auditLog.runEnd(totalDurationMs, { status: dagResult.status, findings: dagResult.findings.length });
+    await auditLog.close();
+
+    // ─ Mark run complete in registry ──────────────────────────────────────────
+    await runRegistry.complete(runId, dagResult.status as import('./run-registry.js').RunStatus, totalDurationMs);
 
     return dagResult;
   }
 
-  // â”€â”€â”€ Load & Validate â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Load & Validate ────────────────────────────────────────────────────────
 
   async loadDag(dagFilePath: string): Promise<DagDefinition> {
     const raw = await fs.readFile(dagFilePath, 'utf-8');
@@ -238,7 +347,7 @@ export class DagOrchestrator {
     return dag;
   }
 
-  // â”€â”€â”€ Logging â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ─── Logging ──────────────────────────────────────────────────────────────
 
   private log(msg: string): void {
     if (this.verbose) {

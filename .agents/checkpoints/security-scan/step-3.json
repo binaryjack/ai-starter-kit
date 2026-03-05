@@ -1,0 +1,43 @@
+{
+  "checkpointId": "step-3",
+  "stepIndex": 3,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-3",
+    "mode": "self",
+    "stepIndex": 3,
+    "partialResult": {
+      "agentName": "Security Scanner",
+      "status": "success",
+      "findings": [
+        "⚠️  Found 'API_KEY' string in source — verify no secrets are committed",
+        "✅ .gitignore present — secrets unlikely to be committed",
+        "❌ LLM review failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock.",
+        "❌🔴 Security issues detected",
+        "⚠️ ⚠️  npm audit found high or critical vulnerabilities"
+      ],
+      "recommendations": [
+        "Run 'npm audit fix' or update affected packages"
+      ],
+      "details": {
+        "_": "DAG_SUPERVISED_AGENTS.md",
+        "value": "{\n  \"error\": {\n    \"code\": \"ENOLOCK\",\n    \"summary\": \"This command requires an existing lockfile.\",\n    \"detail\": \"Try creating one first with: npm i --package-lock-only\\nOriginal error: loadVirtual requires existing shrinkwrap file\"\n  }\n}\nnpm ERR! code ENOLOCK\nnpm ERR! audit This command requires an existing lockfile.\nnpm ERR! audit Try creating one first with: npm i --package-lock-only\nnpm ERR! audit Original error: loadVirtual requires existing shrinkwrap file\n\nnpm ERR! A complete log of this"
+      },
+      "timestamp": "2026-03-04T22:51:05.773Z"
+    },
+    "contracts": {
+      "laneId": "security-scan",
+      "version": 3,
+      "timestamp": "2026-03-04T22:51:04.942Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "APPROVE"
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-04T22:51:05.773Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}

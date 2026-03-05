@@ -1,0 +1,31 @@
+{
+  "name": "Code Reviewer",
+  "icon": "🔍",
+  "description": "Reviews TypeScript source code quality, architecture, and patterns via LLM, then generates a prioritised refactoring plan.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "✅ Node.js project confirmed",
+      "fail": "❌ No package.json — skipping code review",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-review",
+      "path": "packages",
+      "taskType": "validation",
+      "prompt": "Review the TypeScript packages in the directory listing below for code quality, type safety, separation of concerns, and naming conventions.\n\nDirectory contents:\n{content}\n\nProvide a bullet-list of specific findings. Flag any anti-patterns, type violations, or architectural concerns. Be concise and actionable.",
+      "outputKey": "code_quality_findings",
+      "pass": "✅ Code quality review complete",
+      "fail": "⚠️  Code quality issues found",
+      "recommendations": ["Review findings and prioritise the top 3 items for the next sprint"]
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Based on this retry context or prior analysis, generate a prioritised refactoring plan with exactly 3 actionable items. Each item must have: title, effort (S/M/L), and one concrete first step.\n\nContext: {retryContext}\n\nFormat as a numbered list.",
+      "outputKey": "refactoring_plan",
+      "pass": "✅ Refactoring plan generated"
+    }
+  ]
+}

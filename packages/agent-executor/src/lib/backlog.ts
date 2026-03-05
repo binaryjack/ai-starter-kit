@@ -9,15 +9,15 @@
  * The BacklogBoard is the single source of truth during Phases 1–3.
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
-import { ChatRenderer } from './chat-renderer.js';
+import * as path from 'path'
+import { ChatRenderer } from './chat-renderer.js'
 import type {
     ActorId,
     BacklogItem,
     BacklogItemStatus,
     ChecklistDisplayItem,
-} from './plan-types.js';
+} from './plan-types.js'
+import { StateStore } from './state-store.js'
 
 // ─── BacklogBoard ─────────────────────────────────────────────────────────────
 
@@ -79,7 +79,6 @@ export class BacklogBoard {
         }
       }
     }
-    this._save();
   }
 
   /**
@@ -89,7 +88,6 @@ export class BacklogBoard {
     const item = this._require(id);
     item.status = 'skipped';
     item.resolvedAt = new Date().toISOString();
-    this._save();
   }
 
   // ─── Queries ───────────────────────────────────────────────────────────────
@@ -194,16 +192,13 @@ export class BacklogBoard {
 
   // ─── Persistence ──────────────────────────────────────────────────────────
 
-  private _save(): void {
-    fs.mkdirSync(this.stateDir, { recursive: true });
-    const file = path.join(this.stateDir, 'backlog.json');
-    fs.writeFileSync(file, JSON.stringify(Array.from(this.items.values()), null, 2));
+  save(): void {
+    new StateStore<BacklogItem[]>(path.join(this.stateDir, 'backlog.json')).saveSync(Array.from(this.items.values()));
   }
 
   load(): void {
-    const file = path.join(this.stateDir, 'backlog.json');
-    if (!fs.existsSync(file)) return;
-    const items: BacklogItem[] = JSON.parse(fs.readFileSync(file, 'utf-8'));
+    const items = new StateStore<BacklogItem[]>(path.join(this.stateDir, 'backlog.json')).loadSync();
+    if (!items) return;
     this.items = new Map(items.map((i) => [i.id, i]));
     this.seq = items.length;
   }

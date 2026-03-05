@@ -26,6 +26,7 @@ export interface StepResult {
  * @param retryInstructions Corrective context injected by the supervisor on RETRY
  * @param modelRouter       Optional router — required for llm-* check types
  * @param onLlmResponse     Optional callback fired after every LLM call (cost tracking)
+ * @param onLlmStream       Optional callback fired for each streamed token (live output)
  */
 export async function runCheckStep(
   check: CheckDefinition,
@@ -33,6 +34,7 @@ export async function runCheckStep(
   retryInstructions?: string,
   modelRouter?: ModelRouter,
   onLlmResponse?: (response: RoutedResponse) => void,
+  onLlmStream?: (token: string) => void,
 ): Promise<StepResult> {
   const registry = CheckHandlerRegistry.createDefault(modelRouter, onLlmResponse);
   const ctx      = CheckHandlerRegistry.buildContext(
@@ -41,6 +43,7 @@ export async function runCheckStep(
     retryInstructions,
     modelRouter,
     onLlmResponse,
+    onLlmStream,
   );
   return registry.run(ctx);
 }

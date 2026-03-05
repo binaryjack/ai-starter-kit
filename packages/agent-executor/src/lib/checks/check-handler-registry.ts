@@ -9,7 +9,9 @@
 import * as path from 'path'
 import type { CheckType } from '../agent-types.js'
 import type { StepResult } from '../check-runner.js'
+import type { ToolExecutorFn } from '../llm-provider.js'
 import type { ModelRouter, RoutedResponse } from '../model-router.js'
+import { discoverPlugins } from '../plugin-api.js'
 import type { CheckContext } from './check-context.js'
 import type { ICheckHandler } from './check-handler.interface.js'
 import { formatCheckResult } from './check-result-formatter.js'
@@ -35,6 +37,17 @@ export class CheckHandlerRegistry {
   register(handler: ICheckHandler): this {
     this.handlers.set(handler.type, handler);
     return this;
+  }
+
+  /**
+   * Discover and register all ai-kit plugin packages from node_modules.
+   * Safe to call multiple times — each call re-scans and re-registers.
+   *
+   * @param nodeModulesDir  Override the node_modules directory to scan.
+   *                        Defaults to the project's own node_modules.
+   */
+  async discover(nodeModulesDir?: string): Promise<void> {
+    await discoverPlugins(this, nodeModulesDir);
   }
 
   // ─── Dispatch ──────────────────────────────────────────────────────────────
@@ -114,6 +127,8 @@ export class CheckHandlerRegistry {
     retryInstructions?: string,
     modelRouter?: ModelRouter,
     onLlmResponse?: (response: RoutedResponse) => void,
+    onLlmStream?: (token: string) => void,
+    toolExecutor?: ToolExecutorFn,
   ): CheckContext {
     return {
       check,
@@ -122,6 +137,8 @@ export class CheckHandlerRegistry {
       retryInstructions,
       modelRouter,
       onLlmResponse,
+      onLlmStream,
+      toolExecutor,
     };
   }
 }

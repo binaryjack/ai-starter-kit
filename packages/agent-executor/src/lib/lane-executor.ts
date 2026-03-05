@@ -1,10 +1,11 @@
 import * as fs from 'fs/promises'
 import * as path from 'path'
-import * as readline from 'readline'
 import { AgentResult } from './agent-types.js'
+import { AuditLog } from './audit-log.js'
 import { BarrierCoordinator } from './barrier-coordinator.js'
 import { ContractRegistry } from './contract-registry.js'
 import { CostTracker } from './cost-tracker.js'
+import { getGlobalEventBus } from './dag-events.js'
 import {
   BarrierResolution,
   CheckpointPayload,
@@ -15,41 +16,15 @@ import {
   LaneResult,
   SupervisorVerdict,
 } from './dag-types.js'
+import {
+  AutoApproveHumanReviewGate,
+  IHumanReviewGate,
+  InteractiveHumanReviewGate,
+} from './human-review-gate.js'
 import { IntraSupervisor } from './intra-supervisor.js'
 import { ModelRouter, RoutedResponse } from './model-router.js'
+import { getGlobalTracer } from './otel.js'
 import { EscalationError, SupervisedAgent } from './supervised-agent.js'
-// ─── Interactive approval prompt ───────────────────────────────────────────────────
-
-async function promptHumanApproval(
-  payload: CheckpointPayload,
-  verdict: SupervisorVerdict,
-): Promise<SupervisorVerdict> {
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-  const findings = payload.partialResult.findings ?? [];
-  process.stdout.write('\n');
-  process.stdout.write('  🔔  HUMAN REVIEW CHECKPOINT\n');
-  process.stdout.write(`  Checkpoint : ${payload.checkpointId}\n`);
-  process.stdout.write(`  Supervisor : ${verdict.type}`);
-  if (verdict.type === 'RETRY') process.stdout.write(` (“${verdict.instructions ?? ''}”)`);
-  process.stdout.write('\n');
-  if (findings.length > 0) {
-    process.stdout.write('  Findings   :\n');
-    findings.slice(-5).forEach((f) => process.stdout.write(`    ${f}\n`));
-  }
-  process.stdout.write('\n  [a] Approve  [r] Retry  [e] Escalate  (Enter = accept verdict)\n> ');
-
-  return new Promise((resolve) => {
-    rl.once('line', (input) => {
-      rl.close();
-      const ch = input.trim().toLowerCase();
-      if (ch === 'a') return resolve({ type: 'APPROVE' });
-      if (ch === 'r') return resolve({ type: 'RETRY', instructions: 'Human-requested retry' });
-      if (ch === 'e')
-        return resolve({ type: 'ESCALATE', reason: 'Human escalated at review checkpoint' });
-      resolve(verdict); // accept supervisor verdict
-    });
-  });
-}
 // ─── LaneExecutor ─────────────────────────────────────────────────────────────
 
 /**
@@ -75,6 +50,10 @@ export class LaneExecutor {
   private readonly modelRouter: ModelRouter | undefined;
   private readonly costTracker: CostTracker | undefined;
   private readonly interactive: boolean;
+  private readonly humanReviewGate: IHumanReviewGate;
+  private readonly auditLog: AuditLog | undefined;
+  /** Optional run ID forwarded from the orchestrator for event-bus emissions. */
+  private readonly runId: string;
   /**
    * Base directory for resolving agent/supervisor JSON files.
    * Defaults to projectRoot when not supplied (backward-compatible).
@@ -94,6 +73,11 @@ export class LaneExecutor {
     modelRouter?: ModelRouter;
     costTracker?: CostTracker;
     interactive?: boolean;
+    humanReviewGate?: IHumanReviewGate;
+    /** Optional audit log to record lane events. */
+    auditLog?: AuditLog;
+    /** Optional run ID forwarded from the orchestrator for event-bus emissions. */
+    runId?: string;
   }) {
     this.registry = options.registry;
     this.coordinator = options.coordinator;
@@ -105,6 +89,10 @@ export class LaneExecutor {
     this.modelRouter = options.modelRouter;
     this.costTracker = options.costTracker;
     this.interactive = options.interactive ?? false;
+    this.humanReviewGate = options.humanReviewGate
+      ?? (options.interactive ? new InteractiveHumanReviewGate() : new AutoApproveHumanReviewGate());
+    this.auditLog = options.auditLog;
+    this.runId = options.runId ?? 'unknown';
   }
 
   // ─── Public API ─────────────────────────────────────────────────────────────
@@ -115,6 +103,16 @@ export class LaneExecutor {
     const checkpoints: CheckpointRecord[] = [];
     let totalRetries = 0;
     let handoffsReceived = 0;
+
+    // OTEL lane span + audit lane-start
+    const laneSpan = getGlobalTracer().startLane('', lane.id);
+    void this.auditLog?.laneStart(lane.id, lane.id);
+    getGlobalEventBus().emitLaneStart({
+      runId:            this.runId,
+      laneId:           lane.id,
+      providerOverride: lane.providerOverride,
+      timestamp:        startedAt,
+    });
 
     let agentResult: AgentResult | null = null;
     let laneStatus: LaneResult['status'] = 'success';
@@ -138,14 +136,36 @@ export class LaneExecutor {
       }
       totalRetries = checkpoints.reduce((sum, cp) => sum + cp.retryCount, 0);
       handoffsReceived = checkpoints.filter((cp) => cp.verdict.type === 'HANDOFF').length;
+      laneSpan.recordException(err instanceof Error ? err : new Error(String(err)));
+      laneSpan.setStatus('error', String(err));
     }
 
     const completedAt = new Date().toISOString();
     const durationMs = Date.now() - startMs;
 
+    const finalStatus = agentResult ? 'success' : laneStatus;
+
+    // Close OTEL span + record audit lane-end
+    laneSpan
+      .setAttribute('lane.id', lane.id)
+      .setAttribute('lane.status', finalStatus)
+      .setAttribute('lane.retries', totalRetries)
+      .setAttribute('lane.checkpoints', checkpoints.length)
+      .setStatus(finalStatus === 'failed' || finalStatus === 'escalated' ? 'error' : 'ok')
+      .end();
+    void this.auditLog?.laneEnd(lane.id, lane.id, durationMs, finalStatus);
+    getGlobalEventBus().emitLaneEnd({
+      runId:     this.runId,
+      laneId:    lane.id,
+      durationMs,
+      status:    finalStatus as 'success' | 'failed' | 'escalated',
+      retries:   totalRetries,
+      timestamp: new Date().toISOString(),
+    });
+
     const laneResult: LaneResult = {
       laneId: lane.id,
-      status: agentResult ? 'success' : laneStatus,
+      status: finalStatus,
       agentResult: agentResult ?? undefined,
       checkpoints,
       totalRetries,
@@ -197,12 +217,50 @@ export class LaneExecutor {
     // Cost tracking: collect LLM responses fired inside the generator,
     // then attribute them to each checkpoint when the payload yields.
     const pendingCosts: RoutedResponse[] = [];
-    const onLlmResponse = this.costTracker
-      ? (resp: RoutedResponse) => { pendingCosts.push(resp); }
-      : undefined;
+    const onLlmResponse = (resp: RoutedResponse): void => {
+      if (this.costTracker) pendingCosts.push(resp);
+      // Fire-and-forget audit + OTEL span for each LLM call
+      if (this.auditLog) {
+        const costUSD  = resp.usage
+          ? (resp.usage.inputTokens * 0.000003 + resp.usage.outputTokens * 0.000015)
+          : 0;
+        const laneSpan = getGlobalTracer().startLlmCall(lane.id, resp.model ?? 'unknown');
+        laneSpan.setAttribute('llm.model', resp.model ?? 'unknown')
+                .setAttribute('llm.input_tokens', resp.usage?.inputTokens ?? 0)
+                .setAttribute('llm.output_tokens', resp.usage?.outputTokens ?? 0)
+                .setAttribute('llm.cost_usd', costUSD)
+                .end();
+        void this.auditLog.llmCall(lane.id, lane.id, resp.model ?? 'unknown', costUSD);
+      }
+      // Event bus: emit llm:call for external subscribers (dashboard, metrics, etc.)
+      const llmCostUSD = resp.usage
+        ? (resp.usage.inputTokens * 0.000003 + resp.usage.outputTokens * 0.000015)
+        : 0;
+      getGlobalEventBus().emitLlmCall({
+        runId:            this.runId,
+        laneId:           lane.id,
+        model:            resp.model ?? 'unknown',
+        provider:         resp.provider,
+        inputTokens:      resp.usage?.inputTokens ?? 0,
+        outputTokens:     resp.usage?.outputTokens ?? 0,
+        estimatedCostUSD: llmCostUSD,
+        timestamp:        new Date().toISOString(),
+      });
+    };
+
+    // Streaming: print each token live to stdout with a lane prefix so
+    // parallel lanes are distinguishable in verbose mode.
+    const onLlmStream = (token: string): void => {
+      process.stdout.write(token);
+    };
 
     // Start the generator
-    const generator = agent.run(this.projectRoot, 'self', publishContract, this.modelRouter, onLlmResponse);
+    // If the lane declares a providerOverride, use a scoped router that forces that provider.
+    const effectiveRouter: ModelRouter | undefined = lane.providerOverride && this.modelRouter
+      ? this.modelRouter.withProviderOverride(lane.providerOverride)
+      : this.modelRouter;
+
+    const generator = agent.run(this.projectRoot, 'self', publishContract, effectiveRouter, onLlmResponse, onLlmStream);
 
     // Drive the generator
     let currentVerdict: SupervisorVerdict = { type: 'APPROVE' };
@@ -254,7 +312,7 @@ export class LaneExecutor {
 
       // Interactive human review: pause and let the human override the supervisor verdict
       if (this.interactive && effectivePayload.mode === 'needs-human-review') {
-        verdict = await promptHumanApproval(effectivePayload, verdict);
+        verdict = await this.humanReviewGate.prompt(effectivePayload, verdict);
       }
 
       // Track retry count for this checkpoint
@@ -455,6 +513,9 @@ export async function runLane(
   costTracker?: CostTracker,
   interactive?: boolean,
   agentsBaseDir?: string,
+  auditLog?: AuditLog,
+  checkpointBaseDir?: string,
+  runId?: string,
 ): Promise<LaneResult> {
   const executor = new LaneExecutor({
     registry,
@@ -462,9 +523,12 @@ export async function runLane(
     projectRoot,
     agentsBaseDir,
     capabilityRegistry,
+    checkpointBaseDir,
     modelRouter,
     costTracker,
     interactive,
+    auditLog,
+    runId,
   });
   return executor.runLane(lane);
 }

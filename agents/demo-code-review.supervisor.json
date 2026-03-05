@@ -1,0 +1,26 @@
+{
+  "laneId": "code-review",
+  "retryBudget": 2,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "The codebase review returned no findings. Look specifically for missing error handling, implicit any types, or functions longer than 40 lines."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "No refactoring plan was generated. Produce exactly 3 items: one quick win (S), one medium effort (M), one architectural improvement (L)."
+    }
+  ]
+}

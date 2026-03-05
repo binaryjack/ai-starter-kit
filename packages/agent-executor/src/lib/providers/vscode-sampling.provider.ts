@@ -1,4 +1,4 @@
-import type { LLMMessage, LLMPrompt, LLMProvider, LLMResponse } from '../llm-provider.js'
+import type { LLMMessage, LLMPrompt, LLMProvider, LLMResponse, LLMStreamChunk } from '../llm-provider.js'
 
 // ─── SamplingCallback ─────────────────────────────────────────────────────────
 //
@@ -49,5 +49,16 @@ export class VSCodeSamplingProvider implements LLMProvider {
       model:    result.model,
       provider: this.name,
     };
+  }
+
+  /**
+   * VS Code Sampling API does not expose a streaming endpoint.
+   * We fall back to `complete()` and yield the full response as a single token,
+   * then a done sentinel — callers see one big chunk but the interface is satisfied.
+   */
+  async *stream(prompt: LLMPrompt, modelId: string): AsyncIterable<LLMStreamChunk> {
+    const response = await this.complete(prompt, modelId);
+    yield { token: response.content, done: false };
+    yield { token: '', done: true, usage: response.usage };
   }
 }

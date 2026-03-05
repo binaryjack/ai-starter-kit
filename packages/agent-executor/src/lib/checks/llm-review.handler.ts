@@ -1,5 +1,6 @@
 import * as fs from 'fs/promises'
 import type { TaskType } from '../llm-provider.js'
+import type { RoutedResponse } from '../model-router.js'
 import type { CheckContext } from './check-context.js'
 import type { ICheckHandler, RawCheckResult } from './check-handler.interface.js'
 
@@ -47,20 +48,39 @@ export class LlmReviewHandler implements ICheckHandler {
         .replace('{retryContext}', ctx.retryInstructions ?? 'N/A')
         .replace('{path}',         ctx.check.path        ?? '');
 
-      const response = await ctx.modelRouter.route(taskType, {
-        messages: [
-          {
-            role:    'system',
-            content: 'You are a code reviewer. Reply with findings as a bullet list. Be specific and actionable.',
-          },
-          { role: 'user', content: promptText },
-        ],
-      });
+      const messages = [
+        {
+          role:    'system' as const,
+          content: 'You are a code reviewer. Reply with findings as a bullet list. Be specific and actionable.',
+        },
+        { role: 'user' as const, content: promptText },
+      ];
 
-      ctx.onLlmResponse?.(response);
+      // Stream tokens if callback is registered
+      let reviewText = '';
+      let routedResponse: RoutedResponse | undefined;
 
-      const reviewText = response.content.trim();
-      const passed     =
+      if (ctx.onLlmStream) {
+        await (async () => {
+          for await (const token of ctx.modelRouter!.streamRoute(
+            taskType,
+            { messages },
+            undefined,
+            (r) => { routedResponse = r; },
+          )) {
+            reviewText += token;
+            ctx.onLlmStream!(token);
+          }
+        })();
+      } else {
+        const response = await ctx.modelRouter!.route(taskType, { messages });
+        routedResponse = response;
+        reviewText     = response.content.trim();
+      }
+
+      if (routedResponse) ctx.onLlmResponse?.(routedResponse);
+
+      const passed =
         !reviewText.includes('CRITICAL:') &&
         !reviewText.toLowerCase().includes('security vulnerability found');
 

@@ -1,0 +1,45 @@
+{
+  "_comment": "Copy this file to .agents/rbac.json and customise for your team.",
+  "version": 1,
+  "defaultRole": "observer",
+  "roles": {
+    "admin": {
+      "_comment": "Full access — can run any lane, read audit logs, override verdicts and budgets.",
+      "permissions": ["*"]
+    },
+    "developer": {
+      "_comment": "Can run all lanes and read audit logs. Cannot override verdicts.",
+      "permissions": ["run:*", "audit:read", "interactive:pause"]
+    },
+    "reviewer": {
+      "_comment": "Can read audit logs and override supervisor verdicts. Cannot run lanes.",
+      "permissions": ["audit:read", "audit:verify", "verdict:override"]
+    },
+    "observer": {
+      "_comment": "Read-only access — can read audit logs only.",
+      "permissions": ["audit:read"]
+    },
+    "ci": {
+      "_comment": "CI/CD service account — can run all lanes but cannot pause for human review.",
+      "permissions": ["run:*", "budget:override", "audit:read"]
+    }
+  },
+  "principals": {
+    "alice": {
+      "role": "admin"
+    },
+    "bob": {
+      "role": "developer"
+    },
+    "ci-bot": {
+      "role": "ci",
+      "_comment": "CI bot cannot run the security-review lane — requires human",
+      "laneRestrictions": {
+        "security-review": "deny"
+      }
+    },
+    "auditor": {
+      "role": "reviewer"
+    }
+  }
+}

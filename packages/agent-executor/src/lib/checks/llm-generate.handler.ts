@@ -1,4 +1,5 @@
 import type { TaskType } from '../llm-provider.js'
+import type { RoutedResponse } from '../model-router.js'
 import type { CheckContext } from './check-context.js'
 import type { ICheckHandler, RawCheckResult } from './check-handler.interface.js'
 
@@ -26,26 +27,47 @@ export class LlmGenerateHandler implements ICheckHandler {
         .replace('{retryContext}', ctx.retryInstructions ?? 'N/A')
         .replace('{path}',        ctx.check.path        ?? '');
 
-      const response = await ctx.modelRouter.route(taskType, {
-        messages: [
-          {
-            role:    'system',
-            content: 'You are an expert software engineer. Be concise and specific. Output plain text findings only.',
-          },
-          { role: 'user', content: promptText },
-        ],
-      });
+      const messages = [
+        {
+          role:    'system' as const,
+          content: 'You are an expert software engineer. Be concise and specific. Output plain text findings only.',
+        },
+        { role: 'user' as const, content: promptText },
+      ];
 
-      ctx.onLlmResponse?.(response);
+      // Stream tokens if a stream callback is registered, otherwise batch
+      let fullContent = '';
+      let routedResponse: RoutedResponse | undefined;
 
-      const value  = response.content.trim();
+      if (ctx.onLlmStream) {
+        // Live streaming — print each token as it arrives
+        await (async () => {
+          for await (const token of ctx.modelRouter!.streamRoute(
+            taskType,
+            { messages },
+            undefined,
+            (r) => { routedResponse = r; },
+          )) {
+            fullContent += token;
+            ctx.onLlmStream!(token);
+          }
+        })();
+      } else {
+        const response = await ctx.modelRouter!.route(taskType, { messages });
+        routedResponse = response;
+        fullContent    = response.content.trim();
+      }
+
+      if (routedResponse) ctx.onLlmResponse?.(routedResponse);
+
+      const value  = fullContent.trim();
       const passed = value.length > 0;
 
       if (ctx.check.outputKey) {
         return {
           passed,
           value,
-          detail:      { key: ctx.check.outputKey, value: response.content },
+          detail:      { key: ctx.check.outputKey, value: fullContent },
           extraFindings: ctx.check.pass
             ? [ctx.check.pass]
             : [`💡 Generated: ${value.slice(0, 200)}`],

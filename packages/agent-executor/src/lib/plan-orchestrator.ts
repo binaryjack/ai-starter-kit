@@ -22,6 +22,7 @@ import { DiscoverySession } from './discovery-session.js';
 import type { ModelRouter } from './model-router.js';
 import { PlanModelAdvisor } from './plan-model-advisor.js';
 import { PlanSynthesizer } from './plan-synthesizer.js';
+import { SprintPlanner } from './sprint-planner.js';
 import type {
     DiscoveryResult,
     PlanDefinition,
@@ -131,8 +132,7 @@ export class PlanOrchestrator {
     const board = new BacklogBoard(r, this.projectRoot);
     if (this._shouldRun('decompose')) {
       board.load();
-      const synth = new PlanSynthesizer(r, this.projectRoot, this.modelRouter);
-      await synth.runSprintPlanning(plan!, discovery!, board);
+      await new SprintPlanner(r, this.projectRoot, this.modelRouter).run(plan!, discovery!, board);
     }
 
     // ── Phase 3: WIRE (decisions + dependency pass) ───────────────────────

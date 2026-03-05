@@ -209,6 +209,17 @@ export interface LaneDefinition {
    *   { "apiRoutes": "RouteContract[]", "errorTypes": "ErrorContract[]" }
    */
   contractSchema?: Record<string, string>;
+
+  /**
+   * Override the default LLM provider for this lane only.
+   * Must match a key in the `providers` map of model-router.json.
+   *
+   * Example: "openai" | "anthropic" | "vscode" | any custom provider id
+   *
+   * When set, the lane creates a scoped model-router config that forces
+   * this provider regardless of the global routing profile.
+   */
+  providerOverride?: string;
 }
 
 /** A named synchronization point that requires all participant lanes to arrive */

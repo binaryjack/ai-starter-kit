@@ -1,0 +1,422 @@
+{
+  "dagName": "Demo — Real LLM Code Review",
+  "runId": "296dcad7-c16f-4a97-aff7-27fd1c61635e",
+  "status": "success",
+  "lanes": [
+    {
+      "laneId": "code-review",
+      "status": "success",
+      "agentResult": {
+        "agentName": "Code Reviewer",
+        "status": "success",
+        "findings": [
+          "✅ Node.js project confirmed",
+          "❌ LLM review failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock.",
+          "ℹ️ ⚠️  Code quality issues found",
+          "❌ LLM generate failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock."
+        ],
+        "recommendations": [
+          "Review findings and prioritise the top 3 items for the next sprint"
+        ],
+        "details": {},
+        "timestamp": "2026-03-04T22:51:01.874Z"
+      },
+      "checkpoints": [
+        {
+          "checkpointId": "step-0",
+          "stepIndex": 0,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-0",
+            "mode": "self",
+            "stepIndex": 0,
+            "partialResult": {
+              "agentName": "Code Reviewer",
+              "status": "success",
+              "findings": [
+                "✅ Node.js project confirmed"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-04T22:51:01.308Z"
+            },
+            "contracts": {
+              "laneId": "code-review",
+              "version": 0,
+              "timestamp": "2026-03-04T22:51:01.308Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-04T22:51:01.309Z",
+          "contractsReceived": {},
+          "durationMs": 1
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Code Reviewer",
+              "status": "success",
+              "findings": [
+                "✅ Node.js project confirmed",
+                "❌ LLM review failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock.",
+                "ℹ️ ⚠️  Code quality issues found"
+              ],
+              "recommendations": [
+                "Review findings and prioritise the top 3 items for the next sprint"
+              ],
+              "details": {},
+              "timestamp": "2026-03-04T22:51:01.874Z"
+            },
+            "contracts": {
+              "laneId": "code-review",
+              "version": 1,
+              "timestamp": "2026-03-04T22:51:01.308Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-04T22:51:01.874Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-2",
+          "stepIndex": 2,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-2",
+            "mode": "self",
+            "stepIndex": 2,
+            "partialResult": {
+              "agentName": "Code Reviewer",
+              "status": "success",
+              "findings": [
+                "✅ Node.js project confirmed",
+                "❌ LLM review failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock.",
+                "ℹ️ ⚠️  Code quality issues found",
+                "❌ LLM generate failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock."
+              ],
+              "recommendations": [
+                "Review findings and prioritise the top 3 items for the next sprint"
+              ],
+              "details": {},
+              "timestamp": "2026-03-04T22:51:01.874Z"
+            },
+            "contracts": {
+              "laneId": "code-review",
+              "version": 2,
+              "timestamp": "2026-03-04T22:51:01.874Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-04T22:51:01.874Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        }
+      ],
+      "totalRetries": 0,
+      "handoffsReceived": 0,
+      "startedAt": "2026-03-04T22:51:01.305Z",
+      "completedAt": "2026-03-04T22:51:01.874Z",
+      "durationMs": 569
+    },
+    {
+      "laneId": "security-scan",
+      "status": "success",
+      "agentResult": {
+        "agentName": "Security Scanner",
+        "status": "success",
+        "findings": [
+          "⚠️  Found 'API_KEY' string in source — verify no secrets are committed",
+          "✅ .gitignore present — secrets unlikely to be committed",
+          "❌ LLM review failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock.",
+          "❌🔴 Security issues detected",
+          "⚠️ ⚠️  npm audit found high or critical vulnerabilities"
+        ],
+        "recommendations": [
+          "Run 'npm audit fix' or update affected packages"
+        ],
+        "details": {
+          "_": "DAG_SUPERVISED_AGENTS.md",
+          "value": "{\n  \"error\": {\n    \"code\": \"ENOLOCK\",\n    \"summary\": \"This command requires an existing lockfile.\",\n    \"detail\": \"Try creating one first with: npm i --package-lock-only\\nOriginal error: loadVirtual requires existing shrinkwrap file\"\n  }\n}\nnpm ERR! code ENOLOCK\nnpm ERR! audit This command requires an existing lockfile.\nnpm ERR! audit Try creating one first with: npm i --package-lock-only\nnpm ERR! audit Original error: loadVirtual requires existing shrinkwrap file\n\nnpm ERR! A complete log of this"
+        },
+        "timestamp": "2026-03-04T22:51:05.773Z"
+      },
+      "checkpoints": [
+        {
+          "checkpointId": "step-0",
+          "stepIndex": 0,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-0",
+            "mode": "self",
+            "stepIndex": 0,
+            "partialResult": {
+              "agentName": "Security Scanner",
+              "status": "success",
+              "findings": [
+                "⚠️  Found 'API_KEY' string in source — verify no secrets are committed"
+              ],
+              "recommendations": [],
+              "details": {
+                "_": "DAG_SUPERVISED_AGENTS.md"
+              },
+              "timestamp": "2026-03-04T22:51:04.937Z"
+            },
+            "contracts": {
+              "laneId": "security-scan",
+              "version": 0,
+              "timestamp": "2026-03-04T22:51:04.937Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-04T22:51:04.937Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Security Scanner",
+              "status": "success",
+              "findings": [
+                "⚠️  Found 'API_KEY' string in source — verify no secrets are committed",
+                "✅ .gitignore present — secrets unlikely to be committed"
+              ],
+              "recommendations": [],
+              "details": {
+                "_": "DAG_SUPERVISED_AGENTS.md"
+              },
+              "timestamp": "2026-03-04T22:51:04.937Z"
+            },
+            "contracts": {
+              "laneId": "security-scan",
+              "version": 1,
+              "timestamp": "2026-03-04T22:51:04.937Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-04T22:51:04.937Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-2",
+          "stepIndex": 2,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-2",
+            "mode": "self",
+            "stepIndex": 2,
+            "partialResult": {
+              "agentName": "Security Scanner",
+              "status": "success",
+              "findings": [
+                "⚠️  Found 'API_KEY' string in source — verify no secrets are committed",
+                "✅ .gitignore present — secrets unlikely to be committed",
+                "❌ LLM review failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock.",
+                "❌🔴 Security issues detected"
+              ],
+              "recommendations": [],
+              "details": {
+                "_": "DAG_SUPERVISED_AGENTS.md"
+              },
+              "timestamp": "2026-03-04T22:51:04.942Z"
+            },
+            "contracts": {
+              "laneId": "security-scan",
+              "version": 2,
+              "timestamp": "2026-03-04T22:51:04.937Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-04T22:51:04.942Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-3",
+          "stepIndex": 3,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-3",
+            "mode": "self",
+            "stepIndex": 3,
+            "partialResult": {
+              "agentName": "Security Scanner",
+              "status": "success",
+              "findings": [
+                "⚠️  Found 'API_KEY' string in source — verify no secrets are committed",
+                "✅ .gitignore present — secrets unlikely to be committed",
+                "❌ LLM review failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock.",
+                "❌🔴 Security issues detected",
+                "⚠️ ⚠️  npm audit found high or critical vulnerabilities"
+              ],
+              "recommendations": [
+                "Run 'npm audit fix' or update affected packages"
+              ],
+              "details": {
+                "_": "DAG_SUPERVISED_AGENTS.md",
+                "value": "{\n  \"error\": {\n    \"code\": \"ENOLOCK\",\n    \"summary\": \"This command requires an existing lockfile.\",\n    \"detail\": \"Try creating one first with: npm i --package-lock-only\\nOriginal error: loadVirtual requires existing shrinkwrap file\"\n  }\n}\nnpm ERR! code ENOLOCK\nnpm ERR! audit This command requires an existing lockfile.\nnpm ERR! audit Try creating one first with: npm i --package-lock-only\nnpm ERR! audit Original error: loadVirtual requires existing shrinkwrap file\n\nnpm ERR! A complete log of this"
+              },
+              "timestamp": "2026-03-04T22:51:05.773Z"
+            },
+            "contracts": {
+              "laneId": "security-scan",
+              "version": 3,
+              "timestamp": "2026-03-04T22:51:04.942Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-04T22:51:05.773Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        }
+      ],
+      "totalRetries": 0,
+      "handoffsReceived": 0,
+      "startedAt": "2026-03-04T22:51:01.305Z",
+      "completedAt": "2026-03-04T22:51:05.773Z",
+      "durationMs": 4468
+    },
+    {
+      "laneId": "summary",
+      "status": "success",
+      "agentResult": {
+        "agentName": "Executive Summariser",
+        "status": "success",
+        "findings": [
+          "❌ LLM generate failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock."
+        ],
+        "recommendations": [],
+        "details": {},
+        "timestamp": "2026-03-04T22:51:05.781Z"
+      },
+      "checkpoints": [
+        {
+          "checkpointId": "step-0",
+          "stepIndex": 0,
+          "mode": "read-contract",
+          "payload": {
+            "checkpointId": "step-0",
+            "mode": "read-contract",
+            "stepIndex": 0,
+            "partialResult": {
+              "agentName": "Executive Summariser",
+              "status": "success",
+              "findings": [
+                "❌ LLM generate failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock."
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-04T22:51:05.781Z"
+            },
+            "contracts": {
+              "laneId": "summary",
+              "version": 0,
+              "timestamp": "2026-03-04T22:51:05.781Z",
+              "exports": {},
+              "pending": []
+            },
+            "waitFor": [
+              "code-review",
+              "security-scan"
+            ]
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-04T22:51:05.781Z",
+          "contractsReceived": {
+            "code-review": {
+              "laneId": "code-review",
+              "version": 3,
+              "timestamp": "2026-03-04T22:51:01.874Z",
+              "exports": {},
+              "pending": []
+            },
+            "security-scan": {
+              "laneId": "security-scan",
+              "version": 4,
+              "timestamp": "2026-03-04T22:51:05.773Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "durationMs": 0
+        }
+      ],
+      "totalRetries": 0,
+      "handoffsReceived": 0,
+      "startedAt": "2026-03-04T22:51:05.780Z",
+      "completedAt": "2026-03-04T22:51:05.781Z",
+      "durationMs": 1
+    }
+  ],
+  "totalDurationMs": 4483,
+  "startedAt": "2026-03-04T22:51:01.301Z",
+  "completedAt": "2026-03-04T22:51:05.785Z",
+  "findings": [
+    "[code-review] ✅ Node.js project confirmed",
+    "[code-review] ❌ LLM review failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock.",
+    "[code-review] ℹ️ ⚠️  Code quality issues found",
+    "[code-review] ❌ LLM generate failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock.",
+    "[security-scan] ⚠️  Found 'API_KEY' string in source — verify no secrets are committed",
+    "[security-scan] ✅ .gitignore present — secrets unlikely to be committed",
+    "[security-scan] ❌ LLM review failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock.",
+    "[security-scan] ❌🔴 Security issues detected",
+    "[security-scan] ⚠️ ⚠️  npm audit found high or critical vulnerabilities",
+    "[summary] ❌ LLM generate failed: Error: Provider \"anthropic\" is not registered for streaming. Available: mock."
+  ],
+  "recommendations": [
+    "[code-review] Review findings and prioritise the top 3 items for the next sprint",
+    "[security-scan] Run 'npm audit fix' or update affected packages"
+  ]
+}

@@ -6,6 +6,7 @@
  */
 
 import type { CheckDefinition } from '../agent-types.js'
+import type { ToolExecutorFn } from '../llm-provider.js'
 import type { ModelRouter, RoutedResponse } from '../model-router.js'
 
 export interface CheckContext {
@@ -32,4 +33,14 @@ export interface CheckContext {
 
   /** Optional callback fired after every LLM completion (cost tracking). */
   onLlmResponse?: (response: RoutedResponse) => void;
+
+  /**
+   * Optional callback fired for each streamed token from an LLM call.
+   * When provided, tokens are printed live to stdout during llm-generate
+   * and llm-review checks instead of waiting for the full response.
+   */
+  onLlmStream?: (token: string) => void;
+
+  /** Optional tool executor for llm-tool checks that call built-in tools. */
+  toolExecutor?: ToolExecutorFn;
 }

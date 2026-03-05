@@ -65,6 +65,7 @@ export class SupervisedAgent {
     publishContract?: () => ContractSnapshot,
     modelRouter?: ModelRouter,
     onLlmResponse?: (response: RoutedResponse) => void,
+    onLlmStream?: (token: string) => void,
   ): AsyncGenerator<CheckpointPayload, AgentResult | null, SupervisorVerdict> {
     const findings: string[] = [];
     const recommendations: string[] = [];
@@ -81,7 +82,7 @@ export class SupervisedAgent {
       let stepResult: StepResult;
 
       try {
-        stepResult = await runCheckStep(check, projectRoot, retryInstructions, modelRouter, onLlmResponse);
+        stepResult = await runCheckStep(check, projectRoot, retryInstructions, modelRouter, onLlmResponse, onLlmStream);
       } catch (err) {
         stepResult = {
           findings: [`❌ Unexpected step error: ${err}`],

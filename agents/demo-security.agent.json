@@ -1,0 +1,41 @@
+{
+  "name": "Security Scanner",
+  "icon": "🔐",
+  "description": "Scans project for hardcoded secrets, insecure dependencies, and common security anti-patterns using LLM-assisted review.",
+  "checks": [
+    {
+      "type": "grep",
+      "path": ".",
+      "pattern": "API_KEY",
+      "pass": "⚠️  Found 'API_KEY' string in source — verify no secrets are committed",
+      "fail": "✅ No API_KEY literals found in source"
+    },
+    {
+      "type": "file-exists",
+      "path": ".gitignore",
+      "pass": "✅ .gitignore present — secrets unlikely to be committed",
+      "fail": "🔴 No .gitignore — secrets and .env files may be tracked",
+      "failSeverity": "error",
+      "failRecommendations": ["Add .gitignore immediately and audit git history for committed secrets"]
+    },
+    {
+      "type": "llm-review",
+      "path": "packages/agent-executor/src",
+      "taskType": "security-review",
+      "prompt": "Perform a security review of the TypeScript source listed below. Focus on:\n1. Hardcoded credentials or tokens\n2. Unsafe shell command construction (command injection)\n3. Path traversal vulnerabilities\n4. Unsafe JSON.parse / eval usage\n5. Missing input validation on user-supplied data\n6. Secrets in environment variable names logged to console\n\nSource directory listing:\n{content}\n\nRespond with a bullet list. Prefix critical issues with CRITICAL:, warnings with WARN:.",
+      "outputKey": "security_findings",
+      "pass": "✅ Security review complete",
+      "fail": "🔴 Security issues detected",
+      "failSeverity": "error"
+    },
+    {
+      "type": "run-command",
+      "command": "npm audit --json --audit-level=high",
+      "passPattern": "\"vulnerabilities\":\\{\\}|\"total\":0",
+      "pass": "✅ No high/critical npm vulnerabilities",
+      "fail": "⚠️  npm audit found high or critical vulnerabilities",
+      "failSeverity": "warning",
+      "failRecommendations": ["Run 'npm audit fix' or update affected packages"]
+    }
+  ]
+}

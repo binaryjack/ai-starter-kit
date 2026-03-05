@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { DagOrchestrator } from '@ai-agencee/ai-kit-agent-executor';
+import { AuditLog, DagOrchestrator } from '@ai-agencee/ai-kit-agent-executor';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
@@ -13,6 +13,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import { buildDashboard } from './dashboard-resource.js';
 import { createVSCodeSamplingBridge } from './vscode-lm-bridge.js';
 
 const server = new Server(
@@ -204,6 +205,31 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           },
         },
         required: ['sessionId'],
+      },
+    },
+    {
+      name: 'audit-log',
+      description:
+        'Retrieve or verify the tamper-evident audit log for a DAG run. ' +
+        'Returns the NDJSON entries or a verification report.',
+      inputSchema: {
+        type: 'object' as const,
+        properties: {
+          runId: {
+            type: 'string',
+            description: 'DAG run UUID to retrieve the audit log for',
+          },
+          projectRoot: {
+            type: 'string',
+            description: 'Absolute path to the project root (default: process.cwd())',
+          },
+          verify: {
+            type: 'boolean',
+            description: 'When true, verify the hash-chain integrity and return a report',
+            default: false,
+          },
+        },
+        required: ['runId'],
       },
     },
   ] as Tool[],
@@ -413,6 +439,50 @@ Status: Ready to validate
         };
       }
 
+      case 'audit-log': {
+        const a2 = (args as Record<string, unknown> | undefined) ?? {};
+        const runId = String(a2.runId ?? '');
+        const projectRoot = typeof a2.projectRoot === 'string' ? a2.projectRoot : process.cwd();
+        const verify = a2.verify === true;
+
+        if (!runId) {
+          return { content: [{ type: 'text', text: 'Error: runId is required' }], isError: true };
+        }
+
+        if (verify) {
+          const report = await AuditLog.verify(projectRoot, runId);
+          return {
+            content: [{
+              type: 'text',
+              text: [
+                `# Audit Verification: ${runId}`,
+                `**Valid:** ${report.valid ? '✅ Yes' : '❌ No'}`,
+                `**Total entries:** ${report.totalEntries}`,
+                report.brokenLinks.length > 0
+                  ? ['', '## Broken Links', ...report.brokenLinks.map((b) => `- seq ${b.seq}: ${b.reason}`)].join('\n')
+                  : '',
+              ].join('\n'),
+            }],
+          };
+        }
+
+        const entries = await AuditLog.read(projectRoot, runId);
+        if (entries.length === 0) {
+          return { content: [{ type: 'text', text: `No audit log found for run: ${runId}` }] };
+        }
+        const summary = [
+          `# Audit Log: ${runId}`,
+          `**Entries:** ${entries.length}`,
+          '',
+          '| seq | eventType | laneId | actor | timestamp |',
+          '|-----|-----------|--------|-------|-----------|',
+          ...entries.map((e) =>
+            `| ${e.seq} | ${e.eventType} | ${e.laneId ?? '-'} | ${e.actor ?? '-'} | ${e.timestamp} |`,
+          ),
+        ];
+        return { content: [{ type: 'text', text: summary.join('\n') }] };
+      }
+
       default:
         return {
           content: [
@@ -438,34 +508,51 @@ Status: Ready to validate
 });
 
 // Register Resources
-server.setRequestHandler(ListResourcesRequestSchema, async () => ({
-  resources: [
-    {
-      uri: 'bootstrap://init',
-      name: 'Initialize AI Session',
-      description: 'Load ULTRA_HIGH standards and project rules',
-      mimeType: 'text/plain',
-    },
-    {
-      uri: 'bootstrap://rules',
-      name: 'Project Rules',
-      description: 'Coding standards and conventions',
-      mimeType: 'text/markdown',
-    },
-    {
-      uri: 'bootstrap://patterns',
-      name: 'Design Patterns',
-      description: 'Architecture patterns and best practices',
-      mimeType: 'text/markdown',
-    },
-    {
-      uri: 'bootstrap://manifest',
-      name: 'Project Manifest',
-      description: 'Project structure and capabilities',
-      mimeType: 'application/xml',
-    },
-  ],
-}));
+server.setRequestHandler(ListResourcesRequestSchema, async () => {
+  const projectRoot = process.cwd();
+  const runIds = await AuditLog.listRuns(projectRoot).catch(() => [] as string[]);
+  const auditResources = runIds.map((id) => ({
+    uri: `audit://${id}`,
+    name: `Audit log: ${id}`,
+    description: `Hash-chained NDJSON audit trail for run ${id}`,
+    mimeType: 'application/x-ndjson',
+  }));
+  return {
+    resources: [
+      {
+        uri: 'bootstrap://init',
+        name: 'Initialize AI Session',
+        description: 'Load ULTRA_HIGH standards and project rules',
+        mimeType: 'text/plain',
+      },
+      {
+        uri: 'bootstrap://rules',
+        name: 'Project Rules',
+        description: 'Coding standards and conventions',
+        mimeType: 'text/markdown',
+      },
+      {
+        uri: 'bootstrap://patterns',
+        name: 'Design Patterns',
+        description: 'Architecture patterns and best practices',
+        mimeType: 'text/markdown',
+      },
+      {
+        uri: 'bootstrap://manifest',
+        name: 'Project Manifest',
+        description: 'Project structure and capabilities',
+        mimeType: 'application/xml',
+      },
+      ...auditResources,
+      {
+        uri: 'dashboard://status',
+        name: 'DAG Run Dashboard',
+        description: 'Live Markdown dashboard with active runs, recent history, and cost aggregates',
+        mimeType: 'text/markdown',
+      },
+    ],
+  };
+});
 
 // Handle Resource Reads
 server.setRequestHandler(ReadResourceRequestSchema, async (request: ReadResourceRequest) => {
@@ -530,6 +617,32 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request: ReadResource
       default:
         throw new Error(`Unknown resource: ${resource}`);
     }
+  }
+
+  if (uri.startsWith('audit://')) {
+    const runId = uri.replace('audit://', '');
+    const projectRoot = process.cwd();
+    const entries = await AuditLog.read(projectRoot, runId);
+    const ndjson = entries.map((e) => JSON.stringify(e)).join('\n');
+    return {
+      contents: [{
+        uri,
+        mimeType: 'application/x-ndjson',
+        text: ndjson || `# No audit log found for run: ${runId}`,
+      }],
+    };
+  }
+
+  if (uri === 'dashboard://status') {
+    const projectRoot = process.cwd();
+    const markdown = await buildDashboard(projectRoot);
+    return {
+      contents: [{
+        uri,
+        mimeType: 'text/markdown',
+        text: markdown,
+      }],
+    };
   }
 
   throw new Error(`Unknown resource URI: ${uri}`);

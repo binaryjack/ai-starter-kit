@@ -22,6 +22,12 @@ import type {
     PendingDecision,
     PlanDefinition
 } from './plan-types.js'
+import {
+    ArchResolutionTier,
+    BAResolutionTier,
+    POEscalationTier,
+    ResolutionTier,
+} from './resolution-tiers.js'
 
 // ─── Decision registry ────────────────────────────────────────────────────────
 
@@ -96,11 +102,17 @@ export class Arbiter {
   private readonly stateDir: string;
   private readonly modelRouter?: ModelRouter;
   private decisions: ArbiterDecision[] = [];
+  private readonly tiers: ResolutionTier[];
 
-  constructor(renderer: ChatRenderer, projectRoot: string, modelRouter?: ModelRouter) {
+  constructor(renderer: ChatRenderer, projectRoot: string, modelRouter?: ModelRouter, tiers?: ResolutionTier[]) {
     this.renderer    = renderer;
     this.stateDir    = path.join(projectRoot, '.agents', 'plan-state');
     this.modelRouter = modelRouter;
+    this.tiers = tiers ?? [
+      new BAResolutionTier(modelRouter),
+      new ArchResolutionTier(modelRouter),
+      new POEscalationTier(renderer, modelRouter),
+    ];
   }
 
   // ─── Main entry: raise a decision ─────────────────────────────────────────
@@ -126,53 +138,37 @@ export class Arbiter {
       raisedAt: new Date().toISOString(),
     };
 
-    // Step 1: BA attempts to resolve
-    const baResolution = await this._baResolve(pending, params.preferSimple ?? true);
-    if (baResolution) {
-      r.say('ba', `I can resolve this: "${params.question}" → ${baResolution.label}`);
-      r.system(`Rationale: ${baResolution.description} — ${baResolution.implications}`);
-      r.newline();
-      return this._record(pending, baResolution, 'ba', `BA resolved: ${baResolution.implications}`);
-    }
+    for (const tier of this.tiers) {
+      if (tier.canHandle(pending)) {
+        const chosen = await tier.resolve(pending);
+        if (chosen !== null) {
+          const isBa   = tier instanceof BAResolutionTier;
+          const isArch = tier instanceof ArchResolutionTier;
+          const resolvedBy: ActorId = isBa ? 'ba' : isArch ? 'architecture' : 'user';
+          const rationale = isBa
+            ? `BA resolved: ${chosen.implications}`
+            : isArch
+              ? `Architecture decided: ${chosen.implications}`
+              : `PO decided: ${chosen.label}`;
 
-    // Step 2: Architectural question — delegate to Architecture
-    const isArchitectural = params.raisedBy === 'architecture' || params.affectedActors.includes('architecture');
-    if (isArchitectural && params.options.length > 0) {
-      r.say('architecture', `This is in my domain — let me assess: "${params.question}"`);
-      const archPick = await this._architectureResolve(pending);
-      if (archPick) {
-        r.say('architecture', `Architecture recommendation: ${archPick.label} — ${archPick.description}`);
-        r.say('ba', `Architecture has resolved this. Proceeding with: ${archPick.label}`);
-        r.newline();
-        return this._record(pending, archPick, 'architecture', `Architecture decided: ${archPick.implications}`);
+          if (isBa) {
+            r.say('ba', `I can resolve this: "${params.question}" → ${chosen.label}`);
+            r.system(`Rationale: ${chosen.description} — ${chosen.implications}`);
+            r.newline();
+          } else if (isArch) {
+            r.say('architecture', `Architecture recommendation: ${chosen.label} — ${chosen.description}`);
+            r.say('ba', `Architecture has resolved this. Proceeding with: ${chosen.label}`);
+            r.newline();
+          }
+          // PO tier (POEscalationTier) handles its own logging + broadcast internally
+
+          return this._record(pending, chosen, resolvedBy, rationale);
+        }
       }
     }
 
-    // Step 3: Escalate to User
-    const escalationMsg = await this._escalationContext(pending);
-    r.say('ba', escalationMsg);
-    r.decision(pending);
-
-    const choice = await promptChoice(r, params.options.length);
-
-    let chosen: DecisionOption;
-    const indexFromLetter = choice.toUpperCase().charCodeAt(0) - 65;
-
-    if (indexFromLetter >= 0 && indexFromLetter < params.options.length) {
-      chosen = params.options[indexFromLetter];
-    } else {
-      // Custom answer
-      chosen = {
-        label: choice,
-        description: 'Custom user-specified option',
-        implications: 'Will be evaluated by affected agents',
-      };
-    }
-
-    r.say('user', `Selected: ${chosen.label}`);
-    this._broadcastDecision(pending, chosen, params.affectedActors);
-
-    return this._record(pending, chosen, 'user', `PO decided: ${chosen.label}`);
+    // Should never be reached — POEscalationTier always resolves
+    throw new Error(`Arbiter: no tier resolved "${params.question}"`);
   }
 
   // ─── Run standard decision set for a plan ────────────────────────────────
@@ -289,147 +285,8 @@ export class Arbiter {
 
   getDecisions(): ArbiterDecision[] { return [...this.decisions]; }
 
-  // ─── Private helpers ──────────────────────────────────────────────────────
 
-  /**
-   * BA tries to resolve by picking the simplest/most standard option.
-   * Uses haiku (validation) when ModelRouter is available.
-   */
-  private async _baResolve(
-    pending: PendingDecision,
-    preferSimple: boolean,
-  ): Promise<DecisionOption | null> {
-    if (!preferSimple) return null;
-    const opts = pending.options;
-    if (opts.length === 0) return null;
-    if (opts.length === 1) return opts[0];
-
-    // LLM-backed: haiku reasons about simplest standard choice
-    if (this.modelRouter) {
-      try {
-        const optList = opts.map((o, i) =>
-          `${String.fromCharCode(65 + i)}) ${o.label}: ${o.description} — ${o.implications}`
-        ).join('\n');
-        const resp = await this.modelRouter.route('validation', {
-          messages: [
-            {
-              role: 'system',
-              content:
-                'You are a Business Analyst. Given a decision and its options, decide if there is '
-                + 'a clearly simplest or most standard option that does NOT require architectural expertise '
-                + 'or product input. If yes, reply with ONLY the letter (A/B/C/D). '
-                + 'If it requires architectural expertise or product input, reply with exactly: DEFER',
-            },
-            {
-              role: 'user',
-              content: `Decision: ${pending.question}\n\nOptions:\n${optList}`,
-            },
-          ],
-          maxTokens: 10,
-        });
-        const ans = resp.content.trim().toUpperCase();
-        if (ans === 'DEFER') return null;
-        const idx = ans.charCodeAt(0) - 65;
-        if (idx >= 0 && idx < opts.length) return opts[idx];
-      } catch { /* fall through to heuristic */ }
-    }
-
-    // Heuristic: BA defers multi-option decisions
-    return null;
-  }
-
-  /**
-   * Architecture agent resolves by performing technical trade-off analysis.
-   * Uses opus (hard-barrier-resolution) for robust reasoning.
-   */
-  private async _architectureResolve(pending: PendingDecision): Promise<DecisionOption | null> {
-    // LLM-backed: opus analyses trade-offs deeply
-    if (this.modelRouter) {
-      try {
-        const optList = pending.options.map((o, i) =>
-          `${String.fromCharCode(65 + i)}) ${o.label}: ${o.description} — ${o.implications}`
-        ).join('\n');
-        const resp = await this.modelRouter.route('hard-barrier-resolution', {
-          messages: [
-            {
-              role: 'system',
-              content:
-                'You are a senior software architect. Analyse the technical trade-offs and pick '
-                + 'the best option for a production system. Reply with ONLY the option letter (A/B/C/D). '
-                + 'No explanation.',
-            },
-            {
-              role: 'user',
-              content:
-                `Decision: ${pending.question}\n`
-                + `Context: ${pending.context}\n\n`
-                + `Options:\n${optList}`,
-            },
-          ],
-          maxTokens: 10,
-        });
-        const ans = resp.content.trim().toUpperCase();
-        const idx = ans.charCodeAt(0) - 65;
-        if (idx >= 0 && idx < pending.options.length) return pending.options[idx];
-      } catch { /* fall through to heuristic */ }
-    }
-
-    // Heuristic fallback: keyword scoring
-    const signals = ['standard', 'acid', 'scale', 'type-safe', 'relational', 'familiar', 'production'];
-    const scored = pending.options.map((opt) => {
-      const text = `${opt.label} ${opt.description} ${opt.implications}`.toLowerCase();
-      const score = signals.filter((s) => text.includes(s)).length;
-      return { opt, score };
-    });
-    scored.sort((a, b) => b.score - a.score);
-    return scored[0].score > 0 ? scored[0].opt : null;
-  }
-
-  /**
-   * Generate context message for why this decision requires PO input.
-   * Uses haiku (fast) — explains the business impact concisely.
-   */
-  private async _escalationContext(pending: PendingDecision): Promise<string> {
-    if (this.modelRouter) {
-      try {
-        const resp = await this.modelRouter.route('file-analysis', {
-          messages: [
-            {
-              role: 'system',
-              content:
-                'You are a Scrum Master escalating a technical decision to the Product Owner. '
-                + 'Write ONE sentence explaining the business impact of this decision and why '
-                + 'the PO must decide. Be direct and non-technical. No markdown.',
-            },
-            {
-              role: 'user',
-              content:
-                `Decision: ${pending.question}\n`
-                + `Context: ${pending.context}\n`
-                + `Affected agents: ${pending.affectedActors.join(', ')}`,
-            },
-          ],
-          maxTokens: 80,
-        });
-        const text = resp.content.trim();
-        if (text.length > 10) return text;
-      } catch { /* fall through */ }
-    }
-    return `This requires your decision as PO. ${pending.affectedActors.length} agents are waiting.`;
-  }
-
-  private _broadcastDecision(
-    pending: PendingDecision,
-    chosen: DecisionOption,
-    affected: ActorId[],
-  ): void {
-    const r = this.renderer;
-    r.say('ba', `Broadcasting decision to ${affected.length} agents: "${chosen.label}"`);
-    for (const actorId of affected) {
-      r.say(actorId, `Decision received — "${pending.question}" → ${chosen.label}. Updating my plan.`);
-    }
-    r.newline();
-  }
+  // ─── Private helpers ──────────────────────────────────────────────────────────────────────
 
   private _record(
     pending: PendingDecision,

@@ -1,0 +1,41 @@
+{
+  "name": "Demo — Real LLM Code Review",
+  "description": "Two-lane demo: Code Review (llm-review + llm-generate) runs in parallel with Security Scan (llm-review). Requires ANTHROPIC_API_KEY, OPENAI_API_KEY, or runs free via VS Code Copilot (MCP).",
+  "lanes": [
+    {
+      "id": "code-review",
+      "agentFile": "demo-code-review.agent.json",
+      "supervisorFile": "demo-code-review.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["code-review", "refactoring-plan"]
+    },
+    {
+      "id": "security-scan",
+      "agentFile": "demo-security.agent.json",
+      "supervisorFile": "demo-security.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["security-review"]
+    },
+    {
+      "id": "summary",
+      "agentFile": "demo-summary.agent.json",
+      "supervisorFile": "demo-summary.supervisor.json",
+      "dependsOn": ["code-review", "security-scan"],
+      "capabilities": ["executive-summary"]
+    }
+  ],
+  "globalBarriers": [
+    {
+      "name": "review-complete",
+      "participants": ["code-review", "security-scan"],
+      "timeoutMs": 120000
+    }
+  ],
+  "capabilityRegistry": {
+    "code-review":       ["code-review"],
+    "refactoring-plan":  ["code-review"],
+    "security-review":   ["security-scan"],
+    "executive-summary": ["summary"]
+  },
+  "modelRouterFile": "model-router.json"
+}

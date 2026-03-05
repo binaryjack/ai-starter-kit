@@ -22,5 +22,7 @@ export { JsonFieldHandler } from './json-field.handler.js'
 export { JsonHasKeyHandler } from './json-has-key.handler.js'
 export { LlmGenerateHandler } from './llm-generate.handler.js'
 export { LlmReviewHandler } from './llm-review.handler.js'
+export { LlmToolHandler } from './llm-tool.handler.js'
 export { RunCommandHandler } from './run-command.handler.js'
+
 

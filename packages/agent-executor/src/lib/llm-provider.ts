@@ -38,6 +38,11 @@ export interface LLMPrompt {
   messages: LLMMessage[];
   maxTokens?: number;
   temperature?: number;
+  /**
+   * Optional set of tools to expose to the LLM for tool-use / function calling.
+   * Populated by `routeWithTools()` and `llm-tool` check handlers.
+   */
+  tools?: LLMTool[];
 }
 
 export interface LLMUsage {
@@ -52,9 +57,70 @@ export interface LLMResponse {
   provider: string;
 }
 
+// ─── Tool types (function / tool calling) ─────────────────────────────────────
+
+/**
+ * JSON-Schema-based tool descriptor forwarded to the provider's function-calling
+ * API (Anthropic tool_use, OpenAI function_call, etc.).
+ */
+export interface LLMTool {
+  name: string;
+  description: string;
+  inputSchema: {
+    type: 'object';
+    properties: Record<string, { type: string; description?: string }>;
+    required?: string[];
+  };
+}
+
+/**
+ * A single tool invocation requested by the LLM during a tool-use loop.
+ * Mirrors Anthropic's `tool_use` content block and OpenAI's `function_call`.
+ */
+export interface LLMToolCall {
+  /** Tool call ID — must be echoed back in the tool result. */
+  id: string;
+  /** The name of the tool to call. */
+  name: string;
+  /** Parsed JSON arguments for the tool. */
+  input: Record<string, unknown>;
+}
+
+/**
+ * Function signature for a tool executor.
+ * Receives one `LLMToolCall` and returns the result as a string.
+ */
+export type ToolExecutorFn = (call: LLMToolCall) => Promise<string>;
+
+/**
+ * A single token chunk yielded during streaming.
+ * The last chunk has `done: true` and carries the final token usage.
+ */
+export interface LLMStreamChunk {
+  /** Incremental token text (empty string on the final done chunk) */
+  token: string;
+  done: boolean;
+  /** Present only on the final chunk */
+  usage?: LLMUsage;
+}
+
 export interface LLMProvider {
   readonly name: string;
   complete(prompt: LLMPrompt, modelId: string): Promise<LLMResponse>;
+  /**
+   * Optional streaming interface. When not implemented the caller should
+   * fall back to `complete()` and yield the full response as a single token.
+   */
+  stream?(prompt: LLMPrompt, modelId: string): AsyncIterable<LLMStreamChunk>;
+  /**
+   * Optional tool-use interface.  When not implemented the caller falls back
+   * to a plain `complete()` call (no tool invocation loop).
+   */
+  completeWithTools?(
+    prompt: LLMPrompt,
+    modelId: string,
+    executor: ToolExecutorFn,
+  ): Promise<LLMResponse>;
   isAvailable(): Promise<boolean>;
 }
 
