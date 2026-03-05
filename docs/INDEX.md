@@ -41,6 +41,12 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 - **Best for**: Project review, acceptance criteria verification
 - **Covers**: What was built, deliverables checklist, next steps
 - **Time**: ~10 minutes for status overview
+### ⚡ **Quickies — Copy-Paste Recipes** (5 minutes)
+- **File**: [docs/quickies.md](quickies.md)
+- **Best for**: Anyone who wants a specific result *right now*, without reading full guides
+- **Covers**: 12 task-first recipes — custom agent, app from scratch, feature in context, security audit, test generation, migration, performance brainstorm, onboarding, post-mortem, and more
+- **Time**: Pick the recipe you need, copy the commands, done
+
 ### 🎬 **Advanced Demo Scenarios** (30 minutes)
 - **File**: [docs/demo-scenarios.md](demo-scenarios.md)
 - **Best for**: Engineers who want to see the DAG engine's full behaviour surface without API keys
@@ -57,8 +63,8 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 ## 🎓 Learning Paths
 
 ### Path 1: **I Just Want to Use It** (5-10 min)
-1. Read [AGENT_QUICKSTART.md](AGENT_QUICKSTART.md)
-2. Run the example commands
+1. Read [AGENT_QUICKSTART.md](AGENT_QUICKSTART.md) (5 min)
+2. Or jump to [docs/quickies.md](quickies.md) Q1 — get a result in 2 minutes
 3. Check `.agents/results/` for outputs
 4. Done! ✓
 
@@ -91,6 +97,9 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 ## 🔍 Find What You Need
 
 ### By Use Case
+
+**"I want a copy-paste command for a specific task"**
+→ [docs/quickies.md](quickies.md) — 12 task-first recipes
 
 **"I want to see failures, retries, and escalations"**
 → [docs/demo-scenarios.md](demo-scenarios.md) — run `pnpm demo:06` for the full showcase
