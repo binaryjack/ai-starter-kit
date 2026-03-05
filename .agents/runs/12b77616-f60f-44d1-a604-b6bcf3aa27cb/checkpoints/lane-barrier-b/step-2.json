@@ -1,0 +1,40 @@
+{
+  "checkpointId": "step-2",
+  "stepIndex": 2,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-2",
+    "mode": "self",
+    "stepIndex": 2,
+    "partialResult": {
+      "agentName": "🔒 Lane: Barrier Participant B",
+      "status": "success",
+      "findings": [
+        "✅ [barrier-b] pnpm workspace confirmed",
+        "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+        "✅ [barrier-b] Package analysis complete — arriving at barrier",
+        "✅ [barrier-b] Combined test strategy produced — barrier resolved"
+      ],
+      "recommendations": [],
+      "details": {
+        "package_analysis": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+        "combined_test_strategy": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+      },
+      "timestamp": "2026-03-05T11:11:14.075Z"
+    },
+    "contracts": {
+      "laneId": "lane-barrier-b",
+      "version": 2,
+      "timestamp": "2026-03-05T11:11:14.074Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "APPROVE"
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-05T11:11:14.075Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}

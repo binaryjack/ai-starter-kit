@@ -3,7 +3,7 @@
  * child_process.spawn is mocked to simulate a Python MCP server.
  */
 
-import { EventEmitter } from 'events'
+import { EventEmitter } from 'events';
 
 // ─── Mock child_process ───────────────────────────────────────────────────────
 

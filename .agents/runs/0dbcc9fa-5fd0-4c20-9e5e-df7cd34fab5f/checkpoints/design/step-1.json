@@ -1,0 +1,41 @@
+{
+  "checkpointId": "step-1",
+  "stepIndex": 1,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-1",
+    "mode": "self",
+    "stepIndex": 1,
+    "partialResult": {
+      "agentName": "Visual Design Planner",
+      "status": "success",
+      "findings": [
+        "ℹ️ ⚠️  No Tailwind config — design tokens will be defined from scratch",
+        "❌❌ No src/styles directory — CSS architecture is missing"
+      ],
+      "recommendations": [],
+      "details": {},
+      "timestamp": "2026-03-05T11:11:00.074Z"
+    },
+    "contracts": {
+      "laneId": "design",
+      "version": 3,
+      "timestamp": "2026-03-05T11:11:00.072Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "ESCALATE",
+    "reason": "Retry budget exhausted (2 retries) for checkpoint \"step-1\". Last failure: Found 1 error finding(s): ❌❌ No src/styles directory — CSS architecture is missing",
+    "evidence": {
+      "checkpointId": "step-1",
+      "failureReason": "Found 1 error finding(s): ❌❌ No src/styles directory — CSS architecture is missing",
+      "retries": 2
+    }
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-05T11:11:00.074Z",
+  "contractsReceived": {},
+  "durationMs": 1
+}

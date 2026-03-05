@@ -8,7 +8,21 @@
     "demo": "pnpm build && node scripts/demo.js",
     "demo:dag": "node scripts/demo.js",
     "run:dag": "node packages/cli/dist/bin/ai-kit.js agent:dag",
-    "run:plan": "node packages/cli/dist/bin/ai-kit.js plan"
+    "run:plan": "node packages/cli/dist/bin/ai-kit.js plan",
+    "demo:menu": "node scripts/run-scenarios.js",
+    "demo:all": "node scripts/run-scenarios.js all",
+    "demo:01": "node scripts/run-scenarios.js 1",
+    "demo:02": "node scripts/run-scenarios.js 2",
+    "demo:03": "node scripts/run-scenarios.js 3",
+    "demo:04": "node scripts/run-scenarios.js 4",
+    "demo:05": "node scripts/run-scenarios.js 5",
+    "demo:06": "node scripts/run-scenarios.js 6",
+    "demo:plan": "node scripts/plan-demo.js",
+    "demo:plan:01": "node scripts/plan-demo.js 1",
+    "demo:plan:02": "node scripts/plan-demo.js 2",
+    "demo:plan:03": "node scripts/plan-demo.js 3",
+    "demo:plan:04": "node scripts/plan-demo.js 4",
+    "demo:plan:05": "node scripts/plan-demo.js 5"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

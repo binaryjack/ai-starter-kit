@@ -1,0 +1,52 @@
+{
+  "projectName": "my-app-boilerplate",
+  "problem": "Need a production-ready full-stack application scaffold with CI/CD, Docker support, and clear separation between backend API and frontend SPA so the team can start building features on day one.",
+  "primaryUser": "Engineering team — 2 backend devs, 1 frontend dev, 1 DevOps",
+  "successCriteria": "Running Docker Compose with working API + SPA; all tests green; CI pipeline configured; README covers local setup in under 5 minutes.",
+  "stories": [
+    {
+      "id": "S1",
+      "title": "Project Scaffold",
+      "type": "poc",
+      "description": "Generate monorepo structure with packages/api and packages/web, shared tsconfig, ESLint, Prettier, Husky pre-commit hooks, and root-level Makefile."
+    },
+    {
+      "id": "S2",
+      "title": "Backend API Skeleton",
+      "type": "feature",
+      "description": "Express + TypeScript REST API with health check endpoint, request validation middleware, error handler, and Swagger docs auto-generated from OpenAPI spec."
+    },
+    {
+      "id": "S3",
+      "title": "Frontend SPA Skeleton",
+      "type": "feature",
+      "description": "Vite + React + TypeScript SPA with routing, global state slice, design-token CSS, and Storybook configured."
+    },
+    {
+      "id": "S4",
+      "title": "Docker + CI/CD",
+      "type": "feature",
+      "description": "Multi-stage Dockerfiles for api and web, docker-compose.yml for local dev, GitHub Actions workflow for build + test + push to GHCR."
+    }
+  ],
+  "layers": ["backend", "frontend", "infra"],
+  "isGreenfield": true,
+  "stackConstraints": "Node 20 LTS, TypeScript 5, pnpm workspaces, PostgreSQL 16",
+  "externalIntegrations": "GitHub Actions, GHCR (container registry)",
+  "qualityGrade": "enterprise",
+  "timelinePressure": "medium",
+  "teamSize": "small",
+  "budgetSensitivity": "low",
+  "openQuestions": [
+    "Should the API include JWT auth scaffold or leave that for a separate story?",
+    "Which database ORM: Prisma vs Drizzle?"
+  ],
+  "modelRecommendation": {
+    "discovery": "claude-haiku-20240307",
+    "planning": "claude-3-sonnet-20240229",
+    "implementation": "claude-3-sonnet-20240229",
+    "review": "claude-3-opus-20240229",
+    "estimatedCostNote": "Estimated $0.80–$1.50 for full plan synthesis using recommended models"
+  },
+  "completedAt": "2025-01-01T09:00:00.000Z"
+}

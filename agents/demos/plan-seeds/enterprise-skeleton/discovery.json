@@ -1,0 +1,59 @@
+{
+  "projectName": "acme-platform",
+  "problem": "Standing up a production-grade enterprise platform skeleton with auth (SSO + RBAC), multi-tenancy, audit logs, and two initial features: user management and notification centre, so that 5 squads can independently deliver their epics without rework.",
+  "primaryUser": "Platform team (4 engineers) + 5 downstream feature squads; end-users are enterprise employees behind Okta SSO",
+  "successCriteria": "Auth flow works end-to-end with test IdP; tenant isolation proven by integration tests; both features covered by unit + integration tests; OpenAPI spec published; deployment to staging via Terraform apply passes security scan.",
+  "stories": [
+    {
+      "id": "S1",
+      "title": "Auth & RBAC Foundation",
+      "type": "feature",
+      "description": "Integrate Passport.js + JWT; define roles (ADMIN, MANAGER, MEMBER, READONLY); implement guards middleware; expose /auth/login, /auth/refresh, /auth/logout."
+    },
+    {
+      "id": "S2",
+      "title": "Multi-Tenant Data Isolation",
+      "type": "feature",
+      "description": "PostgreSQL Row-Level Security policies keyed on tenant_id; Prisma extension to auto-inject tenantId on every query; integration tests prove cross-tenant data cannot leak."
+    },
+    {
+      "id": "S3",
+      "title": "User Management Feature",
+      "type": "feature",
+      "description": "CRUD for users within a tenant; admin-only invite flow; bulk import CSV; audit trail for every mutation."
+    },
+    {
+      "id": "S4",
+      "title": "Notification Centre Feature",
+      "type": "feature",
+      "description": "In-app notification store (read/unread, pagination); email delivery via SendGrid; webhook delivery with retry; tenant-level notification preferences."
+    },
+    {
+      "id": "S5",
+      "title": "Infra & Security Baseline",
+      "type": "feature",
+      "description": "Terraform modules for VPC, RDS, ECS, ALB, secrets in AWS Secrets Manager; Security Hub baseline scan; WAF rules; DR runbook."
+    }
+  ],
+  "layers": ["backend", "frontend", "database", "infra"],
+  "isGreenfield": true,
+  "stackConstraints": "Node 20 LTS, NestJS, Prisma + PostgreSQL 16, React 18, Terraform 1.7, AWS ECS Fargate",
+  "externalIntegrations": "Okta SAML, SendGrid, Datadog, PagerDuty, GitHub Actions for CI",
+  "qualityGrade": "enterprise",
+  "timelinePressure": "low",
+  "teamSize": "large",
+  "budgetSensitivity": "low",
+  "openQuestions": [
+    "Will Okta SSO be SAML or OIDC?",
+    "Redis required for session store or stateless JWT only?",
+    "Should notification centre support Slack webhooks in v1?"
+  ],
+  "modelRecommendation": {
+    "discovery": "claude-haiku-20240307",
+    "planning": "claude-3-opus-20240229",
+    "implementation": "claude-3-sonnet-20240229",
+    "review": "claude-3-opus-20240229",
+    "estimatedCostNote": "Estimated $2.50–$4.00 for full enterprise plan synthesis — large context budget recommended"
+  },
+  "completedAt": "2025-01-01T09:00:00.000Z"
+}

@@ -1,0 +1,41 @@
+{
+  "checkpointId": "step-1",
+  "stepIndex": 1,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-1",
+    "mode": "self",
+    "stepIndex": 1,
+    "partialResult": {
+      "agentName": "Project Scaffolder",
+      "status": "success",
+      "findings": [
+        "✅ TypeScript config found — TS boilerplate will extend it",
+        "❌❌ No Dockerfile — container packaging is missing from the scaffold"
+      ],
+      "recommendations": [],
+      "details": {},
+      "timestamp": "2026-03-05T11:10:26.212Z"
+    },
+    "contracts": {
+      "laneId": "scaffold",
+      "version": 3,
+      "timestamp": "2026-03-05T11:10:26.211Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "ESCALATE",
+    "reason": "Retry budget exhausted (2 retries) for checkpoint \"step-1\". Last failure: Found 1 error finding(s): ❌❌ No Dockerfile — container packaging is missing from the scaffold",
+    "evidence": {
+      "checkpointId": "step-1",
+      "failureReason": "Found 1 error finding(s): ❌❌ No Dockerfile — container packaging is missing from the scaffold",
+      "retries": 2
+    }
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-05T11:10:26.212Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}

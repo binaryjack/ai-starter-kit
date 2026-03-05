@@ -1,0 +1,52 @@
+{
+  "projectName": "launchpad-mvp",
+  "problem": "Validate market interest in an AI-powered job-application assistant that auto-drafts cover letters and tracks application status — in 2 weeks with a solo developer.",
+  "primaryUser": "Early-adopter job seekers (25-40, tech roles); solo developer maintains it",
+  "successCriteria": "User can sign up, paste a job description, get a tailored cover letter draft in < 5 seconds, and track up to 50 applications on a Kanban board; deploys to Vercel; user can share via waitlist link.",
+  "stories": [
+    {
+      "id": "S1",
+      "title": "Auth (Magic Link)",
+      "type": "poc",
+      "description": "Next.js + NextAuth.js with Resend magic-link email; sessions stored in Supabase; only social email providers (Google OAuth) as fallback. No passwords."
+    },
+    {
+      "id": "S2",
+      "title": "Cover Letter Generator",
+      "type": "poc",
+      "description": "Paste job description + optional resume text → OpenAI GPT-4o streams a tailored cover letter; user can regenerate or edit inline; saved to DB."
+    },
+    {
+      "id": "S3",
+      "title": "Application Tracker (Kanban)",
+      "type": "poc",
+      "description": "Simple drag-and-drop board (react-beautiful-dnd) with columns: Saved, Applied, Interview, Offer, Rejected; CRUD backed by Supabase table; no real-time needed in MVP."
+    },
+    {
+      "id": "S4",
+      "title": "Waitlist & Landing Page",
+      "type": "poc",
+      "description": "Marketing landing page on Next.js with product demo GIF, feature list, waitlist email form (stored in Supabase); OG image for social sharing."
+    }
+  ],
+  "layers": ["frontend", "backend"],
+  "isGreenfield": true,
+  "stackConstraints": "Next.js 14 App Router, TypeScript, Tailwind, Supabase (auth + DB), OpenAI API, Vercel hosting; must ship in 2 weeks — no over-engineering",
+  "externalIntegrations": "OpenAI GPT-4o, Resend (magic link), Google OAuth, Vercel, Supabase",
+  "qualityGrade": "mvp",
+  "timelinePressure": "high",
+  "teamSize": "solo",
+  "budgetSensitivity": "high",
+  "openQuestions": [
+    "Rate-limit cover letter generation per user (prevent abuse before paid tier)?",
+    "Should the waitlist page be the root / or /waitlist while app is at /app?"
+  ],
+  "modelRecommendation": {
+    "discovery": "claude-haiku-20240307",
+    "planning": "claude-haiku-20240307",
+    "implementation": "claude-3-sonnet-20240229",
+    "review": "claude-haiku-20240307",
+    "estimatedCostNote": "Estimated $0.30–$0.60 — MVP grade uses Haiku where possible to keep plan cost minimal"
+  },
+  "completedAt": "2025-01-01T09:00:00.000Z"
+}

@@ -1,0 +1,59 @@
+{
+  "projectName": "acme-platform — recurring-billing feature",
+  "problem": "Add a recurring billing feature to the existing acme-platform: subscription plans, payment method management, invoice generation, and dunning flow — without breaking existing user management or notification centre.",
+  "primaryUser": "Finance team (creates plans, reviews invoices); end-users who manage their own subscriptions through the self-serve portal",
+  "successCriteria": "Stripe Billing integrated; subscriptions created/upgraded/cancelled correctly; failed-payment dunning triggers 3-attempt retry logic; invoices stored in DB and emailed; existing tests remain green; feature-flagged for gradual rollout.",
+  "stories": [
+    {
+      "id": "S1",
+      "title": "Stripe Integration & Webhooks",
+      "type": "feature",
+      "description": "Configure Stripe SDK; implement webhook handler with idempotency guard; store raw events in stripe_events table for replay."
+    },
+    {
+      "id": "S2",
+      "title": "Subscription Plans API",
+      "type": "feature",
+      "description": "Admin CRUD for plans (name, price, interval, features JSON); sync with Stripe Products; versioned so existing subscribers keep old plan terms."
+    },
+    {
+      "id": "S3",
+      "title": "Payment Methods & Checkout",
+      "type": "feature",
+      "description": "Stripe Payment Element embedded in React; save/default/delete payment methods; SCA (3-D Secure) flow handled."
+    },
+    {
+      "id": "S4",
+      "title": "Invoice Generation",
+      "type": "feature",
+      "description": "Generate PDF invoice on every payment event; store in S3; send via notification centre; downloadable from self-serve portal."
+    },
+    {
+      "id": "S5",
+      "title": "Dunning & Retry Flow",
+      "type": "feature",
+      "description": "BullMQ job: retry failed payment at day 1, 4, 7; email customer each attempt via notification centre; downgrade to free tier after final failure."
+    }
+  ],
+  "layers": ["backend", "frontend", "database"],
+  "isGreenfield": false,
+  "stackConstraints": "Existing NestJS + Prisma + PostgreSQL stack; React 18 frontend; BullMQ for job queues; must not break /users or /notifications APIs",
+  "externalIntegrations": "Stripe Billing & Webhooks, AWS S3 for invoice PDFs, existing notification centre integration",
+  "qualityGrade": "enterprise",
+  "timelinePressure": "high",
+  "teamSize": "small",
+  "budgetSensitivity": "medium",
+  "openQuestions": [
+    "Are per-seat and flat-rate plans both needed in v1?",
+    "Proration on mid-cycle upgrades: yes or no?",
+    "Should failed-payment downgrade be reversible within 30 days?"
+  ],
+  "modelRecommendation": {
+    "discovery": "claude-haiku-20240307",
+    "planning": "claude-3-sonnet-20240229",
+    "implementation": "claude-3-sonnet-20240229",
+    "review": "claude-3-opus-20240229",
+    "estimatedCostNote": "Estimated $1.20–$2.00 — existing context read adds tokens; recommend loading codebase summary before synthesis"
+  },
+  "completedAt": "2025-01-01T09:00:00.000Z"
+}

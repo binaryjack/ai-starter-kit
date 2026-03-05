@@ -1,0 +1,42 @@
+{
+  "checkpointId": "step-2",
+  "stepIndex": 2,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-2",
+    "mode": "self",
+    "stepIndex": 2,
+    "partialResult": {
+      "agentName": "Backend Spec Agent",
+      "status": "success",
+      "findings": [
+        "📦 4 existing packages found — backend will extend the monorepo",
+        "✅ API spec designed",
+        "✅ Data models defined"
+      ],
+      "recommendations": [
+        "Keep the backend in packages/api or packages/server"
+      ],
+      "details": {
+        "packages": 4,
+        "api_spec": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+        "data_models": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+      },
+      "timestamp": "2026-03-05T11:10:26.229Z"
+    },
+    "contracts": {
+      "laneId": "backend",
+      "version": 2,
+      "timestamp": "2026-03-05T11:10:26.228Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "APPROVE"
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-05T11:10:26.229Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}

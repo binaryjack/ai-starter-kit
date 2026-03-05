@@ -32,7 +32,7 @@
  *   if (sync) sync.attach(bus);
  */
 
-import type { DagEventBus, DagEndEvent } from './dag-events.js';
+import type { DagEndEvent, DagEventBus } from './dag-events.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

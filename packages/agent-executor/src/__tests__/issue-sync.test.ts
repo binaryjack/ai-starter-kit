@@ -2,7 +2,7 @@
  * Unit tests for IssueSync — E11 Jira/Linear integration.
  * All HTTP calls are intercepted via global.fetch mock.
  */
-export { }
+export { };
 
 const ORIGINAL_ENV = { ...process.env };
 

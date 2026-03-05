@@ -1,0 +1,34 @@
+{
+  "checkpointId": "step-0",
+  "stepIndex": 0,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-0",
+    "mode": "self",
+    "stepIndex": 0,
+    "partialResult": {
+      "agentName": "Frontend Spec Agent",
+      "status": "success",
+      "findings": [
+        "✅ Root package.json confirmed"
+      ],
+      "recommendations": [],
+      "details": {},
+      "timestamp": "2026-03-05T11:10:26.224Z"
+    },
+    "contracts": {
+      "laneId": "frontend",
+      "version": 0,
+      "timestamp": "2026-03-05T11:10:26.224Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "APPROVE"
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-05T11:10:26.224Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}
