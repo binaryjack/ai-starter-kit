@@ -92,7 +92,7 @@ pnpm demo:plan
 
 All demos run on the built-in `MockProvider` — **zero API keys required**.
 
-**📖 See**: [Advanced Demo Scenarios](docs/demo-scenarios.md)
+**📖 See**: [Advanced Demo Scenarios](docs/demo-scenarios.md) · [Quickies — copy-paste recipes](docs/quickies.md)
 
 ### 3. Run a Real DAG
 
@@ -350,6 +350,7 @@ MIT — see [LICENSE](LICENSE).
 ## Support & Resources
 
 - 📚 **Full Documentation**: [docs/features/INDEX.md](docs/features/INDEX.md)
+- ⚡ **Quickies — copy-paste recipes**: [docs/quickies.md](docs/quickies.md)
 - 🎬 **Advanced Demo Scenarios**: [docs/demo-scenarios.md](docs/demo-scenarios.md)
 - 📋 **Enterprise Readiness**: [docs/enterprise-readiness.md](docs/enterprise-readiness.md)
 - 🏗️ **Architecture**: [agents/](agents/)
