@@ -44,7 +44,7 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 ### ⚡ **Quickies — Copy-Paste Recipes** (5 minutes)
 - **File**: [docs/quickies.md](quickies.md)
 - **Best for**: Anyone who wants a specific result *right now*, without reading full guides
-- **Covers**: 12 task-first recipes — custom agent, app from scratch, feature in context, security audit, test generation, migration, performance brainstorm, onboarding, post-mortem, and more
+- **Covers**: 19 task-first recipes — **General (Q1–Q12):** custom agent, app from scratch, feature in context, security audit, test generation, migration, performance brainstorm, onboarding, post-mortem · **Enterprise (Q13–Q19):** org adoption, compliance gate, multi-squad onboarding, power-user tips, large-scale coordination, regression prevention, data migration
 - **Time**: Pick the recipe you need, copy the commands, done
 
 ### 🎬 **Advanced Demo Scenarios** (30 minutes)
@@ -99,7 +99,19 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 ### By Use Case
 
 **"I want a copy-paste command for a specific task"**
-→ [docs/quickies.md](quickies.md) — 12 task-first recipes
+→ [docs/quickies.md](quickies.md) — 19 task-first recipes (Q1–Q12 general · Q13–Q19 enterprise)
+
+**\"I want to introduce this to my enterprise / get security approval\"**
+→ [docs/quickies.md](quickies.md#q13) Q13 — Enterprise adoption checklist
+
+**\"I want to enforce compliance gates and block bad PRs\"**
+→ [docs/quickies.md](quickies.md#q18) Q18 — CI gate + supervisor as guard-rail
+
+**\"I want to coordinate 5 squads on one large project\"**
+→ [docs/quickies.md](quickies.md#q17) Q17 — Multi-squad coordination
+
+**\"I want to plan a data migration safely\"**
+→ [docs/quickies.md](quickies.md#q19) Q19 — Data migration + hard-barrier cutover gate
 
 **"I want to see failures, retries, and escalations"**
 → [docs/demo-scenarios.md](demo-scenarios.md) — run `pnpm demo:06` for the full showcase
