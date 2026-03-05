@@ -17,7 +17,7 @@ afterAll(() => {
   process.env = ORIGINAL_ENV;
 });
 
-import { buildPrCommentBody, postPrComment } from '../github-reporter';
+import { buildPrCommentBody, postPrComment } from '../github-reporter.js';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -25,8 +25,8 @@ type FetchCall = [string, RequestInit];
 
 function mockFetch(responses: Array<{ ok: boolean; status: number; json: () => Promise<unknown> }>) {
   let index = 0;
-  (global as unknown as { fetch: jest.Mock }).fetch = jest.fn().mockImplementation(() => {
-    const resp = responses[index] ?? responses[responses.length - 1];
+  (globalThis as unknown as { fetch: jest.Mock }).fetch = jest.fn().mockImplementation(() => {
+    const resp = responses[index] ?? responses.at(-1)!;
     index++;
     return Promise.resolve({ ...resp, text: () => Promise.resolve('') });
   });
@@ -128,7 +128,7 @@ describe('postPrComment()', () => {
     process.env['GITHUB_PR_NUMBER'] = '42';
 
     let authHeader = '';
-    (global as unknown as { fetch: jest.Mock }).fetch = jest.fn().mockImplementation((_url: string, opts: RequestInit) => {
+    (globalThis as unknown as { fetch: jest.Mock }).fetch = jest.fn().mockImplementation((_url: string, opts: RequestInit) => {
       authHeader = (opts.headers as Record<string, string>)['Authorization'] ?? '';
       return Promise.resolve({
         ok: true, status: 200,
@@ -139,7 +139,7 @@ describe('postPrComment()', () => {
 
     // Second call (POST) returns the comment
     let postCallCount = 0;
-    (global as unknown as { fetch: jest.Mock }).fetch = jest.fn().mockImplementation((_url: string, opts: RequestInit) => {
+    (globalThis as unknown as { fetch: jest.Mock }).fetch = jest.fn().mockImplementation((_url: string, opts: RequestInit) => {
       const method = opts.method ?? 'GET';
       postCallCount++;
       authHeader = (opts.headers as Record<string, string>)['Authorization'] ?? '';
@@ -166,7 +166,7 @@ describe('postPrComment()', () => {
   it('calls DELETE for existing bot comments when replacePrevious=true', async () => {
     const fetchCalls: FetchCall[] = [];
 
-    (global as unknown as { fetch: jest.Mock }).fetch = jest.fn().mockImplementation((url: string, opts: RequestInit) => {
+    (globalThis as unknown as { fetch: jest.Mock }).fetch = jest.fn().mockImplementation((url: string, opts: RequestInit) => {
       fetchCalls.push([url, opts ?? {}]);
       const method = (opts?.method ?? 'GET').toUpperCase();
 
@@ -208,7 +208,7 @@ describe('postPrComment()', () => {
   it('skips DELETE when replacePrevious=false', async () => {
     const fetchCalls: FetchCall[] = [];
 
-    (global as unknown as { fetch: jest.Mock }).fetch = jest.fn().mockImplementation((url: string, opts: RequestInit) => {
+    (globalThis as unknown as { fetch: jest.Mock }).fetch = jest.fn().mockImplementation((url: string, opts: RequestInit) => {
       fetchCalls.push([url, opts ?? {}]);
       const method = (opts?.method ?? 'GET').toUpperCase();
       if (method === 'POST') {
@@ -234,7 +234,7 @@ describe('postPrComment()', () => {
   });
 
   it('throws on non-200 POST response', async () => {
-    (global as unknown as { fetch: jest.Mock }).fetch = jest.fn().mockImplementation((_url: string, opts: RequestInit) => {
+    (globalThis as unknown as { fetch: jest.Mock }).fetch = jest.fn().mockImplementation((_url: string, opts: RequestInit) => {
       const method = (opts?.method ?? 'GET').toUpperCase();
       if (method === 'POST') {
         return Promise.resolve({

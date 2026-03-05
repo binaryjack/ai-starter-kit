@@ -5,7 +5,7 @@
  * Each test uses a fresh port to avoid conflicts.
  */
 
-import * as http from 'http'
+import * as http from 'node:http';
 
 // The module exports startSseServer / stopSseServer — import after mocking event bus
 jest.mock('@ai-agencee/ai-kit-agent-executor', () => ({
@@ -24,7 +24,7 @@ jest.mock('../oidc-auth.js', () => ({
   ),
 }));
 
-import { startSseServer, stopSseServer } from '../sse-server'
+import { startSseServer, stopSseServer } from '../sse-server.js';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -170,11 +170,11 @@ describe('SSE Server — singleton management', () => {
   it('returns the same server type on multiple start calls (after stop)', async () => {
     const p1 = nextPort();
     const srv1 = startSseServer(p1);
-    expect(srv1).toBeInstanceOf(require('http').Server);
+    expect(srv1).toBeInstanceOf(require('node:http').Server);
     stopSseServer();
 
     const p2 = nextPort();
     const srv2 = startSseServer(p2);
-    expect(srv2).toBeInstanceOf(require('http').Server);
+    expect(srv2).toBeInstanceOf(require('node:http').Server);
   });
 });
