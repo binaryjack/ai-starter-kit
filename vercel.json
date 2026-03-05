@@ -1,7 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "nodeVersion": "20.x",
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm --filter @ai-agencee/showcase-web build",
   "outputDirectory": "packages/showcase-web/.next"
