@@ -1,4 +1,4 @@
-import type { AnyNodeData, DagEdge, DagNode, DagNodeKind } from '@ai-agencee/ui/dag';
+import type { AnyNodeData, DagEdge, DagNode, DagNodeKind } from '@ai-agencee/ui/dag'
 
 /** Minimal dag.json structure (mirrors agents/dag.json) */
 interface RawDagJson {

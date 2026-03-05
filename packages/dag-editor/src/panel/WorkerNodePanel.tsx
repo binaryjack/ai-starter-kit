@@ -1,7 +1,7 @@
 import { Button } from '@ai-agencee/ui/atoms'
 import type { WorkerNodeData } from '@ai-agencee/ui/dag'
-import { CheckBox, FormProvider, Input, Select } from '@ai-agencee/ui/formular-bridge'
 import type { IFormularLike } from '@ai-agencee/ui/formular-bridge'
+import { CheckBox, FormProvider, Input, Select } from '@ai-agencee/ui/formular-bridge'
 import { createForm, DirectSubmissionStrategy, f } from '@pulsar-framework/formular.dev'
 import { useEffect, useState } from 'react'
 
