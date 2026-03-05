@@ -28,10 +28,10 @@
  *   pnpm ai-kit advise --json # machine-readable JSON
  */
 
-import * as fs   from 'fs/promises';
-import * as path from 'path';
-import type { DagResult, LaneResult } from './dag-types.js';
-import type { RunEntry }              from './run-registry.js';
+import * as fs from 'fs/promises'
+import * as path from 'path'
+import type { DagResult } from './dag-types.js'
+import type { RunEntry } from './run-registry.js'
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 

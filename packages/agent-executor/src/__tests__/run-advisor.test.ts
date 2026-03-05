@@ -14,9 +14,9 @@ jest.mock('fs/promises', () => ({
 import * as fsMod from 'fs/promises'
 const mockReadFile = fsMod.readFile as jest.Mock;
 
-import { RunAdvisor } from '../lib/run-advisor.js'
-import type { AdviceReport, Recommendation } from '../lib/run-advisor.js'
 import type { DagResult } from '../lib/dag-types.js'
+import type { AdviceReport, Recommendation } from '../lib/run-advisor.js'
+import { RunAdvisor } from '../lib/run-advisor.js'
 
 const PROJECT_ROOT = '/fake/project';
 const RUNS_DIR     = path.join(PROJECT_ROOT, '.agents', 'runs');
