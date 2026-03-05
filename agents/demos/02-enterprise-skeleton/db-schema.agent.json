@@ -1,0 +1,28 @@
+{
+  "name": "DB Schema Designer",
+  "icon": "🗄️",
+  "description": "Designs the database schema. If it cannot determine the user-role enum structure independently, it HANDOFFs to the auth-module lane (which owns that contract). This is the HANDOFF demonstration.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "prisma/schema.prisma",
+      "pass": "✅ Existing Prisma schema found — will extend it",
+      "fail": "⚠️  No Prisma schema yet — will design from scratch"
+    },
+    {
+      "type": "file-exists",
+      "path": "drizzle.config.ts",
+      "pass": "✅ Drizzle ORM config found",
+      "fail": "❌ No ORM config found — database tooling not yet decided",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "api-design",
+      "prompt": "Design the core database schema tables: users, sessions, audit_log, and one business entity table. For each table list columns with types. Note: role column must match the Role enum from the auth module. Context: {retryContext}",
+      "outputKey": "schema_design",
+      "pass": "✅ Database schema designed",
+      "fail": "⚠️  Schema design generation failed"
+    }
+  ]
+}

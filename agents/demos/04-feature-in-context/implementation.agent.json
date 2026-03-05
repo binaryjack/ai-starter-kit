@@ -1,0 +1,23 @@
+{
+  "name": "Feature Implementation Planner",
+  "icon": "🛠️",
+  "description": "After api-design and data-model have synchronised via soft-align, produces the implementation task breakdown with file-by-file engineering steps.",
+  "checks": [
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Produce a feature implementation plan: list exactly 8 engineering tasks in order with (1) file path, (2) change type (create/modify), (3) one-sentence description, (4) estimated effort (XS/S/M). The tasks should cover: data layer, business logic, API handler, validation, error handling, and tests.",
+      "outputKey": "implementation_tasks",
+      "pass": "✅ Implementation task breakdown produced",
+      "fail": "⚠️  Implementation plan generation failed"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Identify the risk areas in this feature implementation: (1) breaking changes to existing APIs, (2) migration risk, (3) auth surface changes, (4) performance-sensitive paths. Recommend mitigation for each. Context: {retryContext}",
+      "outputKey": "risk_assessment",
+      "pass": "✅ Risk assessment completed",
+      "fail": "⚠️  Risk assessment generation failed"
+    }
+  ]
+}

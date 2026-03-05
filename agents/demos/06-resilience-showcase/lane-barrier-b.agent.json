@@ -1,0 +1,30 @@
+{
+  "name": "🔒 Lane: Barrier Participant B",
+  "icon": "🔒",
+  "description": "HARD-BARRIER DEMONSTRATION (participant B of 2). Runs in parallel with barrier-a. Both must reach the global barrier before either continues. Participant B performs slightly more work, making it the slower participant — demonstrating that A waits for B at the sync point.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "pnpm-workspace.yaml",
+      "pass": "✅ [barrier-b] pnpm workspace confirmed",
+      "fail": "⚠️  [barrier-b] No workspace config — single package project"
+    },
+    {
+      "type": "llm-review",
+      "path": "packages",
+      "taskType": "file-analysis",
+      "prompt": "Participant B of the barrier demo: analyse the monorepo package structure. List each package, its role, and whether it has a test suite. This output will be combined with Participant A's output after the barrier synchronisation point.",
+      "outputKey": "package_analysis",
+      "pass": "✅ [barrier-b] Package analysis complete — arriving at barrier",
+      "fail": "⚠️  [barrier-b] Package analysis failed"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "validation",
+      "prompt": "After the barrier synchronisation, produce a combined test strategy that covers both the test configuration (from Participant A) and the package structure (from Participant B). List 5 actionable test improvement recommendations. Context: {retryContext}",
+      "outputKey": "combined_test_strategy",
+      "pass": "✅ [barrier-b] Combined test strategy produced — barrier resolved",
+      "fail": "⚠️  [barrier-b] Combined strategy generation failed"
+    }
+  ]
+}

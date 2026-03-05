@@ -1,0 +1,19 @@
+{
+  "laneId": "integrate",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Integration point analysis returned empty. Look for any TypeScript interface files or openapi.yaml to identify shared contract surface."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

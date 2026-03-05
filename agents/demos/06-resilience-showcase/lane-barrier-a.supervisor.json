@@ -1,0 +1,21 @@
+{
+  "laneId": "lane-barrier-a",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "hard-barrier",
+      "waitFor": ["lane-barrier-b"],
+      "timeoutMs": 8000,
+      "fallback": "proceed-with-snapshot",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 > **Enterprise-grade multi-agent orchestration engine** — DAG-supervised parallel agents with streaming LLM output, intelligent model routing, resilience patterns, cost tracking, RBAC, audit logging, and a zero-API-key demo mode.
 
-**Status**: ✅ Production-Ready | **Tests**: 324 passing | **Enterprise Features**: E1-E7 complete
+**Status**: ✅ Production-Ready | **Tests**: 396 passing (358 agent-executor + 12 cli + 26 mcp) | **Enterprise Features**: 10 completed (E1-E10, E13)
 
 ---
 
@@ -250,7 +250,7 @@ Comprehensive feature guides are available in [`docs/features/`](docs/features/I
 ```sh
 pnpm install          # install all workspace deps
 pnpm build            # compile all packages (tsc)
-pnpm test             # run all Jest suites (324 tests)
+pnpm test             # run all Jest suites (396 tests: 358 agent-executor + 12 cli + 26 mcp)
 pnpm demo             # build + run the mock demo
 pnpm run:plan         # start interactive planning session
 pnpm run:dag agents/dag.json      # execute a DAG
@@ -259,11 +259,48 @@ pnpm visualize agents/dag.json    # output Mermaid/DOT diagram
 
 ---
 
-## Roadmap
+## Roadmap & Status
 
-**Completed (E1–E7)**: PII scrubbing, security CI, multi-tenant, GDPR data CLI, OIDC auth, rate limiting, DAG visualizer
+### Enterprise Features (E1–E13) ✅ Implemented & Tested
 
-**Planned (E8–E14)**: Prompt injection detection, Python MCP bridge, AWS Bedrock, Jira/Linear sync, Slack/Teams notifications, auto-tuning, visual DAG editor
+| ID | Feature | Status | Details |
+|----|---------|--------|----------|
+| **E1** | PII Scrubbing | ✅ | Automatic detection and redaction via regex patterns |
+| **E2** | Security Audit | ✅ | CI/CD scanning via GitHub Actions (`pnpm audit --audit-level=high`) |
+| **E3** | Multi-Tenant Isolation | ✅ | Path-isolated run roots per tenant, GDPR-compliant |
+| **E4** | GDPR Data CLI | ✅ | `data:export`, `data:delete`, `data:list-tenants` commands |
+| **E5** | OIDC JWT Auth | ✅ | RS256/ES256 Bearer token validation on SSE `/events` endpoint |
+| **E6** | Rate Limiting | ✅ | Token budget + concurrent run limits per principal |
+| **E7** | DAG Visualizer | ✅ | Mermaid + DOT output for architecture visualization |
+| **E8** | Prompt Injection Detection | ✅ | 10 detection families; configurable warn/block modes |
+| **E10** | AWS Bedrock Provider | ✅ | SigV4-signed Converse API; supports Claude/Llama/Titan on Bedrock |
+| **E13** | Run Advisor (Auto-Tune) | ✅ | Analyzes run history → suggests model downgrades, budget optimization, stability improvements |
+
+**📖 See**: [Enterprise Readiness](docs/enterprise-readiness.md) for implementation details
+
+### Advanced Features Implemented
+
+| Feature | Roadmap ID | Status | Details |
+|---------|-----------|--------|----------|
+| Prompt Distillation | G-37 | ✅ | Few-shot example collection for self-improving prompts |
+| Code Execution Sandbox | G-38 | ✅ | Isolated Node/Python/Bash code execution with timeout + output capture |
+| Vector Memory | G-13 | ✅ | In-memory semantic search with cosine similarity |
+| SQLite Vector Memory | G-24/G-25 | ✅ | Persistent embeddings with `better-sqlite3` backend |
+| Webhook Triggers | G-16 | ✅ | GitHub webhook integration for DAG execution |
+| DAG Builder Fluent API | G-22 | ✅ | Type-safe TypeScript DSL for programmatic DAG construction |
+| LLM-as-Judge Eval | G-50 | ✅ | Structured evaluation harness for output quality assessment |
+| OpenTelemetry | G-08 | ✅ | Distributed tracing and metrics collection |
+| Plugin System | Core | ✅ | Custom check types and provider extensions |
+| Human Review Gate | Core | ✅ | Manual approval checkpoints in DAG execution |
+
+### Planned (E9, E11, E12, E14)
+
+| ID | Feature | Priority | Status |
+|----|---------|----------|--------|
+| **E9** | Python MCP Bridge | P2 | 🔜 Subprocess bridge for Python tool registration |
+| **E11** | Jira/Linear Sync | P3 | 🔜 Webhook → create issues on agent run failure |
+| **E12** | Slack/Teams Notifications | P3 | 🔜 Outbound webhooks on DAG completion/failure |
+| **E14** | Visual DAG Editor | P3 | 🔜 React-based browser UI for editing `.dag.json` files |
 
 **📖 See**: [Enterprise Readiness](docs/enterprise-readiness.md) for detailed roadmap
 

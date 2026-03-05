@@ -1,0 +1,19 @@
+{
+  "laneId": "deployment-config",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "No .github directory found. Generate a generic GitHub Actions workflow skeleton instead with stages: install, lint, test, build, docker-push."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

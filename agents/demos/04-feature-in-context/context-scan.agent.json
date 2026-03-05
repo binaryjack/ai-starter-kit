@@ -1,0 +1,30 @@
+{
+  "name": "Codebase Context Scanner",
+  "icon": "🔭",
+  "description": "Scans the existing codebase to map the current API surface, data models, and conventions. Publishes a contract that downstream lanes read via read-contract mode.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "packages",
+      "pass": "✅ Existing monorepo packages found",
+      "fail": "⚠️  No packages directory — treating as single-package project"
+    },
+    {
+      "type": "llm-review",
+      "path": "packages",
+      "taskType": "file-analysis",
+      "prompt": "Map the existing codebase API surface: (1) list exposed TypeScript interfaces and types, (2) identify existing route patterns, (3) note the state management approach, (4) flag any conventions that a new feature must follow. Be specific — list actual file patterns and naming conventions.",
+      "outputKey": "existing_api_map",
+      "pass": "✅ Existing API surface mapped",
+      "fail": "⚠️  API map incomplete"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "file-analysis",
+      "prompt": "Identify the integration points a new feature must respect: (1) shared utility functions, (2) existing error handling pattern, (3) authentication middleware hooks, (4) test setup conventions. Context: {retryContext}",
+      "outputKey": "integration_constraints",
+      "pass": "✅ Integration constraints documented",
+      "fail": "⚠️  Integration constraint analysis failed"
+    }
+  ]
+}

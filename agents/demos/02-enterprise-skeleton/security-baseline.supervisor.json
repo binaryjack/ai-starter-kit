@@ -1,0 +1,32 @@
+{
+  "laneId": "security-baseline",
+  "retryBudget": 2,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "SECURITY.md check failed. Check for security-related GitHub Action workflows in .github/workflows/ as an alternative evidence of a security process."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "RETRY",
+      "retryInstructions": "No .env.example found — secrets management is undocumented. Recommend creating .env.example with placeholders for: DATABASE_URL, JWT_SECRET, API_KEY. This is a blocker for enterprise deployment."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-3",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

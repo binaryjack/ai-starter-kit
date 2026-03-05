@@ -1,0 +1,26 @@
+{
+  "laneId": "design",
+  "retryBudget": 2,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "No Tailwind config found. Check for postcss.config.js or a styles/ directory at the project root. Fall back to defining a vanilla CSS custom-properties token system."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "RETRY",
+      "retryInstructions": "No CSS architecture found. Create a minimal src/styles/ structure: tokens.css, reset.css, typography.css. Document the directory structure even if the files don't exist yet."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

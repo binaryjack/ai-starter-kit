@@ -1,0 +1,29 @@
+{
+  "name": "SEO Analyst",
+  "icon": "🔍",
+  "description": "Audits SEO readiness and attempts to generate a sitemap. ESCALATES after retryBudget=1 — no URL structure is defined in the project, making sitemap.xml generation impossible without human input. This is the ESCALATE demonstration.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "sitemap.xml",
+      "pass": "✅ sitemap.xml already present",
+      "fail": "❌ No sitemap.xml — SEO indexability is unverified",
+      "failSeverity": "error"
+    },
+    {
+      "type": "file-exists",
+      "path": "robots.txt",
+      "pass": "✅ robots.txt found — crawl rules in place",
+      "fail": "❌ No robots.txt — search engine crawl behaviour is undefined",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "validation",
+      "prompt": "Attempt to generate a sitemap.xml structure for the website. List page URLs, their change frequency, and priority. If no URL structure can be determined from context, explicitly state the blocker. Context: {retryContext}",
+      "outputKey": "sitemap_attempt",
+      "pass": "✅ Sitemap structure drafted",
+      "fail": "⚠️  Sitemap generation incomplete — URL structure unknown"
+    }
+  ]
+}

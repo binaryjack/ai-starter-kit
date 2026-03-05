@@ -1,0 +1,30 @@
+{
+  "name": "Frontend Spec Agent",
+  "icon": "🎨",
+  "description": "Designs the UI component tree, routing, and state management. Participates in the hard-barrier sync with the backend before the integration step.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "✅ Root package.json confirmed",
+      "fail": "❌ No project root found",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "api-design",
+      "prompt": "Design a minimal React frontend component tree for the app boilerplate. List: (1) 4 page components with their route paths. (2) 3 shared UI components. (3) suggested state management approach.",
+      "outputKey": "component_tree",
+      "pass": "✅ Component tree designed",
+      "fail": "⚠️  Component tree generation failed"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Define the frontend routing configuration and main App.tsx structure. List the routes and their corresponding components. Context: {retryContext}",
+      "outputKey": "routing_config",
+      "pass": "✅ Routing configuration defined",
+      "fail": "⚠️  Routing config generation failed"
+    }
+  ]
+}

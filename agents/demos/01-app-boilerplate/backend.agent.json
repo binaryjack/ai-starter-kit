@@ -1,0 +1,30 @@
+{
+  "name": "Backend Spec Agent",
+  "icon": "⚙️",
+  "description": "Designs the API layer: routes, middleware, data-access patterns. Participates in the hard-barrier sync with the frontend before the integration step.",
+  "checks": [
+    {
+      "type": "count-dirs",
+      "path": "packages",
+      "pass": "📦 {count} existing packages found — backend will extend the monorepo",
+      "fail": "ℹ️  No packages/ dir — backend will be created at the repo root",
+      "recommendations": ["Keep the backend in packages/api or packages/server"]
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "api-design",
+      "prompt": "Design a REST API for the app boilerplate. Produce: (1) 3 example route definitions with method, path, and description. (2) suggest a middleware stack (auth, validation, error handling). Format as a structured list.",
+      "outputKey": "api_spec",
+      "pass": "✅ API spec designed",
+      "fail": "⚠️  API spec generation failed"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Based on the API spec, define the data models: list 2-3 TypeScript interfaces with fields and types. Context: {retryContext}",
+      "outputKey": "data_models",
+      "pass": "✅ Data models defined",
+      "fail": "⚠️  Data model generation failed"
+    }
+  ]
+}

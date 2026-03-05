@@ -1,0 +1,22 @@
+{
+  "name": "✅ Lane: Immediate Success",
+  "icon": "✅",
+  "description": "BASE CASE — The simplest happy path. All checks pass, supervisor APPROVEs on the first evaluation with zero retries. Compare this lane's log output against the other lanes to see the difference.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "✅ [success] package.json confirmed — project root valid",
+      "fail": "❌ [success-lane] No package.json found",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "validation",
+      "prompt": "Produce a one-paragraph project summary based on the package.json. Include: project name, purpose, and 3 key capabilities.",
+      "outputKey": "project_summary",
+      "pass": "✅ [success] Summary generated — lane complete",
+      "fail": "⚠️  [success] Summary generation failed"
+    }
+  ]
+}

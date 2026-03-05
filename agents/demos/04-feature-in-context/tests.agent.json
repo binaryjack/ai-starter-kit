@@ -1,0 +1,21 @@
+{
+  "name": "Feature Test Planner",
+  "icon": "🧪",
+  "description": "Produces the test plan covering the new feature: unit tests, integration tests, and edge cases.",
+  "checks": [
+    {
+      "type": "count-dirs",
+      "path": "packages",
+      "pass": "📦 {count} packages found — will check for existing test patterns",
+      "fail": "ℹ️  No packages directory — will define tests at project level"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "validation",
+      "prompt": "Produce a test plan for the new feature: (1) 5 unit test cases for the business logic layer, (2) 3 integration test scenarios for the API endpoints, (3) 2 edge cases requiring special handling, (4) test data fixtures needed. Format as a structured list with test ID and description.",
+      "outputKey": "test_plan",
+      "pass": "✅ Test plan produced",
+      "fail": "⚠️  Test plan generation failed"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Content Strategist",
+  "icon": "✍️",
+  "description": "Produces the website content strategy: page inventory, copy tone, messaging hierarchy.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "README.md",
+      "pass": "✅ README.md found — brand messaging available",
+      "fail": "⚠️  No README.md — content strategy will be inferred from package.json"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "prompt-synthesis",
+      "prompt": "Create a website content strategy: (1) 6 page inventory items with purpose, (2) tone of voice guidelines (3 qualities), (3) headline and subheading for the hero section, (4) key value propositions. Be specific and publication-ready.",
+      "outputKey": "content_strategy",
+      "pass": "✅ Content strategy produced",
+      "fail": "⚠️  Content strategy generation failed"
+    }
+  ]
+}

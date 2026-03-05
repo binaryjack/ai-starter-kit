@@ -1,0 +1,23 @@
+{
+  "name": "🎯 Specialist Lane",
+  "icon": "🎯",
+  "description": "HANDOFF TARGET — Can be invoked either directly by the DAG scheduler or via HANDOFF from lane-handoff. Owns database architecture expertise. Always APPROVEs, providing the specialist knowledge the source lane needed.",
+  "checks": [
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "As the database specialist, provide the ORM and data layer decision for a TypeScript Node.js project: (1) recommended ORM (Prisma/Drizzle/TypeORM — pick one with justification), (2) migration toolchain, (3) connection pooling config, (4) 3 schema conventions to enforce. This may be responding to a HANDOFF request.",
+      "outputKey": "database_decision",
+      "pass": "✅ [specialist] Database architecture decision provided",
+      "fail": "⚠️  [specialist] Decision generation failed"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Generate a minimal Prisma schema.prisma example showing the conventions: datasource block, 2 model definitions with the required field patterns, and enum example. Context: {retryContext}",
+      "outputKey": "schema_template",
+      "pass": "✅ [specialist] Schema template provided",
+      "fail": "⚠️  [specialist] Schema template generation failed"
+    }
+  ]
+}

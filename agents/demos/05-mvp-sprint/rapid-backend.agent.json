@@ -1,0 +1,23 @@
+{
+  "name": "Rapid Backend Builder",
+  "icon": "⚡",
+  "description": "Fast-tracks the backend implementation plan: API skeleton, data store choice, and corners-cut registry.",
+  "checks": [
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Design a rapid MVP backend: (1) 4 API endpoints (method + path + one-line description), (2) data store choice for MVP speed (in-memory / SQLite / Postgres — justify), (3) 3 shortcuts taken vs production and why they are acceptable for MVP, (4) estimated implementation time in days. Optimise for SHIP SPEED.",
+      "outputKey": "backend_skeleton",
+      "pass": "✅ Rapid backend plan produced",
+      "fail": "⚠️  Backend plan generation failed"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "api-design",
+      "prompt": "Define the MVP data store schema — optimised for quick implementation, not long-term scalability. List 2-3 tables/collections with minimal essential fields. Flag fields that would need to be added post-MVP. Context: {retryContext}",
+      "outputKey": "mvp_data_store",
+      "pass": "✅ MVP data store designed",
+      "fail": "⚠️  Data store design failed"
+    }
+  ]
+}

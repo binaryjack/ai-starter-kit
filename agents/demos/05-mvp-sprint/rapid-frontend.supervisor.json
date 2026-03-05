@@ -1,0 +1,26 @@
+{
+  "laneId": "rapid-frontend",
+  "retryBudget": 2,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "No UI component directory found. Check for a pages/ or views/ convention instead. Fall back to describing a flat src/ layout."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "RETRY",
+      "retryInstructions": "⚡ [FLAKY RETRY 1/2] Design token CSS file is missing. For MVP speed, define inline CSS variables in a <style> tag inside index.html instead of a separate token file. Document this as tech-debt item #1."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

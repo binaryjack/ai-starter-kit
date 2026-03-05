@@ -1,0 +1,22 @@
+{
+  "name": "🔒 Lane: Barrier Participant A",
+  "icon": "🔒",
+  "description": "HARD-BARRIER DEMONSTRATION (participant A of 2). Both barrier-a and barrier-b must reach the global barrier 'barrier-demo-sync' before EITHER can continue. Watch the ⏳ barrier wait in the log — the slower lane holds the faster one at the barrier point.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "✅ [barrier-a] Participant A started",
+      "fail": "❌ [barrier-a] Cannot start",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "validation",
+      "prompt": "Participant A of the barrier demo: analyse the project's test configuration. List the test runner, coverage tool, and 3 test script commands available. This output will be combined with Participant B's output after the barrier.",
+      "outputKey": "test_config_analysis",
+      "pass": "✅ [barrier-a] Test config analysis complete — waiting at barrier",
+      "fail": "⚠️  [barrier-a] Analysis failed"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Idea Validator",
+  "icon": "💡",
+  "description": "Fast first-pass validation of the MVP concept: value proposition clarity, target audience definition, and core assumption check.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "README.md",
+      "pass": "✅ Product description found",
+      "fail": "⚠️  No README.md — idea will be inferred from package.json"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "prompt-synthesis",
+      "prompt": "Validate this MVP idea: (1) state the value proposition in one sentence, (2) define the primary user persona, (3) list 3 core assumptions being made, (4) give a viability score 1-5 with reasoning. Be concise and direct.",
+      "outputKey": "value_proposition",
+      "pass": "✅ Idea validation complete",
+      "fail": "⚠️  Idea validation generation failed"
+    }
+  ]
+}

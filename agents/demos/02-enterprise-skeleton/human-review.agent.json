@@ -1,0 +1,16 @@
+{
+  "name": "Architecture Approval Gate",
+  "icon": "👤",
+  "description": "HUMAN REVIEW checkpoint — pauses execution when running with --interactive. An operator reviews the auth + db design decisions before deployment configuration begins. Demonstrates needs-human-review mode.",
+  "checks": [
+    {
+      "type": "llm-review",
+      "path": "agents",
+      "taskType": "validation",
+      "prompt": "Produce an executive summary of the enterprise skeleton design decisions so far. Cover: (1) authentication approach, (2) database design, (3) security posture, (4) open questions that require human sign-off. Format as a concise briefing note.",
+      "outputKey": "review_summary",
+      "pass": "✅ Review summary prepared for human operator",
+      "fail": "⚠️  Review summary could not be generated"
+    }
+  ]
+}

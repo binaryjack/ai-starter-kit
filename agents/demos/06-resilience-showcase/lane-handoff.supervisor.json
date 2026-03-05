@@ -1,0 +1,30 @@
+{
+  "laneId": "lane-handoff",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "HANDOFF",
+      "targetLaneId": "specialist-lane",
+      "handoffContext": {
+        "reason": "No ORM configuration found. Handing off to the specialist lane which has database expertise.",
+        "requestedCapability": "specialised-analysis",
+        "context": "Need: ORM selection, schema conventions, migration approach for a TypeScript Node.js project."
+      }
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

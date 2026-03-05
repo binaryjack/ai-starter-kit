@@ -1,0 +1,29 @@
+{
+  "name": "💥 Lane: Terminal Escalation",
+  "icon": "💥",
+  "description": "ESCALATE DEMONSTRATION — This lane checks for both sitemap.xml and robots.txt (neither exists). retryBudget=1, so after one retry the budget is exhausted and the supervisor forces ESCALATE. DAG status becomes 'partial'. Other lanes are unaffected and continue running.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "sitemap.xml",
+      "pass": "✅ [escalate] sitemap.xml found",
+      "fail": "❌ [escalate] No sitemap.xml — automatic recovery impossible",
+      "failSeverity": "error"
+    },
+    {
+      "type": "file-exists",
+      "path": "robots.txt",
+      "pass": "✅ [escalate] robots.txt found",
+      "fail": "❌ [escalate] No robots.txt — cannot proceed without URL structure",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "validation",
+      "prompt": "Attempt to auto-recover: generate a minimal sitemap.xml and robots.txt content for this project. If insufficient context exists, explicitly state the escalation reason. Context: {retryContext}",
+      "outputKey": "escalation_evidence",
+      "pass": "✅ [escalate] Recovery attempt documented",
+      "fail": "⚠️  [escalate] Recovery attempt failed"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "laneId": "seo",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "RETRY",
+      "retryInstructions": "No sitemap.xml found. Attempt to generate a minimal sitemap from any known routes in the codebase — check src/routes/, src/pages/, or a Next.js app/ directory. List whatever routes can be inferred."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "ESCALATE",
+      "reason": "ESCALATE: robots.txt and sitemap.xml are both missing and cannot be generated without a confirmed URL structure. A human must define the site's URL architecture before SEO configuration can proceed."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

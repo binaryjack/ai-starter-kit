@@ -1,0 +1,70 @@
+{
+  "name": "Demo 05 — MVP Sprint (flaky lane + retry recovery)",
+  "description": "Demonstrates: high-tempo build under simulated time pressure. The rapid-frontend lane is flaky (RETRY × 2 before APPROVE). The market-scan lane retries once. The ship-checklist gathers all contracts and produces warnings. Shows a realistic MVP workflow where not everything goes smoothly but the team ships anyway. Zero API keys — mock provider.",
+  "lanes": [
+    {
+      "id": "idea-validation",
+      "agentFile": "idea-validation.agent.json",
+      "supervisorFile": "idea-validation.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["value-proposition", "target-audience"]
+    },
+    {
+      "id": "market-scan",
+      "agentFile": "market-scan.agent.json",
+      "supervisorFile": "market-scan.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["competitor-analysis", "differentiators"]
+    },
+    {
+      "id": "mvp-spec",
+      "agentFile": "mvp-spec.agent.json",
+      "supervisorFile": "mvp-spec.supervisor.json",
+      "dependsOn": ["idea-validation", "market-scan"],
+      "capabilities": ["feature-list", "scope-boundary"]
+    },
+    {
+      "id": "rapid-backend",
+      "agentFile": "rapid-backend.agent.json",
+      "supervisorFile": "rapid-backend.supervisor.json",
+      "dependsOn": ["mvp-spec"],
+      "capabilities": ["api-skeleton", "data-store"]
+    },
+    {
+      "id": "rapid-frontend",
+      "agentFile": "rapid-frontend.agent.json",
+      "supervisorFile": "rapid-frontend.supervisor.json",
+      "dependsOn": ["mvp-spec"],
+      "capabilities": ["ui-skeleton", "user-flows"]
+    },
+    {
+      "id": "ship-checklist",
+      "agentFile": "ship-checklist.agent.json",
+      "supervisorFile": "ship-checklist.supervisor.json",
+      "dependsOn": ["rapid-backend", "rapid-frontend"],
+      "capabilities": ["launch-readiness", "known-gaps"]
+    }
+  ],
+  "globalBarriers": [
+    {
+      "name": "backend-frontend-mvp-sync",
+      "participants": ["rapid-backend", "rapid-frontend"],
+      "timeoutMs": 10000
+    }
+  ],
+  "capabilityRegistry": {
+    "value-proposition":   ["idea-validation"],
+    "target-audience":     ["idea-validation"],
+    "competitor-analysis": ["market-scan"],
+    "differentiators":     ["market-scan"],
+    "feature-list":        ["mvp-spec"],
+    "scope-boundary":      ["mvp-spec"],
+    "api-skeleton":        ["rapid-backend"],
+    "data-store":          ["rapid-backend"],
+    "ui-skeleton":         ["rapid-frontend"],
+    "user-flows":          ["rapid-frontend"],
+    "launch-readiness":    ["ship-checklist"],
+    "known-gaps":          ["ship-checklist"]
+  },
+  "modelRouterFile": "../model-router.json"
+}

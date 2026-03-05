@@ -1,0 +1,30 @@
+{
+  "name": "Requirements Analyst",
+  "icon": "📋",
+  "description": "Validates project prerequisites and captures the app requirements via LLM analysis.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "✅ Node.js project root confirmed",
+      "fail": "❌ No package.json — cannot proceed without a project root",
+      "failSeverity": "error"
+    },
+    {
+      "type": "file-exists",
+      "path": "README.md",
+      "pass": "✅ README.md found — project description available",
+      "fail": "⚠️  No README.md — requirements will be inferred from package.json only",
+      "failSeverity": "warning"
+    },
+    {
+      "type": "llm-review",
+      "path": "package.json",
+      "taskType": "validation",
+      "prompt": "Analyse this package.json and extract the application requirements: name, purpose, runtime dependencies, and target environment. Produce a bullet-list of at least 3 confirmed requirements.",
+      "outputKey": "app_requirements",
+      "pass": "✅ Requirements captured from project manifest",
+      "fail": "⚠️  Requirements analysis returned no output"
+    }
+  ]
+}

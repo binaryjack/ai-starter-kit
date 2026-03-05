@@ -1,0 +1,24 @@
+{
+  "name": "Data Model Extender",
+  "icon": "🗃️",
+  "description": "Reads the context-scan contract (read-contract mode) then designs the database schema extension. Uses soft-align to synchronise with api-design before publishing the migration plan.",
+  "checks": [
+    {
+      "type": "llm-review",
+      "path": "packages/agent-executor/src/lib",
+      "taskType": "file-analysis",
+      "prompt": "Review the lib directory structure and identify the data persistence patterns: (1) what data structures are persisted, (2) serialisation approach, (3) ID generation convention, (4) timestamp fields convention. This shapes the new feature's data model extension.",
+      "outputKey": "data_patterns",
+      "pass": "✅ Existing data patterns identified",
+      "fail": "⚠️  Data pattern analysis returned limited findings"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "api-design",
+      "prompt": "Design the database schema extension for the new feature: (1) new table(s) with columns and types, (2) foreign key relationships to existing tables, (3) required indexes, (4) migration steps (up + down). Context: {retryContext}",
+      "outputKey": "migration_plan",
+      "pass": "✅ Schema extension and migration plan designed",
+      "fail": "⚠️  Schema extension generation failed"
+    }
+  ]
+}

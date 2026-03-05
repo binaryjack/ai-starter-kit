@@ -1,0 +1,21 @@
+{
+  "name": "Deployment Config Agent",
+  "icon": "🚀",
+  "description": "Generates deployment configuration: Docker Compose for dev, environment variable templates, CI/CD pipeline sketch, and cloud deployment checklist.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": ".github",
+      "pass": "✅ GitHub Actions directory found — CI/CD pipeline can be extended",
+      "fail": "⚠️  No .github directory — CI/CD pipeline will be created from scratch"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Generate a deployment configuration plan for the enterprise skeleton: (1) Docker Compose services (app, db, cache), (2) 8 required environment variables with descriptions, (3) CI/CD pipeline stages (build, test, security-scan, deploy), (4) cloud deployment checklist (5 items). Context: {retryContext}",
+      "outputKey": "deployment_plan",
+      "pass": "✅ Deployment configuration generated",
+      "fail": "⚠️  Deployment config generation failed"
+    }
+  ]
+}

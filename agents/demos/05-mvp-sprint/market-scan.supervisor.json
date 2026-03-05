@@ -1,0 +1,19 @@
+{
+  "laneId": "market-scan",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "RETRY",
+      "retryInstructions": "No market research documentation exists. Widen the analysis scope: use the project README and package.json description as the product context. Name at least 3 categories of competing tools even if specific names are uncertain."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

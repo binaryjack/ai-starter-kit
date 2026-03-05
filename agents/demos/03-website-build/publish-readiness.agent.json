@@ -1,0 +1,22 @@
+{
+  "name": "Publish Readiness Checker",
+  "icon": "🚢",
+  "description": "Runs after content and design succeed (SEO may have escalated — partial DAGs still produce this summary). Produces the go-live checklist.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "✅ Build config confirmed",
+      "fail": "❌ No package.json — cannot verify build pipeline",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "validation",
+      "prompt": "Produce a website go-live checklist with 10 items across these categories: (1) Performance (3 items), (2) Accessibility (3 items), (3) Security (2 items), (4) Analytics (2 items). Mark each as REQUIRED or NICE-TO-HAVE. Note: SEO lane may have escalated — include SEO items in the checklist as REQUIRED manual tasks.",
+      "outputKey": "publish_checklist",
+      "pass": "✅ Publish readiness checklist produced",
+      "fail": "⚠️  Publish checklist generation failed"
+    }
+  ]
+}

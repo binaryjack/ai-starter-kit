@@ -1,0 +1,31 @@
+{
+  "laneId": "db-schema",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "No existing ORM schema found. Check for sql/ or migrations/ directories to understand the database baseline."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "HANDOFF",
+      "targetLaneId": "auth-module",
+      "handoffContext": {
+        "reason": "No ORM config found — cannot determine role enum structure independently. Auth module owns the user-role contract.",
+        "requestedCapability": "session-types",
+        "waitingFor": "Role enum definition and session payload shape"
+      }
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

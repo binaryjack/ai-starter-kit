@@ -1,0 +1,26 @@
+{
+  "laneId": "lane-escalate",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "RETRY",
+      "retryInstructions": "🔁 RETRY before ESCALATE: sitemap.xml not found. Try to infer the URL structure from any route files or sitemaps in public/ or static/. If still impossible, document the blocker explicitly."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "ESCALATE",
+      "reason": "🚨 ESCALATING: Both sitemap.xml and robots.txt are absent and cannot be auto-generated without a defined URL structure. Human intervention required."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

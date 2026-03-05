@@ -1,0 +1,58 @@
+{
+  "name": "Demo 01 — App Boilerplate (from scratch)",
+  "description": "Demonstrates: coached RETRY (×2 on scaffold lane), parallel backend+frontend execution, hard-barrier sync before integration. Zero API keys required — runs entirely on the mock provider.",
+  "lanes": [
+    {
+      "id": "requirements",
+      "agentFile": "requirements.agent.json",
+      "supervisorFile": "requirements.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["requirements-analysis"]
+    },
+    {
+      "id": "scaffold",
+      "agentFile": "scaffold.agent.json",
+      "supervisorFile": "scaffold.supervisor.json",
+      "dependsOn": ["requirements"],
+      "capabilities": ["project-scaffold"]
+    },
+    {
+      "id": "backend",
+      "agentFile": "backend.agent.json",
+      "supervisorFile": "backend.supervisor.json",
+      "dependsOn": ["scaffold"],
+      "capabilities": ["backend-spec", "api-routes"]
+    },
+    {
+      "id": "frontend",
+      "agentFile": "frontend.agent.json",
+      "supervisorFile": "frontend.supervisor.json",
+      "dependsOn": ["scaffold"],
+      "capabilities": ["frontend-spec", "component-tree"]
+    },
+    {
+      "id": "integrate",
+      "agentFile": "integrate.agent.json",
+      "supervisorFile": "integrate.supervisor.json",
+      "dependsOn": ["backend", "frontend"],
+      "capabilities": ["integration-summary"]
+    }
+  ],
+  "globalBarriers": [
+    {
+      "name": "backend-frontend-ready",
+      "participants": ["backend", "frontend"],
+      "timeoutMs": 15000
+    }
+  ],
+  "capabilityRegistry": {
+    "requirements-analysis": ["requirements"],
+    "project-scaffold":      ["scaffold"],
+    "backend-spec":          ["backend"],
+    "api-routes":            ["backend"],
+    "frontend-spec":         ["frontend"],
+    "component-tree":        ["frontend"],
+    "integration-summary":   ["integrate"]
+  },
+  "modelRouterFile": "../model-router.json"
+}

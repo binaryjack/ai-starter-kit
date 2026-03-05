@@ -1,0 +1,23 @@
+{
+  "laneId": "data-model",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": ["context-scan"],
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Context scan unavailable. Infer data persistence patterns from any JSON state files or TypeScript interfaces visible in the lib directory."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "soft-align",
+      "waitFor": ["api-design"],
+      "timeoutMs": 8000,
+      "fallback": "proceed-with-snapshot",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

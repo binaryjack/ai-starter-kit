@@ -1,0 +1,23 @@
+{
+  "laneId": "api-design",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": ["context-scan"],
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Context scan results unavailable. Proceed with standard REST conventions as fallback and note the deviation in findings."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "soft-align",
+      "waitFor": ["data-model"],
+      "timeoutMs": 8000,
+      "fallback": "proceed-with-snapshot",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

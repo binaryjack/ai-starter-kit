@@ -1,0 +1,31 @@
+{
+  "name": "Enterprise Requirements Analyst",
+  "icon": "📋",
+  "description": "Captures feature scope and non-functional requirements (security, compliance, SLA) via LLM analysis of the project manifest.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "✅ Project manifest found",
+      "fail": "❌ No package.json — cannot establish project scope",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-review",
+      "path": "package.json",
+      "taskType": "validation",
+      "prompt": "Analyse this manifest and produce enterprise requirements: (1) business domain, (2) compliance requirements (GDPR, SOC2, HIPAA if applicable), (3) target user roles, (4) scale expectations. Format as a structured list.",
+      "outputKey": "enterprise_requirements",
+      "pass": "✅ Enterprise requirements captured",
+      "fail": "⚠️  Requirements analysis incomplete"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Define the feature scope boundary for the enterprise skeleton: (1) Core features (MVP), (2) Phase 2 features, (3) Out-of-scope items. Keep it to 3-4 items per category. Context: {retryContext}",
+      "outputKey": "feature_scope",
+      "pass": "✅ Feature scope defined",
+      "fail": "⚠️  Feature scope generation failed"
+    }
+  ]
+}

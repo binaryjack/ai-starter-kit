@@ -1,0 +1,28 @@
+{
+  "name": "Visual Design Planner",
+  "icon": "🎨",
+  "description": "Produces the visual design specification: colour palette, typography, layout system, responsive breakpoints. Includes a coached RETRY for missing design tokens.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "tailwind.config.js",
+      "pass": "✅ Tailwind config found — will extend existing design tokens",
+      "fail": "⚠️  No Tailwind config — design tokens will be defined from scratch"
+    },
+    {
+      "type": "file-exists",
+      "path": "src/styles",
+      "pass": "✅ Styles directory found",
+      "fail": "❌ No src/styles directory — CSS architecture is missing",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Create a visual design specification: (1) colour palette (primary, secondary, accent, semantic), (2) typography scale (5 sizes with use cases), (3) spacing system (8px base), (4) responsive breakpoints (sm/md/lg/xl), (5) component border-radius convention. Context: {retryContext}",
+      "outputKey": "design_spec",
+      "pass": "✅ Design specification produced",
+      "fail": "⚠️  Design spec generation failed"
+    }
+  ]
+}

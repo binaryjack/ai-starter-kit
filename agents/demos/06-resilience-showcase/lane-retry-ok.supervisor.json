@@ -1,0 +1,25 @@
+{
+  "laneId": "lane-retry-ok",
+  "retryBudget": 2,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "RETRY",
+      "retryInstructions": "🔁 RETRY 1: Dockerfile is missing. Generate a minimal Node.js Dockerfile content as the output instead of checking for the file. Include: FROM node:20-alpine, WORKDIR /app, COPY package*.json ./, RUN npm ci --only=production, COPY dist/ ./dist/, EXPOSE 3000, CMD [\"node\", \"dist/index.js\"]."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

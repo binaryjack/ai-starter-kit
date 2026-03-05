@@ -1,0 +1,29 @@
+{
+  "name": "🔁 Lane: Retry Loop",
+  "icon": "🔁",
+  "description": "RETRY DEMONSTRATION — step-1 checks for a Dockerfile (missing). The supervisor triggers RETRY with corrective instructions. After retryBudget=2 attempts the budget is exhausted and the lane ESCALATEs. In real LLM mode the retryInstructions would guide the model past the issue.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "✅ [retry-ok] Step 1 passed — project confirmed",
+      "fail": "❌ [retry-ok] No project root",
+      "failSeverity": "error"
+    },
+    {
+      "type": "file-exists",
+      "path": "Dockerfile",
+      "pass": "✅ [retry-ok] Dockerfile found — containerisation ready",
+      "fail": "❌ [retry-ok] No Dockerfile — this triggers the RETRY loop",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Describe the containerisation setup that should exist: Dockerfile stages, exposed ports, and environment variables needed. Context from retry loop: {retryContext}",
+      "outputKey": "container_spec",
+      "pass": "✅ [retry-ok] Container spec produced",
+      "fail": "⚠️  [retry-ok] Container spec generation failed"
+    }
+  ]
+}

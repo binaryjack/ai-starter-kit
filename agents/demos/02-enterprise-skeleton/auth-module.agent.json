@@ -1,0 +1,23 @@
+{
+  "name": "Auth Module Designer",
+  "icon": "🔑",
+  "description": "Designs the authentication and authorisation system. Publishes session-types and user-roles contracts. The db-schema lane may HANDOFF to this lane when it needs role-enum definitions.",
+  "checks": [
+    {
+      "type": "llm-generate",
+      "taskType": "api-design",
+      "prompt": "Design the authentication module for the enterprise app: (1) authentication strategy (JWT/session), (2) user roles enum with at least 4 levels, (3) permission matrix for core resources, (4) session lifecycle (expiry, refresh). Be specific and implementable.",
+      "outputKey": "auth_design",
+      "pass": "✅ Auth module designed",
+      "fail": "⚠️  Auth design generation failed"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Generate TypeScript type definitions for the auth module: User interface, Role enum, Permission type, SessionPayload interface, AuthToken interface. Context: {retryContext}",
+      "outputKey": "auth_types",
+      "pass": "✅ Auth TypeScript types defined",
+      "fail": "⚠️  Auth type generation failed"
+    }
+  ]
+}

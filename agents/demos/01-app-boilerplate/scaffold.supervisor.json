@@ -1,0 +1,26 @@
+{
+  "laneId": "scaffold",
+  "retryBudget": 2,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "tsconfig.json was not detected. Verify the TypeScript setup by checking for tsconfig.base.json or individual package tsconfig files."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "RETRY",
+      "retryInstructions": "A Dockerfile is missing from the scaffold. Add a multi-stage Dockerfile: (1) builder stage with Node 20-alpine, (2) production stage that copies only dist/. This is required for cloud deployment."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

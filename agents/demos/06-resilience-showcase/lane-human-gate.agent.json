@@ -1,0 +1,16 @@
+{
+  "name": "⏸ Lane: Human Review Gate",
+  "icon": "⏸",
+  "description": "NEEDS-HUMAN-REVIEW DEMONSTRATION — The supervisor checkpoint uses mode='needs-human-review'. With --interactive flag: execution PAUSES and waits for an operator to approve/reject via CLI prompt. Without --interactive: auto-proceeds (non-interactive CI mode).",
+  "checks": [
+    {
+      "type": "llm-review",
+      "path": "agents",
+      "taskType": "architecture-decision",
+      "prompt": "Produce a decision summary for human review: (1) list the 3 most important architectural decisions made in this DAG run, (2) flag 2 decisions that have non-obvious trade-offs, (3) list 2 items that a human architect should validate before proceeding. This will be presented to the operator at the human-review gate.",
+      "outputKey": "review_package",
+      "pass": "⏸ [human-gate] Review package prepared — awaiting operator decision",
+      "fail": "⚠️  [human-gate] Review package generation failed"
+    }
+  ]
+}

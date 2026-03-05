@@ -1,0 +1,15 @@
+{
+  "name": "MVP Specification Writer",
+  "icon": "📝",
+  "description": "Synthesises idea validation and market scan into a tight MVP specification with a clear scope boundary.",
+  "checks": [
+    {
+      "type": "llm-generate",
+      "taskType": "prompt-synthesis",
+      "prompt": "Write the MVP specification: (1) 5 must-have features (numbered), (2) 5 explicitly out-of-scope items, (3) success metrics (3 measurable KPIs), (4) definition of 'done' for the MVP. Be ruthlessly scoped. Context: {retryContext}",
+      "outputKey": "mvp_spec",
+      "pass": "✅ MVP specification written",
+      "fail": "⚠️  MVP spec generation failed"
+    }
+  ]
+}

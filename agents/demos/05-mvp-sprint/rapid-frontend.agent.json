@@ -1,0 +1,28 @@
+{
+  "name": "Rapid Frontend Builder",
+  "icon": "🖥️",
+  "description": "FLAKY LANE — demonstrates RETRY × 2 before eventual recovery. A CSS architecture check fails twice before the LLM-generate step produces output. In a real LLM run, the retry instructions guide the model to a working solution.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "src/components",
+      "pass": "✅ Existing components directory found",
+      "fail": "⚠️  No src/components directory — UI will be built from scratch"
+    },
+    {
+      "type": "file-exists",
+      "path": "src/styles/tokens.css",
+      "pass": "✅ Design tokens CSS found — will use existing token system",
+      "fail": "❌ No design token file — UI consistency is at risk",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Design the MVP frontend: (1) 3 screen/page layouts with component breakdown, (2) state management: local state vs context API decision for MVP, (3) form handling approach, (4) 2 shortcuts taken vs production UI. Aim for fast delivery. Context: {retryContext}",
+      "outputKey": "frontend_plan",
+      "pass": "✅ Rapid frontend plan produced",
+      "fail": "⚠️  Frontend plan generation failed"
+    }
+  ]
+}

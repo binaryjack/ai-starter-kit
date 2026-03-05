@@ -1,0 +1,30 @@
+{
+  "name": "Ship Checklist Agent",
+  "icon": "🚀",
+  "description": "Final gate before MVP launch. Gathers all outputs from the sprint lanes and produces a ship/no-ship decision with a known-gaps register.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "✅ Project manifest confirmed for ship check",
+      "fail": "❌ No package.json — cannot verify build setup",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "validation",
+      "prompt": "Produce an MVP launch readiness report: (1) ship decision (SHIP / HOLD) with 2-sentence justification, (2) 5 must-fix items before launching, (3) 5 known gaps that are acceptable post-launch, (4) estimated time to address must-fix items. Be decisive and practical.",
+      "outputKey": "launch_readiness",
+      "pass": "✅ Launch readiness report produced",
+      "fail": "⚠️  Launch readiness generation failed"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "validation",
+      "prompt": "List the technical debt items created during this MVP sprint: assign priority (P1/P2/P3) and effort estimate (S/M/L) to each. Include at least 5 items spanning backend shortcuts, frontend shortcuts, and missing tests. Context: {retryContext}",
+      "outputKey": "tech_debt_register",
+      "pass": "✅ Tech debt register compiled",
+      "fail": "⚠️  Tech debt register generation failed"
+    }
+  ]
+}

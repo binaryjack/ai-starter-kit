@@ -1,0 +1,37 @@
+{
+  "name": "Security Baseline Agent",
+  "icon": "🔐",
+  "description": "Runs parallel with requirements. Establishes the security posture: OWASP checklist, dependency audit, secrets management approach. Demonstrates coached RETRY when security config files are absent.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "SECURITY.md",
+      "pass": "✅ SECURITY.md present — security policy documented",
+      "fail": "⚠️  No SECURITY.md — security policy needs to be created"
+    },
+    {
+      "type": "file-exists",
+      "path": ".env.example",
+      "pass": "✅ .env.example found — secrets template available",
+      "fail": "❌ No .env.example — secrets management is undocumented",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-review",
+      "path": "package.json",
+      "taskType": "security-review",
+      "prompt": "Review this package.json for security concerns: (1) check for known vulnerable package patterns in the dependency names, (2) identify missing security tooling (helmet, cors, rate-limiting), (3) flag any risky scripts. List at least 3 security findings.",
+      "outputKey": "security_findings",
+      "pass": "✅ Security posture assessed",
+      "fail": "⚠️  Security review incomplete"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "security-review",
+      "prompt": "Generate a compliance checklist for the enterprise skeleton: (1) authentication requirements, (2) data-at-rest encryption, (3) audit logging requirements, (4) access-control model. Context: {retryContext}",
+      "outputKey": "compliance_checklist",
+      "pass": "✅ Compliance checklist generated",
+      "fail": "⚠️  Compliance checklist generation failed"
+    }
+  ]
+}

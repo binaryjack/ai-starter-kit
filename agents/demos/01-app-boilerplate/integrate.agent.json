@@ -1,0 +1,24 @@
+{
+  "name": "Integration Planner",
+  "icon": "🔗",
+  "description": "Reads backend and frontend contracts after the hard-barrier sync and produces the integration wiring plan: env vars, shared types, API client generation.",
+  "checks": [
+    {
+      "type": "llm-review",
+      "path": "packages",
+      "taskType": "validation",
+      "prompt": "Review the monorepo packages directory and identify the points where backend and frontend need to connect: shared types, API base URL, auth token handling. List exactly 4 integration touch-points.",
+      "outputKey": "integration_points",
+      "pass": "✅ Integration points identified",
+      "fail": "⚠️  Integration analysis returned no findings"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Generate the integration wiring plan: (1) list shared TypeScript types to extract to a packages/shared package. (2) list 3 environment variables both frontend and backend need. (3) recommended API client generation approach. Context: {retryContext}",
+      "outputKey": "wiring_plan",
+      "pass": "✅ Wiring plan generated",
+      "fail": "⚠️  Wiring plan generation failed"
+    }
+  ]
+}

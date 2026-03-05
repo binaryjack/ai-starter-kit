@@ -1,0 +1,61 @@
+{
+  "name": "Demo 04 — Feature in Existing Context",
+  "description": "Demonstrates: context-scan publishes an existing-codebase contract that design + api-design read via read-contract mode. The api-design and data-model lanes use soft-align to synchronise their interface contracts before implementation proceeds. Zero API keys — mock provider.",
+  "lanes": [
+    {
+      "id": "context-scan",
+      "agentFile": "context-scan.agent.json",
+      "supervisorFile": "context-scan.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["codebase-analysis", "existing-api-map"]
+    },
+    {
+      "id": "api-design",
+      "agentFile": "api-design.agent.json",
+      "supervisorFile": "api-design.supervisor.json",
+      "dependsOn": ["context-scan"],
+      "capabilities": ["new-endpoint-design", "openapi-spec"]
+    },
+    {
+      "id": "data-model",
+      "agentFile": "data-model.agent.json",
+      "supervisorFile": "data-model.supervisor.json",
+      "dependsOn": ["context-scan"],
+      "capabilities": ["schema-extension", "migration-plan"]
+    },
+    {
+      "id": "implementation",
+      "agentFile": "implementation.agent.json",
+      "supervisorFile": "implementation.supervisor.json",
+      "dependsOn": ["api-design", "data-model"],
+      "capabilities": ["feature-code", "integration-points"]
+    },
+    {
+      "id": "tests",
+      "agentFile": "tests.agent.json",
+      "supervisorFile": "tests.supervisor.json",
+      "dependsOn": ["implementation"],
+      "capabilities": ["unit-tests", "integration-tests"]
+    }
+  ],
+  "globalBarriers": [
+    {
+      "name": "api-schema-aligned",
+      "participants": ["api-design", "data-model"],
+      "timeoutMs": 12000
+    }
+  ],
+  "capabilityRegistry": {
+    "codebase-analysis":   ["context-scan"],
+    "existing-api-map":    ["context-scan"],
+    "new-endpoint-design": ["api-design"],
+    "openapi-spec":        ["api-design"],
+    "schema-extension":    ["data-model"],
+    "migration-plan":      ["data-model"],
+    "feature-code":        ["implementation"],
+    "integration-points":  ["implementation"],
+    "unit-tests":          ["tests"],
+    "integration-tests":   ["tests"]
+  },
+  "modelRouterFile": "../model-router.json"
+}

@@ -1,0 +1,79 @@
+{
+  "name": "Demo 02 — Enterprise App Skeleton",
+  "description": "Demonstrates: parallel first group (requirements + security-baseline), HANDOFF from db-schema to auth-module for shared types, read-contract cross-lane dependency, needs-human-review gate before deployment config. Zero API keys — mock provider.",
+  "lanes": [
+    {
+      "id": "requirements",
+      "agentFile": "requirements.agent.json",
+      "supervisorFile": "requirements.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["requirements-analysis", "feature-scope"]
+    },
+    {
+      "id": "security-baseline",
+      "agentFile": "security-baseline.agent.json",
+      "supervisorFile": "security-baseline.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["security-posture", "compliance-checklist"]
+    },
+    {
+      "id": "architecture",
+      "agentFile": "architecture.agent.json",
+      "supervisorFile": "architecture.supervisor.json",
+      "dependsOn": ["requirements", "security-baseline"],
+      "capabilities": ["architecture-design", "tech-stack"]
+    },
+    {
+      "id": "auth-module",
+      "agentFile": "auth-module.agent.json",
+      "supervisorFile": "auth-module.supervisor.json",
+      "dependsOn": ["architecture"],
+      "capabilities": ["auth-design", "user-roles", "session-types"]
+    },
+    {
+      "id": "db-schema",
+      "agentFile": "db-schema.agent.json",
+      "supervisorFile": "db-schema.supervisor.json",
+      "dependsOn": ["architecture"],
+      "capabilities": ["schema-design", "migrations"]
+    },
+    {
+      "id": "human-review",
+      "agentFile": "human-review.agent.json",
+      "supervisorFile": "human-review.supervisor.json",
+      "dependsOn": ["auth-module", "db-schema"],
+      "capabilities": ["architecture-approval"]
+    },
+    {
+      "id": "deployment-config",
+      "agentFile": "deployment-config.agent.json",
+      "supervisorFile": "deployment-config.supervisor.json",
+      "dependsOn": ["human-review"],
+      "capabilities": ["deployment-plan", "env-config"]
+    }
+  ],
+  "globalBarriers": [
+    {
+      "name": "auth-db-aligned",
+      "participants": ["auth-module", "db-schema"],
+      "timeoutMs": 20000
+    }
+  ],
+  "capabilityRegistry": {
+    "requirements-analysis": ["requirements"],
+    "feature-scope":         ["requirements"],
+    "security-posture":      ["security-baseline"],
+    "compliance-checklist":  ["security-baseline"],
+    "architecture-design":   ["architecture"],
+    "tech-stack":            ["architecture"],
+    "auth-design":           ["auth-module"],
+    "user-roles":            ["auth-module"],
+    "session-types":         ["auth-module"],
+    "schema-design":         ["db-schema"],
+    "migrations":            ["db-schema"],
+    "architecture-approval": ["human-review"],
+    "deployment-plan":       ["deployment-config"],
+    "env-config":            ["deployment-config"]
+  },
+  "modelRouterFile": "../model-router.json"
+}

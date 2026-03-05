@@ -1,0 +1,28 @@
+{
+  "name": "Project Scaffolder",
+  "icon": "🏗️",
+  "description": "Generates the boilerplate project structure: folder layout, tooling config, and initial README. Demonstrates RETRY behaviour — the first pass is coached to add missing containerisation.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "tsconfig.json",
+      "pass": "✅ TypeScript config found — TS boilerplate will extend it",
+      "fail": "⚠️  No tsconfig.json — will scaffold a fresh TypeScript config"
+    },
+    {
+      "type": "file-exists",
+      "path": "Dockerfile",
+      "pass": "✅ Dockerfile present — containerisation already configured",
+      "fail": "❌ No Dockerfile — container packaging is missing from the scaffold",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Generate a minimal app boilerplate scaffold plan for a TypeScript Node.js project. List exactly 5 files to create (path + one-line description). Context: {retryContext}",
+      "outputKey": "scaffold_plan",
+      "pass": "✅ Scaffold plan generated",
+      "fail": "⚠️  Scaffold plan could not be generated"
+    }
+  ]
+}

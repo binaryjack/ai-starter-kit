@@ -1,0 +1,24 @@
+{
+  "name": "Enterprise Architect",
+  "icon": "🏛️",
+  "description": "Reads from both requirements and security-baseline contracts, then designs the overall system architecture: layers, service boundaries, and tech stack decisions.",
+  "checks": [
+    {
+      "type": "llm-review",
+      "path": "packages",
+      "taskType": "architecture-decision",
+      "prompt": "Review the monorepo structure and design an enterprise application architecture. Specify: (1) application layers (presentation, business, data), (2) service boundaries, (3) inter-service communication pattern, (4) deployment topology. Be concrete and opinionated.",
+      "outputKey": "architecture_blueprint",
+      "pass": "✅ Architecture blueprint created",
+      "fail": "⚠️  Architecture review incomplete"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Based on the architecture, specify the technology stack: (1) backend runtime + framework, (2) database engine, (3) auth strategy, (4) message queue (if needed), (5) observability stack. Justify each choice in one sentence. Context: {retryContext}",
+      "outputKey": "tech_stack",
+      "pass": "✅ Tech stack decisions recorded",
+      "fail": "⚠️  Tech stack generation failed"
+    }
+  ]
+}

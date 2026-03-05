@@ -1,0 +1,12 @@
+{
+  "laneId": "lane-human-gate",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "needs-human-review",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

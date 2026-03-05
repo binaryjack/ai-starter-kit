@@ -1,0 +1,22 @@
+{
+  "name": "Market Scanner",
+  "icon": "📊",
+  "description": "Scans competitive landscape and differentiators. Has limited data and requires one RETRY with instructions to broaden the analysis scope.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "docs/market-research.md",
+      "pass": "✅ Existing market research found",
+      "fail": "❌ No market research docs — analysis will be LLM-inferred only",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "prompt-synthesis",
+      "prompt": "Analyse the competitive landscape for this MVP: (1) name 3 direct competitors with their key differentiators, (2) identify 2 underserved market gaps, (3) the MVP's unique angle in one sentence. Context: {retryContext}",
+      "outputKey": "competitor_analysis",
+      "pass": "✅ Competitive analysis produced",
+      "fail": "⚠️  Competitive analysis generation failed"
+    }
+  ]
+}

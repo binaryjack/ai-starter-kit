@@ -1,0 +1,29 @@
+{
+  "name": "🤝 Lane: Handoff Source",
+  "icon": "🤝",
+  "description": "HANDOFF DEMONSTRATION — This lane encounters a domain boundary it cannot resolve alone (no ORM config). It HANDOFFs to the specialist-lane which owns that capability. Watch for the 🤝 HANDOFF event in the log.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "✅ [handoff] Starting handoff-source lane",
+      "fail": "❌ [handoff] No project root",
+      "failSeverity": "error"
+    },
+    {
+      "type": "file-exists",
+      "path": "prisma/schema.prisma",
+      "pass": "✅ [handoff] Prisma schema found — can proceed independently",
+      "fail": "❌ [handoff] No ORM schema — cannot determine data model without specialist input",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "validation",
+      "prompt": "Document what information this lane needs from the specialist: (1) ORM type and configuration needed, (2) schema conventions, (3) migration toolchain. Context from handoff: {retryContext}",
+      "outputKey": "handoff_request",
+      "pass": "✅ [handoff] Handoff request documented",
+      "fail": "⚠️  [handoff] Handoff documentation failed"
+    }
+  ]
+}

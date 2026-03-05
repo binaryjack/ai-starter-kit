@@ -1,0 +1,44 @@
+{
+  "name": "Demo 03 — Website Build (ESCALATE showcase)",
+  "description": "Demonstrates: ESCALATE in the SEO lane after retry budget is exhausted (no URL structure available), resulting in a partial DAG status. Content and design succeed; publish-readiness runs despite SEO escalation. Zero API keys — mock provider.",
+  "lanes": [
+    {
+      "id": "content",
+      "agentFile": "content.agent.json",
+      "supervisorFile": "content.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["content-strategy", "copywriting"]
+    },
+    {
+      "id": "design",
+      "agentFile": "design.agent.json",
+      "supervisorFile": "design.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["visual-design", "responsive-layout"]
+    },
+    {
+      "id": "seo",
+      "agentFile": "seo.agent.json",
+      "supervisorFile": "seo.supervisor.json",
+      "dependsOn": ["content"],
+      "capabilities": ["seo-audit", "sitemap-generation"]
+    },
+    {
+      "id": "publish-readiness",
+      "agentFile": "publish-readiness.agent.json",
+      "supervisorFile": "publish-readiness.supervisor.json",
+      "dependsOn": ["content", "design"],
+      "capabilities": ["publish-checklist"]
+    }
+  ],
+  "capabilityRegistry": {
+    "content-strategy":   ["content"],
+    "copywriting":        ["content"],
+    "visual-design":      ["design"],
+    "responsive-layout":  ["design"],
+    "seo-audit":          ["seo"],
+    "sitemap-generation": ["seo"],
+    "publish-checklist":  ["publish-readiness"]
+  },
+  "modelRouterFile": "../model-router.json"
+}

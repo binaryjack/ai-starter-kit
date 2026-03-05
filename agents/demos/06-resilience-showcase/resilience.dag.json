@@ -1,0 +1,80 @@
+{
+  "name": "Demo 06 — Resilience Showcase (all error types)",
+  "description": "A single DAG that showcases every engine behaviour in isolation:\n  lane-success:      immediate APPROVE — the base case\n  lane-retry-ok:     RETRY × 2 with corrective instructions → final APPROVE\n  lane-handoff:      HANDOFF to specialist-lane → APPROVE\n  specialist-lane:   receives handoff, APPROVE\n  lane-escalate:     RETRY × budget exhaustion → ESCALATE (terminal 🚨)\n  lane-human-gate:   needs-human-review (pauses with --interactive; auto-proceeds otherwise)\n  lane-barrier-a/b:  hard-barrier — both must reach the sync point before either continues\n\nAll lanes are independent (no dependsOn) so they run in one parallel group and their\nbehaviours are clearly separated in the log output. Zero API keys — mock provider.",
+  "lanes": [
+    {
+      "id": "lane-success",
+      "agentFile": "lane-success.agent.json",
+      "supervisorFile": "lane-success.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["demo-success"]
+    },
+    {
+      "id": "lane-retry-ok",
+      "agentFile": "lane-retry-ok.agent.json",
+      "supervisorFile": "lane-retry-ok.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["demo-retry"]
+    },
+    {
+      "id": "lane-handoff",
+      "agentFile": "lane-handoff.agent.json",
+      "supervisorFile": "lane-handoff.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["demo-handoff-source"]
+    },
+    {
+      "id": "specialist-lane",
+      "agentFile": "specialist-lane.agent.json",
+      "supervisorFile": "specialist-lane.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["demo-handoff-target", "specialised-analysis"]
+    },
+    {
+      "id": "lane-escalate",
+      "agentFile": "lane-escalate.agent.json",
+      "supervisorFile": "lane-escalate.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["demo-escalate"]
+    },
+    {
+      "id": "lane-human-gate",
+      "agentFile": "lane-human-gate.agent.json",
+      "supervisorFile": "lane-human-gate.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["demo-human-review"]
+    },
+    {
+      "id": "lane-barrier-a",
+      "agentFile": "lane-barrier-a.agent.json",
+      "supervisorFile": "lane-barrier-a.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["demo-barrier-participant"]
+    },
+    {
+      "id": "lane-barrier-b",
+      "agentFile": "lane-barrier-b.agent.json",
+      "supervisorFile": "lane-barrier-b.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["demo-barrier-participant"]
+    }
+  ],
+  "globalBarriers": [
+    {
+      "name": "barrier-demo-sync",
+      "participants": ["lane-barrier-a", "lane-barrier-b"],
+      "timeoutMs": 8000
+    }
+  ],
+  "capabilityRegistry": {
+    "demo-success":         ["lane-success"],
+    "demo-retry":           ["lane-retry-ok"],
+    "demo-handoff-source":  ["lane-handoff"],
+    "demo-handoff-target":  ["specialist-lane"],
+    "specialised-analysis": ["specialist-lane"],
+    "demo-escalate":        ["lane-escalate"],
+    "demo-human-review":    ["lane-human-gate"],
+    "demo-barrier-participant": ["lane-barrier-a", "lane-barrier-b"]
+  },
+  "modelRouterFile": "../model-router.json"
+}

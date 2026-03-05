@@ -1,0 +1,24 @@
+{
+  "name": "API Endpoint Designer",
+  "icon": "🔌",
+  "description": "Reads the context-scan contract (read-contract mode) then designs the new feature's API endpoints. Uses soft-align to synchronise with data-model before publishing the OpenAPI spec.",
+  "checks": [
+    {
+      "type": "llm-review",
+      "path": "packages/agent-executor/src",
+      "taskType": "file-analysis",
+      "prompt": "Review this source directory and identify patterns for a new endpoint: (1) existing route naming convention, (2) request/response shape pattern, (3) authentication pattern used, (4) error response format. This informs the new feature's API design.",
+      "outputKey": "api_patterns",
+      "pass": "✅ Existing API patterns identified",
+      "fail": "⚠️  Pattern analysis returned limited findings"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "api-design",
+      "prompt": "Design the new feature's REST endpoints (3-4 endpoints): method, path, request body, response shape, HTTP status codes, and auth requirement. Follow the patterns identified from the codebase context. Context: {retryContext}",
+      "outputKey": "openapi_spec",
+      "pass": "✅ New endpoint design complete",
+      "fail": "⚠️  Endpoint design generation failed"
+    }
+  ]
+}
