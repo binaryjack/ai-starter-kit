@@ -41,7 +41,6 @@ export function CheckBox({
           disabled={disabled}
           onChange={(e) => {
             form.updateField(name, e.target.checked)
-            form.validateField(name)
           }}
           aria-invalid={hasError}
           aria-describedby={hasError ? `${id}-error` : undefined}

@@ -14,7 +14,8 @@
     "sourceMap":                     true,
     "noEmit":                        true,
     "composite":                     false,
-    "isolatedModules":               true
+    "isolatedModules":               true,
+    "types":                         ["react", "react-dom"]
   },
   "include":  ["src/**/*"],
   "exclude":  ["node_modules", "dist"]

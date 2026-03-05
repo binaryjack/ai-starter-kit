@@ -1,6 +1,6 @@
 export { CheckBox } from './CheckBox.js'
 export { FormProvider, useForm } from './FormProvider.js'
-export type { ErrorLike, FieldLike, IFormularLike } from './FormProvider.js'
+export type { ErrorLike, FieldLike, FormBridge, IFormularLike } from './FormProvider.js'
 export { Input } from './Input.js'
 export { Select } from './Select.js'
 export { TextArea } from './TextArea.js'

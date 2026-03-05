@@ -48,7 +48,7 @@ export function Input({
             type === 'number' ? e.target.valueAsNumber : e.target.value,
           )
         }
-        onBlur={() => form.validateField(name)}
+        onBlur={() => void form.validate(name)}
         aria-invalid={hasError}
         aria-describedby={hasError ? `${id}-error` : undefined}
         className={[

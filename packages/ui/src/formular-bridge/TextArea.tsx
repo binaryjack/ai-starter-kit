@@ -43,7 +43,7 @@ export function TextArea({
         placeholder={placeholder}
         disabled={disabled}
         onChange={(e) => form.updateField(name, e.target.value)}
-        onBlur={() => form.validateField(name)}
+        onBlur={() => void form.validate(name)}
         aria-invalid={hasError}
         aria-describedby={hasError ? `${id}-error` : undefined}
         className={[

@@ -45,7 +45,7 @@ export function Select({
         disabled={disabled}
         onChange={(e) => {
           form.updateField(name, e.target.value)
-          form.validateField(name)
+          void form.validate(name)
         }}
         aria-invalid={hasError}
         aria-describedby={hasError ? `${id}-error` : undefined}
