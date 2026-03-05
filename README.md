@@ -32,8 +32,8 @@ It ships two execution paths that compose seamlessly:
 
 | Path | Entry point | When to use |
 |------|------------|-------------|
-| **Plan System** | `pnpm run:plan` | Discovery → synthesis → decomposition → wiring → DAG hand-off for a new project or feature |
-| **DAG Engine** | `pnpm run:dag <dag.json>` | Run any defined agent graph directly: code review, security audit, migration, documentation, CI gate |
+| **Plan System** | `ai-kit plan` | Discovery → synthesis → decomposition → wiring → DAG hand-off for a new project or feature |
+| **DAG Engine** | `ai-kit agent:dag <dag.json>` | Run any defined agent graph directly: code review, security audit, migration, documentation, CI gate |
 
 ---
 
@@ -65,7 +65,7 @@ Copy-paste recipes for the most common tasks. No reading required.
 | **Plan a new app** from scratch | `ai-kit plan` |
 | **Add a feature** to an existing codebase | `ai-kit plan` → type `feature` when asked for story type |
 | **Security audit** my project | `ai-kit agent:dag ./security-review.dag.json --provider mock` |
-| **Create a custom agent** in 5 min | [Q4 in Quickies →](docs/quickies.md#q4) |
+| **Create a custom agent** in 5 min | [↓ guide below](#create-an-agent-in-5-minutes) · [Q4 full recipe →](docs/quickies.md#q4) |
 | **Set up a CI quality gate** | [Q18 in Quickies →](docs/quickies.md#q18) |
 | **Enterprise adoption** checklist | [Q13 in Quickies →](docs/quickies.md#q13) |
 | **Data migration** plan + cutover gate | [Q19 in Quickies →](docs/quickies.md#q19) |
@@ -79,6 +79,30 @@ Copy-paste recipes for the most common tasks. No reading required.
 `ai-starter-kit` is a TypeScript monorepo that turns JSON-defined agent graphs into production-ready AI workflows with enterprise-grade security, compliance, and observability.
 
 **Full Documentation**: Start with [📚 Features Index](docs/features/INDEX.md) for all capabilities.
+
+---
+
+## Use Cases
+
+Typical workflows for engineering teams that need deterministic, auditable, multi-agent automation:
+
+### 🔍 Code Review & Architecture Analysis
+Multi-lane parallel review — security, readability, architecture, performance — all running simultaneously. Supervisor checkpoints enforce quality deterministically. Cost tracked per lane for compliance and budgeting.
+
+### 📋 Product Discovery & Sprint Planning
+The 5-phase Plan System takes a vague idea through BA-led discovery → synthesis → decomposition → dependency wiring → DAG execution. Every task has an owner, acceptance criteria, and effort estimate before a line is written.
+
+### 🛡️ Security & Compliance Automation
+Security-review agents with enforced Opus-tier model routing, PII scrubbing, immutable audit logging, RBAC, multi-tenant isolation, and GDPR CLI (`data:export` / `data:delete`). Ready to drop into a compliance workflow.
+
+### 🚦 CI/CD Quality Gates
+Run DAGs on pull requests or releases. `needs-human-review` checkpoints block the pipeline until an operator approves. Slack, Teams, and Jira integrations fire automatically on escalation or budget exceeded.
+
+### 🗂️ Large-Scale File & Repository Analysis
+Parallel lanes scanning thousands of files. `grep`, `json-field`, `count-files` checks for deterministic validation; `llm-review` lanes for contextual synthesis. Results written to structured JSON for downstream consumption.
+
+### 🏢 Enterprise Orchestration
+Multi-agent workflows with configurable retry budgets, circuit breakers, OIDC JWT auth, per-principal rate limiting, and webhook triggers for GitHub, CI, or internal systems.
 
 ---
 
@@ -254,6 +278,101 @@ Agents compose any mix of these typed checks:
 | `llm-review` | LLM review / critique with streaming output | Analysis & feedback |
 
 **📖 See**: [Check Handlers & Validators](docs/features/04-check-handlers.md), [Tool-Use Integration](docs/features/06-tool-use.md)
+
+---
+
+## Create an Agent in 5 Minutes
+
+An agent is a JSON file — a named role with an ordered list of checks. A DAG wires one or more agents into lanes.
+
+### 1. Define the agent — `agents/my-agent.json`
+
+```json
+{
+  "name": "File Summariser",
+  "description": "Confirms a file exists then produces a structured summary.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "input.txt",
+      "pass": "✅ Input file confirmed",
+      "fail": "❌ input.txt not found",
+      "failSeverity": "error"
+    },
+    {
+      "type": "llm-review",
+      "path": "input.txt",
+      "taskType": "validation",
+      "prompt": "Summarise the content below in 5 concise bullet points.\n\nContent:\n{content}",
+      "outputKey": "summary",
+      "pass": "✅ Summary produced",
+      "fail": "⚠️ Summary incomplete",
+      "recommendations": ["Expand bullet points if content exceeds 500 words"]
+    }
+  ]
+}
+```
+
+### 2. Wire it into a DAG — `agents/my-dag.json`
+
+```json
+{
+  "name": "My First DAG",
+  "description": "Single-lane file summariser.",
+  "lanes": [
+    {
+      "id": "summarise",
+      "agentFile": "my-agent.json",
+      "dependsOn": []
+    }
+  ]
+}
+```
+
+### 3. Run it
+
+```sh
+# Zero-cost mock run
+ai-kit agent:dag agents/my-dag.json --provider mock
+
+# Real LLM
+ANTHROPIC_API_KEY=sk-... ai-kit agent:dag agents/my-dag.json
+```
+
+### 4. Add a supervisor checkpoint (optional) — `agents/my-supervisor.json`
+
+Add deterministic quality enforcement. If the check fails, the engine retries with injected instructions before escalating.
+
+```json
+{
+  "laneId": "summarise",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "after-summary",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "The summary is empty — retry and produce at least 3 bullet points."
+    }
+  ]
+}
+```
+
+Then reference it in the lane:
+
+```json
+{
+  "id": "summarise",
+  "agentFile": "my-agent.json",
+  "supervisorFile": "my-supervisor.json",
+  "dependsOn": []
+}
+```
+
+That's it. Model routing, cost tracking, resilience, streaming, audit logging, RBAC, and multi-tenant isolation are all applied automatically by the engine.
+
+**📖 See**: [Full recipe with parallel lanes and barriers →](docs/quickies.md#q4) · [DAG Orchestration](docs/features/01-dag-orchestration.md)
 
 ---
 
