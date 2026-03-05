@@ -210,7 +210,18 @@ export class RunRegistry {
   private async _read(): Promise<RunEntry[]> {
     const raw = await fs.readFile(this.manifestPath, 'utf-8').catch(() => '[]');
     try {
-      return JSON.parse(raw) as RunEntry[];
+      const parsed: unknown = JSON.parse(raw as string);
+      // Support both flat-array format `[...]` (written by _write) and
+      // legacy object format `{ runs: [...] }` (written by older dashboard code).
+      if (Array.isArray(parsed)) return parsed as RunEntry[];
+      if (
+        parsed !== null &&
+        typeof parsed === 'object' &&
+        Array.isArray((parsed as Record<string, unknown>).runs)
+      ) {
+        return (parsed as { runs: RunEntry[] }).runs;
+      }
+      return [];
     } catch {
       return [];
     }

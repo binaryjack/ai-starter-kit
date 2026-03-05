@@ -8,6 +8,12 @@ importers:
 
   .:
     devDependencies:
+      '@types/jest':
+        specifier: ^29.5.14
+        version: 29.5.14
+      '@types/node':
+        specifier: ^20.19.35
+        version: 20.19.35
       typescript:
         specifier: ^5.4.5
         version: 5.9.3

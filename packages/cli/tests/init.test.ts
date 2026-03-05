@@ -1,14 +1,14 @@
+import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import * as fs from 'fs';
 
-jest.mock('@tadeo/ai-kit-core', () => ({
+jest.mock('@ai-agencee/ai-kit-core', () => ({
   copyTemplateFiles: jest.fn(),
   fileExists: jest.fn(),
   TEMPLATE_DIR: '/fake/template',
 }));
 
-import { copyTemplateFiles, fileExists } from '@tadeo/ai-kit-core';
+import { copyTemplateFiles, fileExists } from '@ai-agencee/ai-kit-core';
 
 const mockCopy = copyTemplateFiles as jest.MockedFunction<typeof copyTemplateFiles>;
 const mockExists = fileExists as jest.MockedFunction<typeof fileExists>;
@@ -31,7 +31,7 @@ describe('runInit', () => {
   });
 
   it('calls copyTemplateFiles with correct arguments', async () => {
-    const { runInit } = await import('../src/commands/init');
+    const { runInit } = await import('../src/commands/init.js');
     await runInit();
     expect(mockCopy).toHaveBeenCalledWith('/fake/template', tmpDir, expect.any(Function));
   });
@@ -43,7 +43,7 @@ describe('runInit', () => {
       capturedConfirm = confirm;
       return [];
     });
-    const { runInit } = await import('../src/commands/init');
+    const { runInit } = await import('../src/commands/init.js');
     await runInit();
     expect(capturedConfirm).toBeDefined();
     const result = await capturedConfirm!(path.join(tmpDir, 'new-file.md'));
