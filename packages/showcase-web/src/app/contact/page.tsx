@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect }                    from 'react'
-import { createForm, f, DirectSubmissionStrategy } from '@pulsar-framework/formular.dev'
-import { FormProvider, Input, Select, CheckBox }  from '@ai-agencee/ui/formular-bridge'
-import { Button, Heading, Text, Divider }          from '@ai-agencee/ui/atoms'
+import { Button, Divider, Heading, Text } from '@ai-agencee/ui/atoms'
+import { CheckBox, FormProvider, Input, Select } from '@ai-agencee/ui/formular-bridge'
+import { createForm, DirectSubmissionStrategy, f } from '@pulsar-framework/formular.dev'
+import { useEffect, useState } from 'react'
 
 const TOPIC_OPTIONS = [
   { value: 'general',   label: 'General enquiry' },

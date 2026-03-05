@@ -2,7 +2,7 @@ import { Button } from '@ai-agencee/ui/atoms'
 import type { SupervisorNodeData } from '@ai-agencee/ui/dag'
 import { FormProvider, Input, Select } from '@ai-agencee/ui/formular-bridge'
 import { createForm, DirectSubmissionStrategy, f } from '@pulsar-framework/formular.dev'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const FAIL_BEHAVIOR_OPTIONS = [
   { value: 'halt', label: 'Halt (stop DAG)' },

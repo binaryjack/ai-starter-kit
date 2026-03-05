@@ -2,7 +2,7 @@ import { Button } from '@ai-agencee/ui/atoms'
 import type { WorkerNodeData } from '@ai-agencee/ui/dag'
 import { CheckBox, FormProvider, Input, Select } from '@ai-agencee/ui/formular-bridge'
 import { createForm, DirectSubmissionStrategy, f } from '@pulsar-framework/formular.dev'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const MODEL_OPTIONS = [
   { value: 'claude-opus-4-5',    label: 'Claude Opus 4.5' },

@@ -1,5 +1,6 @@
 import {
-  Heading, Text, Badge, Button, CodeBlock, Divider,
+    Badge, Button, CodeBlock, Divider,
+    Heading, Text,
 } from '@ai-agencee/ui/atoms'
 import { StatBox } from '@ai-agencee/ui/molecules'
 import type { StatusKey } from '@ai-agencee/ui/tokens'
@@ -79,7 +80,7 @@ export default function AtomsPage() {
       {/* ── CodeBlock ─────────────────────────────────────────────── */}
       <section>
         <Heading level={3} className="mb-3">Code Block</Heading>
-        <CodeBlock language="typescript">{`import { DagCanvas } from '@ai-agencee/ui/dag'
+        <CodeBlock language="typescript" code={`import { DagCanvas } from '@ai-agencee/ui/dag'
 import { ReactFlowProvider } from '@xyflow/react'
 
 export function App() {
@@ -88,7 +89,7 @@ export function App() {
       <DagCanvas nodes={nodes} edges={edges} readonly={false} />
     </ReactFlowProvider>
   )
-}`}</CodeBlock>
+}`} />
       </section>
 
       <Divider />
@@ -100,7 +101,7 @@ export function App() {
         <Divider label="or continue with" />
         <div className="flex items-center gap-4 h-10">
           <span className="text-sm text-neutral-300">Left</span>
-          <Divider vertical />
+          <Divider orientation="vertical" />
           <span className="text-sm text-neutral-300">Right</span>
         </div>
       </section>

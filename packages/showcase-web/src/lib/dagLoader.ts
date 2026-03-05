@@ -3,7 +3,7 @@
  * Converts agents/dag.json into ReactFlow nodes + edges for the showcase viewer.
  * Mirrors the logic in dag-editor/dagSerializer.ts but is read-only / no-edit.
  */
-import type { DagNode, DagEdge } from '@ai-agencee/ui/dag'
+import type { DagEdge, DagNode } from '@ai-agencee/ui/dag'
 
 interface RawNode {
   id:            string
