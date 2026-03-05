@@ -2,7 +2,7 @@
  * Unit tests for NotificationSink — E12 Slack / Teams notifications.
  * All HTTP calls are intercepted via global.fetch mock.
  */
-export { }
+export { };
 
 const ORIGINAL_ENV = { ...process.env };
 

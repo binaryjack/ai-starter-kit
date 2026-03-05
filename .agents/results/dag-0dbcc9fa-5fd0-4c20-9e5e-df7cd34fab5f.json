@@ -1,0 +1,453 @@
+{
+  "dagName": "Demo 03 — Website Build (ESCALATE showcase)",
+  "runId": "0dbcc9fa-5fd0-4c20-9e5e-df7cd34fab5f",
+  "status": "partial",
+  "lanes": [
+    {
+      "laneId": "content",
+      "status": "success",
+      "agentResult": {
+        "agentName": "Content Strategist",
+        "status": "success",
+        "findings": [
+          "✅ README.md found — brand messaging available",
+          "✅ Content strategy produced"
+        ],
+        "recommendations": [],
+        "details": {
+          "content_strategy": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+        },
+        "timestamp": "2026-03-05T11:11:00.069Z"
+      },
+      "checkpoints": [
+        {
+          "checkpointId": "step-0",
+          "stepIndex": 0,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-0",
+            "mode": "self",
+            "stepIndex": 0,
+            "partialResult": {
+              "agentName": "Content Strategist",
+              "status": "success",
+              "findings": [
+                "✅ README.md found — brand messaging available"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:11:00.063Z"
+            },
+            "contracts": {
+              "laneId": "content",
+              "version": 0,
+              "timestamp": "2026-03-05T11:11:00.063Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:11:00.064Z",
+          "contractsReceived": {},
+          "durationMs": 1
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Content Strategist",
+              "status": "success",
+              "findings": [
+                "✅ README.md found — brand messaging available",
+                "✅ Content strategy produced"
+              ],
+              "recommendations": [],
+              "details": {
+                "content_strategy": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+              },
+              "timestamp": "2026-03-05T11:11:00.069Z"
+            },
+            "contracts": {
+              "laneId": "content",
+              "version": 1,
+              "timestamp": "2026-03-05T11:11:00.063Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:11:00.069Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        }
+      ],
+      "totalRetries": 0,
+      "handoffsReceived": 0,
+      "startedAt": "2026-03-05T11:11:00.056Z",
+      "completedAt": "2026-03-05T11:11:00.069Z",
+      "durationMs": 13
+    },
+    {
+      "laneId": "design",
+      "status": "escalated",
+      "checkpoints": [
+        {
+          "checkpointId": "step-0",
+          "stepIndex": 0,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-0",
+            "mode": "self",
+            "stepIndex": 0,
+            "partialResult": {
+              "agentName": "Visual Design Planner",
+              "status": "success",
+              "findings": [
+                "ℹ️ ⚠️  No Tailwind config — design tokens will be defined from scratch"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:11:00.070Z"
+            },
+            "contracts": {
+              "laneId": "design",
+              "version": 0,
+              "timestamp": "2026-03-05T11:11:00.070Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:11:00.070Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Visual Design Planner",
+              "status": "success",
+              "findings": [
+                "ℹ️ ⚠️  No Tailwind config — design tokens will be defined from scratch",
+                "❌❌ No src/styles directory — CSS architecture is missing"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:11:00.071Z"
+            },
+            "contracts": {
+              "laneId": "design",
+              "version": 1,
+              "timestamp": "2026-03-05T11:11:00.070Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "RETRY",
+            "instructions": "No CSS architecture found. Create a minimal src/styles/ structure: tokens.css, reset.css, typography.css. Document the directory structure even if the files don't exist yet."
+          },
+          "retryCount": 1,
+          "timestamp": "2026-03-05T11:11:00.071Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Visual Design Planner",
+              "status": "success",
+              "findings": [
+                "ℹ️ ⚠️  No Tailwind config — design tokens will be defined from scratch",
+                "❌❌ No src/styles directory — CSS architecture is missing"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:11:00.072Z"
+            },
+            "contracts": {
+              "laneId": "design",
+              "version": 2,
+              "timestamp": "2026-03-05T11:11:00.071Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "RETRY",
+            "instructions": "No CSS architecture found. Create a minimal src/styles/ structure: tokens.css, reset.css, typography.css. Document the directory structure even if the files don't exist yet."
+          },
+          "retryCount": 2,
+          "timestamp": "2026-03-05T11:11:00.072Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Visual Design Planner",
+              "status": "success",
+              "findings": [
+                "ℹ️ ⚠️  No Tailwind config — design tokens will be defined from scratch",
+                "❌❌ No src/styles directory — CSS architecture is missing"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:11:00.074Z"
+            },
+            "contracts": {
+              "laneId": "design",
+              "version": 3,
+              "timestamp": "2026-03-05T11:11:00.072Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "ESCALATE",
+            "reason": "Retry budget exhausted (2 retries) for checkpoint \"step-1\". Last failure: Found 1 error finding(s): ❌❌ No src/styles directory — CSS architecture is missing",
+            "evidence": {
+              "checkpointId": "step-1",
+              "failureReason": "Found 1 error finding(s): ❌❌ No src/styles directory — CSS architecture is missing",
+              "retries": 2
+            }
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:11:00.074Z",
+          "contractsReceived": {},
+          "durationMs": 1
+        }
+      ],
+      "totalRetries": 3,
+      "handoffsReceived": 0,
+      "startedAt": "2026-03-05T11:11:00.057Z",
+      "completedAt": "2026-03-05T11:11:00.075Z",
+      "durationMs": 18,
+      "error": "Retry budget exhausted (2 retries) for checkpoint \"step-1\". Last failure: Found 1 error finding(s): ❌❌ No src/styles directory — CSS architecture is missing"
+    },
+    {
+      "laneId": "seo",
+      "status": "escalated",
+      "checkpoints": [
+        {
+          "checkpointId": "step-0",
+          "stepIndex": 0,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-0",
+            "mode": "self",
+            "stepIndex": 0,
+            "partialResult": {
+              "agentName": "SEO Analyst",
+              "status": "success",
+              "findings": [
+                "❌❌ No sitemap.xml — SEO indexability is unverified"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:11:00.090Z"
+            },
+            "contracts": {
+              "laneId": "seo",
+              "version": 0,
+              "timestamp": "2026-03-05T11:11:00.090Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "RETRY",
+            "instructions": "No sitemap.xml found. Attempt to generate a minimal sitemap from any known routes in the codebase — check src/routes/, src/pages/, or a Next.js app/ directory. List whatever routes can be inferred."
+          },
+          "retryCount": 1,
+          "timestamp": "2026-03-05T11:11:00.090Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-0",
+          "stepIndex": 0,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-0",
+            "mode": "self",
+            "stepIndex": 0,
+            "partialResult": {
+              "agentName": "SEO Analyst",
+              "status": "success",
+              "findings": [
+                "❌❌ No sitemap.xml — SEO indexability is unverified"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:11:00.092Z"
+            },
+            "contracts": {
+              "laneId": "seo",
+              "version": 1,
+              "timestamp": "2026-03-05T11:11:00.090Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "ESCALATE",
+            "reason": "Retry budget exhausted (1 retries) for checkpoint \"step-0\". Last failure: Found 1 error finding(s): ❌❌ No sitemap.xml — SEO indexability is unverified",
+            "evidence": {
+              "checkpointId": "step-0",
+              "failureReason": "Found 1 error finding(s): ❌❌ No sitemap.xml — SEO indexability is unverified",
+              "retries": 1
+            }
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:11:00.093Z",
+          "contractsReceived": {},
+          "durationMs": 1
+        }
+      ],
+      "totalRetries": 1,
+      "handoffsReceived": 0,
+      "startedAt": "2026-03-05T11:11:00.086Z",
+      "completedAt": "2026-03-05T11:11:00.093Z",
+      "durationMs": 7,
+      "error": "Retry budget exhausted (1 retries) for checkpoint \"step-0\". Last failure: Found 1 error finding(s): ❌❌ No sitemap.xml — SEO indexability is unverified"
+    },
+    {
+      "laneId": "publish-readiness",
+      "status": "success",
+      "agentResult": {
+        "agentName": "Publish Readiness Checker",
+        "status": "success",
+        "findings": [
+          "✅ Build config confirmed",
+          "✅ Publish readiness checklist produced"
+        ],
+        "recommendations": [],
+        "details": {
+          "publish_checklist": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+        },
+        "timestamp": "2026-03-05T11:11:00.091Z"
+      },
+      "checkpoints": [
+        {
+          "checkpointId": "step-0",
+          "stepIndex": 0,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-0",
+            "mode": "self",
+            "stepIndex": 0,
+            "partialResult": {
+              "agentName": "Publish Readiness Checker",
+              "status": "success",
+              "findings": [
+                "✅ Build config confirmed"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:11:00.090Z"
+            },
+            "contracts": {
+              "laneId": "publish-readiness",
+              "version": 0,
+              "timestamp": "2026-03-05T11:11:00.090Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:11:00.090Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Publish Readiness Checker",
+              "status": "success",
+              "findings": [
+                "✅ Build config confirmed",
+                "✅ Publish readiness checklist produced"
+              ],
+              "recommendations": [],
+              "details": {
+                "publish_checklist": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+              },
+              "timestamp": "2026-03-05T11:11:00.091Z"
+            },
+            "contracts": {
+              "laneId": "publish-readiness",
+              "version": 1,
+              "timestamp": "2026-03-05T11:11:00.090Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:11:00.091Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        }
+      ],
+      "totalRetries": 0,
+      "handoffsReceived": 0,
+      "startedAt": "2026-03-05T11:11:00.086Z",
+      "completedAt": "2026-03-05T11:11:00.091Z",
+      "durationMs": 5
+    }
+  ],
+  "totalDurationMs": 65,
+  "startedAt": "2026-03-05T11:11:00.031Z",
+  "completedAt": "2026-03-05T11:11:00.098Z",
+  "findings": [
+    "[content] ✅ README.md found — brand messaging available",
+    "[content] ✅ Content strategy produced",
+    "[publish-readiness] ✅ Build config confirmed",
+    "[publish-readiness] ✅ Publish readiness checklist produced"
+  ],
+  "recommendations": []
+}

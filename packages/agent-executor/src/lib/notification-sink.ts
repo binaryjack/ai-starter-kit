@@ -29,10 +29,10 @@
  */
 
 import type {
-  BudgetExceededEvent,
-  DagEndEvent,
-  DagEventBus,
-  LaneEndEvent,
+    BudgetExceededEvent,
+    DagEndEvent,
+    DagEventBus,
+    LaneEndEvent,
 } from './dag-events.js';
 
 // ─── Provider options ─────────────────────────────────────────────────────────

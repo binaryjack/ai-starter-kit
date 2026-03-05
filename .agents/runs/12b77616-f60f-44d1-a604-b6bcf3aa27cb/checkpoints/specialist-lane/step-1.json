@@ -1,0 +1,38 @@
+{
+  "checkpointId": "step-1",
+  "stepIndex": 1,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-1",
+    "mode": "self",
+    "stepIndex": 1,
+    "partialResult": {
+      "agentName": "🎯 Specialist Lane",
+      "status": "success",
+      "findings": [
+        "✅ [specialist] Database architecture decision provided",
+        "✅ [specialist] Schema template provided"
+      ],
+      "recommendations": [],
+      "details": {
+        "database_decision": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+        "schema_template": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+      },
+      "timestamp": "2026-03-05T11:11:13.450Z"
+    },
+    "contracts": {
+      "laneId": "specialist-lane",
+      "version": 1,
+      "timestamp": "2026-03-05T11:11:13.447Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "APPROVE"
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-05T11:11:13.450Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}

@@ -1,0 +1,708 @@
+{
+  "dagName": "Demo 01 — App Boilerplate (from scratch)",
+  "runId": "21f323e6-186a-4a7b-a8a1-9e1ec877f9da",
+  "status": "partial",
+  "lanes": [
+    {
+      "laneId": "requirements",
+      "status": "success",
+      "agentResult": {
+        "agentName": "Requirements Analyst",
+        "status": "success",
+        "findings": [
+          "✅ Node.js project root confirmed",
+          "✅ README.md found — project description available",
+          "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+          "✅ Requirements captured from project manifest"
+        ],
+        "recommendations": [],
+        "details": {
+          "app_requirements": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+        },
+        "timestamp": "2026-03-05T11:10:26.197Z"
+      },
+      "checkpoints": [
+        {
+          "checkpointId": "step-0",
+          "stepIndex": 0,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-0",
+            "mode": "self",
+            "stepIndex": 0,
+            "partialResult": {
+              "agentName": "Requirements Analyst",
+              "status": "success",
+              "findings": [
+                "✅ Node.js project root confirmed"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:10:26.193Z"
+            },
+            "contracts": {
+              "laneId": "requirements",
+              "version": 0,
+              "timestamp": "2026-03-05T11:10:26.194Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:10:26.194Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Requirements Analyst",
+              "status": "success",
+              "findings": [
+                "✅ Node.js project root confirmed",
+                "✅ README.md found — project description available"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:10:26.195Z"
+            },
+            "contracts": {
+              "laneId": "requirements",
+              "version": 1,
+              "timestamp": "2026-03-05T11:10:26.194Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:10:26.195Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-2",
+          "stepIndex": 2,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-2",
+            "mode": "self",
+            "stepIndex": 2,
+            "partialResult": {
+              "agentName": "Requirements Analyst",
+              "status": "success",
+              "findings": [
+                "✅ Node.js project root confirmed",
+                "✅ README.md found — project description available",
+                "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+                "✅ Requirements captured from project manifest"
+              ],
+              "recommendations": [],
+              "details": {
+                "app_requirements": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+              },
+              "timestamp": "2026-03-05T11:10:26.197Z"
+            },
+            "contracts": {
+              "laneId": "requirements",
+              "version": 2,
+              "timestamp": "2026-03-05T11:10:26.195Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:10:26.197Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        }
+      ],
+      "totalRetries": 0,
+      "handoffsReceived": 0,
+      "startedAt": "2026-03-05T11:10:26.188Z",
+      "completedAt": "2026-03-05T11:10:26.197Z",
+      "durationMs": 9
+    },
+    {
+      "laneId": "scaffold",
+      "status": "escalated",
+      "checkpoints": [
+        {
+          "checkpointId": "step-0",
+          "stepIndex": 0,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-0",
+            "mode": "self",
+            "stepIndex": 0,
+            "partialResult": {
+              "agentName": "Project Scaffolder",
+              "status": "success",
+              "findings": [
+                "✅ TypeScript config found — TS boilerplate will extend it"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:10:26.210Z"
+            },
+            "contracts": {
+              "laneId": "scaffold",
+              "version": 0,
+              "timestamp": "2026-03-05T11:10:26.210Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:10:26.210Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Project Scaffolder",
+              "status": "success",
+              "findings": [
+                "✅ TypeScript config found — TS boilerplate will extend it",
+                "❌❌ No Dockerfile — container packaging is missing from the scaffold"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:10:26.210Z"
+            },
+            "contracts": {
+              "laneId": "scaffold",
+              "version": 1,
+              "timestamp": "2026-03-05T11:10:26.210Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "RETRY",
+            "instructions": "A Dockerfile is missing from the scaffold. Add a multi-stage Dockerfile: (1) builder stage with Node 20-alpine, (2) production stage that copies only dist/. This is required for cloud deployment."
+          },
+          "retryCount": 1,
+          "timestamp": "2026-03-05T11:10:26.211Z",
+          "contractsReceived": {},
+          "durationMs": 1
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Project Scaffolder",
+              "status": "success",
+              "findings": [
+                "✅ TypeScript config found — TS boilerplate will extend it",
+                "❌❌ No Dockerfile — container packaging is missing from the scaffold"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:10:26.211Z"
+            },
+            "contracts": {
+              "laneId": "scaffold",
+              "version": 2,
+              "timestamp": "2026-03-05T11:10:26.210Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "RETRY",
+            "instructions": "A Dockerfile is missing from the scaffold. Add a multi-stage Dockerfile: (1) builder stage with Node 20-alpine, (2) production stage that copies only dist/. This is required for cloud deployment."
+          },
+          "retryCount": 2,
+          "timestamp": "2026-03-05T11:10:26.211Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Project Scaffolder",
+              "status": "success",
+              "findings": [
+                "✅ TypeScript config found — TS boilerplate will extend it",
+                "❌❌ No Dockerfile — container packaging is missing from the scaffold"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:10:26.212Z"
+            },
+            "contracts": {
+              "laneId": "scaffold",
+              "version": 3,
+              "timestamp": "2026-03-05T11:10:26.211Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "ESCALATE",
+            "reason": "Retry budget exhausted (2 retries) for checkpoint \"step-1\". Last failure: Found 1 error finding(s): ❌❌ No Dockerfile — container packaging is missing from the scaffold",
+            "evidence": {
+              "checkpointId": "step-1",
+              "failureReason": "Found 1 error finding(s): ❌❌ No Dockerfile — container packaging is missing from the scaffold",
+              "retries": 2
+            }
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:10:26.212Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        }
+      ],
+      "totalRetries": 3,
+      "handoffsReceived": 0,
+      "startedAt": "2026-03-05T11:10:26.205Z",
+      "completedAt": "2026-03-05T11:10:26.212Z",
+      "durationMs": 7,
+      "error": "Retry budget exhausted (2 retries) for checkpoint \"step-1\". Last failure: Found 1 error finding(s): ❌❌ No Dockerfile — container packaging is missing from the scaffold"
+    },
+    {
+      "laneId": "backend",
+      "status": "success",
+      "agentResult": {
+        "agentName": "Backend Spec Agent",
+        "status": "success",
+        "findings": [
+          "📦 4 existing packages found — backend will extend the monorepo",
+          "✅ API spec designed",
+          "✅ Data models defined"
+        ],
+        "recommendations": [
+          "Keep the backend in packages/api or packages/server"
+        ],
+        "details": {
+          "packages": 4,
+          "api_spec": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+          "data_models": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+        },
+        "timestamp": "2026-03-05T11:10:26.229Z"
+      },
+      "checkpoints": [
+        {
+          "checkpointId": "step-0",
+          "stepIndex": 0,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-0",
+            "mode": "self",
+            "stepIndex": 0,
+            "partialResult": {
+              "agentName": "Backend Spec Agent",
+              "status": "success",
+              "findings": [
+                "📦 4 existing packages found — backend will extend the monorepo"
+              ],
+              "recommendations": [
+                "Keep the backend in packages/api or packages/server"
+              ],
+              "details": {
+                "packages": 4
+              },
+              "timestamp": "2026-03-05T11:10:26.226Z"
+            },
+            "contracts": {
+              "laneId": "backend",
+              "version": 0,
+              "timestamp": "2026-03-05T11:10:26.226Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:10:26.226Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Backend Spec Agent",
+              "status": "success",
+              "findings": [
+                "📦 4 existing packages found — backend will extend the monorepo",
+                "✅ API spec designed"
+              ],
+              "recommendations": [
+                "Keep the backend in packages/api or packages/server"
+              ],
+              "details": {
+                "packages": 4,
+                "api_spec": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+              },
+              "timestamp": "2026-03-05T11:10:26.228Z"
+            },
+            "contracts": {
+              "laneId": "backend",
+              "version": 1,
+              "timestamp": "2026-03-05T11:10:26.226Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:10:26.228Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-2",
+          "stepIndex": 2,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-2",
+            "mode": "self",
+            "stepIndex": 2,
+            "partialResult": {
+              "agentName": "Backend Spec Agent",
+              "status": "success",
+              "findings": [
+                "📦 4 existing packages found — backend will extend the monorepo",
+                "✅ API spec designed",
+                "✅ Data models defined"
+              ],
+              "recommendations": [
+                "Keep the backend in packages/api or packages/server"
+              ],
+              "details": {
+                "packages": 4,
+                "api_spec": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+                "data_models": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+              },
+              "timestamp": "2026-03-05T11:10:26.229Z"
+            },
+            "contracts": {
+              "laneId": "backend",
+              "version": 2,
+              "timestamp": "2026-03-05T11:10:26.228Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:10:26.229Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        }
+      ],
+      "totalRetries": 0,
+      "handoffsReceived": 0,
+      "startedAt": "2026-03-05T11:10:26.220Z",
+      "completedAt": "2026-03-05T11:10:26.230Z",
+      "durationMs": 10
+    },
+    {
+      "laneId": "frontend",
+      "status": "success",
+      "agentResult": {
+        "agentName": "Frontend Spec Agent",
+        "status": "success",
+        "findings": [
+          "✅ Root package.json confirmed",
+          "✅ Component tree designed",
+          "✅ Routing configuration defined"
+        ],
+        "recommendations": [],
+        "details": {
+          "component_tree": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+          "routing_config": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+        },
+        "timestamp": "2026-03-05T11:10:26.227Z"
+      },
+      "checkpoints": [
+        {
+          "checkpointId": "step-0",
+          "stepIndex": 0,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-0",
+            "mode": "self",
+            "stepIndex": 0,
+            "partialResult": {
+              "agentName": "Frontend Spec Agent",
+              "status": "success",
+              "findings": [
+                "✅ Root package.json confirmed"
+              ],
+              "recommendations": [],
+              "details": {},
+              "timestamp": "2026-03-05T11:10:26.224Z"
+            },
+            "contracts": {
+              "laneId": "frontend",
+              "version": 0,
+              "timestamp": "2026-03-05T11:10:26.224Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:10:26.224Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Frontend Spec Agent",
+              "status": "success",
+              "findings": [
+                "✅ Root package.json confirmed",
+                "✅ Component tree designed"
+              ],
+              "recommendations": [],
+              "details": {
+                "component_tree": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+              },
+              "timestamp": "2026-03-05T11:10:26.226Z"
+            },
+            "contracts": {
+              "laneId": "frontend",
+              "version": 1,
+              "timestamp": "2026-03-05T11:10:26.224Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:10:26.226Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-2",
+          "stepIndex": 2,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-2",
+            "mode": "self",
+            "stepIndex": 2,
+            "partialResult": {
+              "agentName": "Frontend Spec Agent",
+              "status": "success",
+              "findings": [
+                "✅ Root package.json confirmed",
+                "✅ Component tree designed",
+                "✅ Routing configuration defined"
+              ],
+              "recommendations": [],
+              "details": {
+                "component_tree": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+                "routing_config": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+              },
+              "timestamp": "2026-03-05T11:10:26.227Z"
+            },
+            "contracts": {
+              "laneId": "frontend",
+              "version": 2,
+              "timestamp": "2026-03-05T11:10:26.226Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:10:26.227Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        }
+      ],
+      "totalRetries": 0,
+      "handoffsReceived": 0,
+      "startedAt": "2026-03-05T11:10:26.221Z",
+      "completedAt": "2026-03-05T11:10:26.227Z",
+      "durationMs": 6
+    },
+    {
+      "laneId": "integrate",
+      "status": "success",
+      "agentResult": {
+        "agentName": "Integration Planner",
+        "status": "success",
+        "findings": [
+          "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+          "✅ Integration points identified",
+          "✅ Wiring plan generated"
+        ],
+        "recommendations": [],
+        "details": {
+          "integration_points": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+          "wiring_plan": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+        },
+        "timestamp": "2026-03-05T11:10:27.699Z"
+      },
+      "checkpoints": [
+        {
+          "checkpointId": "step-0",
+          "stepIndex": 0,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-0",
+            "mode": "self",
+            "stepIndex": 0,
+            "partialResult": {
+              "agentName": "Integration Planner",
+              "status": "success",
+              "findings": [
+                "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+                "✅ Integration points identified"
+              ],
+              "recommendations": [],
+              "details": {
+                "integration_points": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+              },
+              "timestamp": "2026-03-05T11:10:27.698Z"
+            },
+            "contracts": {
+              "laneId": "integrate",
+              "version": 0,
+              "timestamp": "2026-03-05T11:10:27.698Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:10:27.698Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        },
+        {
+          "checkpointId": "step-1",
+          "stepIndex": 1,
+          "mode": "self",
+          "payload": {
+            "checkpointId": "step-1",
+            "mode": "self",
+            "stepIndex": 1,
+            "partialResult": {
+              "agentName": "Integration Planner",
+              "status": "success",
+              "findings": [
+                "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+                "✅ Integration points identified",
+                "✅ Wiring plan generated"
+              ],
+              "recommendations": [],
+              "details": {
+                "integration_points": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+                "wiring_plan": "{\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}"
+              },
+              "timestamp": "2026-03-05T11:10:27.699Z"
+            },
+            "contracts": {
+              "laneId": "integrate",
+              "version": 1,
+              "timestamp": "2026-03-05T11:10:27.698Z",
+              "exports": {},
+              "pending": []
+            }
+          },
+          "verdict": {
+            "type": "APPROVE"
+          },
+          "retryCount": 0,
+          "timestamp": "2026-03-05T11:10:27.699Z",
+          "contractsReceived": {},
+          "durationMs": 0
+        }
+      ],
+      "totalRetries": 0,
+      "handoffsReceived": 0,
+      "startedAt": "2026-03-05T11:10:26.241Z",
+      "completedAt": "2026-03-05T11:10:27.699Z",
+      "durationMs": 1458
+    }
+  ],
+  "totalDurationMs": 1550,
+  "startedAt": "2026-03-05T11:10:26.156Z",
+  "completedAt": "2026-03-05T11:10:27.708Z",
+  "findings": [
+    "[requirements] ✅ Node.js project root confirmed",
+    "[requirements] ✅ README.md found — project description available",
+    "[requirements] {\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+    "[requirements] ✅ Requirements captured from project manifest",
+    "[backend] 📦 4 existing packages found — backend will extend the monorepo",
+    "[backend] ✅ API spec designed",
+    "[backend] ✅ Data models defined",
+    "[frontend] ✅ Root package.json confirmed",
+    "[frontend] ✅ Component tree designed",
+    "[frontend] ✅ Routing configuration defined",
+    "[integrate] {\"status\":\"ok\",\"findings\":[],\"recommendations\":[],\"details\":{}}",
+    "[integrate] ✅ Integration points identified",
+    "[integrate] ✅ Wiring plan generated"
+  ],
+  "recommendations": [
+    "[backend] Keep the backend in packages/api or packages/server"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "checkpointId": "step-0",
+  "stepIndex": 0,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-0",
+    "mode": "self",
+    "stepIndex": 0,
+    "partialResult": {
+      "agentName": "Requirements Analyst",
+      "status": "success",
+      "findings": [
+        "✅ Node.js project root confirmed"
+      ],
+      "recommendations": [],
+      "details": {},
+      "timestamp": "2026-03-05T11:10:26.193Z"
+    },
+    "contracts": {
+      "laneId": "requirements",
+      "version": 0,
+      "timestamp": "2026-03-05T11:10:26.194Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "APPROVE"
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-05T11:10:26.194Z",
+  "contractsReceived": {},
+  "durationMs": 0
+}

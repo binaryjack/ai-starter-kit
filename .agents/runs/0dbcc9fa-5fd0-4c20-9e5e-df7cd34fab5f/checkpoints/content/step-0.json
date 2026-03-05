@@ -1,0 +1,34 @@
+{
+  "checkpointId": "step-0",
+  "stepIndex": 0,
+  "mode": "self",
+  "payload": {
+    "checkpointId": "step-0",
+    "mode": "self",
+    "stepIndex": 0,
+    "partialResult": {
+      "agentName": "Content Strategist",
+      "status": "success",
+      "findings": [
+        "✅ README.md found — brand messaging available"
+      ],
+      "recommendations": [],
+      "details": {},
+      "timestamp": "2026-03-05T11:11:00.063Z"
+    },
+    "contracts": {
+      "laneId": "content",
+      "version": 0,
+      "timestamp": "2026-03-05T11:11:00.063Z",
+      "exports": {},
+      "pending": []
+    }
+  },
+  "verdict": {
+    "type": "APPROVE"
+  },
+  "retryCount": 0,
+  "timestamp": "2026-03-05T11:11:00.064Z",
+  "contractsReceived": {},
+  "durationMs": 1
+}

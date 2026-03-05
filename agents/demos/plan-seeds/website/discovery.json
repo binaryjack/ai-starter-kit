@@ -1,0 +1,58 @@
+{
+  "projectName": "studio-website",
+  "problem": "Replace an aging Squarespace presence with a high-performance custom website for a design studio: portfolio, blog, contact form, and dark/light mode, targeting Lighthouse 100 across all four categories.",
+  "primaryUser": "Prospective clients (creative directors, marketing leads); managed by one in-house designer/content editor",
+  "successCriteria": "Lighthouse 100 on performance, SEO, accessibility, best practices; < 50ms LCP on 4G; CMS-editable content without code changes; deployed to Vercel with preview deployments on each PR.",
+  "stories": [
+    {
+      "id": "S1",
+      "title": "Design System & Tokens",
+      "type": "feature",
+      "description": "CSS custom properties for colour, spacing, typography in dark/light modes; Figma token export pipeline; Storybook with all base components."
+    },
+    {
+      "id": "S2",
+      "title": "Portfolio Section",
+      "type": "feature",
+      "description": "Filterable grid of case studies; each case study is a MDX file with a hero image, tags, summary, and full write-up; loading skeleton + lazy images via Intersection Observer."
+    },
+    {
+      "id": "S3",
+      "title": "Blog",
+      "type": "feature",
+      "description": "MDX-powered blog with category filtering, related posts, reading time estimate, syntax highlighting, and RSS feed."
+    },
+    {
+      "id": "S4",
+      "title": "Contact & SEO",
+      "type": "feature",
+      "description": "Contact form with server-side validation + Resend email delivery; robots.txt; XML sitemap auto-generated from routes; Open Graph meta tags for every page."
+    },
+    {
+      "id": "S5",
+      "title": "Performance & Deployment",
+      "type": "feature",
+      "description": "Next.js 14 App Router with ISR; image optimisation pipeline; Vercel deployment configuration; Lighthouse CI gate in GitHub Actions preventing merge on regression."
+    }
+  ],
+  "layers": ["frontend"],
+  "isGreenfield": true,
+  "stackConstraints": "Next.js 14 App Router, TypeScript, Tailwind CSS, MDX, Vercel hosting",
+  "externalIntegrations": "Resend (email), Vercel Analytics, Lighthouse CI",
+  "qualityGrade": "enterprise",
+  "timelinePressure": "medium",
+  "teamSize": "solo",
+  "budgetSensitivity": "medium",
+  "openQuestions": [
+    "Will the designer provide Figma tokens export or are we building the token set from scratch?",
+    "Should the contact form include a CAPTCHA in v1?"
+  ],
+  "modelRecommendation": {
+    "discovery": "claude-haiku-20240307",
+    "planning": "claude-3-sonnet-20240229",
+    "implementation": "claude-3-sonnet-20240229",
+    "review": "claude-3-sonnet-20240229",
+    "estimatedCostNote": "Estimated $0.60–$1.00 — frontend-only project, smaller context budget"
+  },
+  "completedAt": "2025-01-01T09:00:00.000Z"
+}
