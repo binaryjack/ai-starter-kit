@@ -1,9 +1,9 @@
 'use client'
 
-import { Heading, Text }        from '@ai-agencee/ui/atoms'
-import { DagCanvas }            from '@ai-agencee/ui/dag'
-import { ReactFlowProvider }    from '@xyflow/react'
-import { DEMO_NODES, DEMO_EDGES } from '../../lib/demoDag.js'
+import { Heading, Text } from '@ai-agencee/ui/atoms'
+import { DagCanvas } from '@ai-agencee/ui/dag'
+import { ReactFlowProvider } from '@xyflow/react'
+import { DEMO_EDGES, DEMO_NODES } from '../../lib/demoDag.js'
 
 export default function DagPage() {
   return (

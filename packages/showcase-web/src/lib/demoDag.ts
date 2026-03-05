@@ -2,7 +2,7 @@
  * demoDag.ts — static demo DAG for the showcase page.
  * No file-system access required (works in both server + client Next.js components).
  */
-import type { DagNode, DagEdge } from '@ai-agencee/ui/dag'
+import type { DagEdge, DagNode } from '@ai-agencee/ui/dag'
 
 export const DEMO_NODES: DagNode[] = [
   {
