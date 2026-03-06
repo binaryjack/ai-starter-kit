@@ -5,7 +5,8 @@ import { SectionLabel } from '@/components/atoms/SectionLabel'
 import { SectionWrapper } from '@/components/layout/SectionWrapper'
 import { Button, Divider, Heading, Text } from '@ai-agencee/ui/atoms'
 import type { FormBridge, IFormularLike } from '@ai-agencee/ui/formular-bridge'
-import { CheckBox, FormProvider, Input, Select } from '@ai-agencee/ui/formular-bridge'
+import { CheckBox, FormProvider, Input, Select, TextArea } from '@ai-agencee/ui/formular-bridge'
+import { Icon } from '@ai-agencee/ui/icons'
 import { createForm, DirectSubmissionStrategy, f } from '@pulsar-framework/formular.dev'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
@@ -151,7 +152,9 @@ export default function ContactPage() {
         {state.step === 'success' ? (
           /* ── Success state ─────────────────────────────────────────── */
           <div className="rounded-node border border-green-700 bg-green-950/40 p-6 text-center flex flex-col gap-3">
-            <p className="text-2xl" aria-hidden>✅</p>
+            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-900/60" aria-hidden>
+              <Icon name="check" theme="auto" size={28} />
+            </span>
             <Heading level={2}>Message sent!</Heading>
             <Text variant="muted">
               Thanks for reaching out. You&apos;ll receive a confirmation email shortly
@@ -192,12 +195,12 @@ export default function ContactPage() {
                   <Input    name="name"             label="Full name"    placeholder="Jane Doe"              disabled={isSending} />
                   <Input    name="email"            label="Email"        placeholder="jane@example.com"      type="email" disabled={isSending} />
                   <Select   name="topic"            label="Topic"        options={TOPIC_OPTIONS}              disabled={isSending} />
-                  <Input    name="message"          label="Message"      placeholder="Tell us something…"    disabled={isSending} />
+                  <TextArea name="message"          label="Message"      placeholder="Tell us something…"    rows={5} disabled={isSending} />
                   <CheckBox name="subscribeUpdates" label="Subscribe to project updates"                     disabled={isSending} />
                   <Divider />
                   <div className="flex gap-2">
                     <Button
-                      onClick={() => void form.submit()}
+                      onClick={() => void bridgeRef.current?.submit()}
                       loading={isSending}
                       disabled={isSending}
                     >

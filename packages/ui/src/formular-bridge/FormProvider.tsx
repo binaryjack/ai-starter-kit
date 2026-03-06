@@ -20,9 +20,22 @@ export interface ErrorLike {
 /**
  * Duck-typed interface matching formular.dev's field schema objects returned by
  * f.string(), f.number(), f.boolean(), etc.  ObjectSchema.shape values all satisfy this.
+ *
+ * `error.issues` is the Zod-compatible array of validation failures — the
+ * human-readable message (e.g. 'Name is required') lives in `issues[0].message`.
+ * `error.message` is the full JSON-stringified issues array and should NOT be
+ * used for display.
  */
 export interface FieldSchemaLike {
-  safeParse(value: unknown): { success: boolean; error?: { message?: string; code?: string } }
+  safeParse(value: unknown): {
+    success: boolean
+    error?: {
+      /** Zod issues array — use issues[0].message for the human-readable message. */
+      issues?: Array<{ message: string; code?: string }>
+      /** Fallback code if issues is unavailable. */
+      code?:   string
+    }
+  }
 }
 
 /**
@@ -68,6 +81,19 @@ export interface FormBridge {
   isDirty:     boolean
   isBusy:      boolean
   submitCount: number
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+/**
+ * Extract the first human-readable message from a safeParse error.
+ * Zod-compatible errors store individual messages in `issues[0].message`.
+ * `error.message` is the full JSON-stringified issues array — never use it for display.
+ */
+function extractErrorMessage(
+  error: NonNullable<ReturnType<FieldSchemaLike['safeParse']>['error']>
+): string {
+  return error.issues?.[0]?.message ?? error.code ?? 'Invalid value'
 }
 
 // ─── Context ─────────────────────────────────────────────────────────────────
@@ -157,7 +183,7 @@ export function FormProvider({
       if (!fieldSchema) return
       const result = fieldSchema.safeParse(valuesRef.current[name])
       const fieldErrors: ErrorLike[] = (!result.success && result.error)
-        ? [{ message: result.error.message ?? result.error.code ?? 'Invalid value', code: result.error.code }]
+        ? [{ message: extractErrorMessage(result.error), code: result.error.issues?.[0]?.code ?? result.error.code }]
         : []
       setErrors(prev => {
         const next = { ...prev, [name]: fieldErrors }
@@ -177,7 +203,7 @@ export function FormProvider({
     for (const [fieldName, fieldSchema] of Object.entries(sc.shape)) {
       const r = fieldSchema.safeParse(valuesRef.current[fieldName])
       result[fieldName] = (!r.success && r.error)
-        ? [{ message: r.error.message ?? r.error.code ?? 'Invalid value', code: r.error.code }]
+        ? [{ message: extractErrorMessage(r.error), code: r.error.issues?.[0]?.code ?? r.error.code }]
         : []
     }
     return result
