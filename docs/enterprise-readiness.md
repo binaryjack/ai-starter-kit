@@ -1,6 +1,6 @@
 # Enterprise Readiness Roadmap
 
-Status as of latest commit. All **E1–E10, E13** items are shipped and actively enforced at runtime.
+Status as of latest commit. All **E1–E13** items are shipped and actively enforced at runtime.
 
 ---
 
@@ -17,9 +17,11 @@ Status as of latest commit. All **E1–E10, E13** items are shipped and actively
 | E7 | DAG visualizer | `cli/src/commands/visualize.ts` | ✅ Mermaid + DOT output from DAG JSON |
 | E8 | Prompt injection detection | `agent-executor/src/lib/prompt-injection-detector.ts` → **wired via** `ModelRouter.wrapAllProviders()` | ✅ 10 signature families; `warn`/`block` mode; `DagRunOptions.injectionDetection` |
 | E10 | AWS Bedrock provider | `agent-executor/src/lib/providers/bedrock.provider.ts` → **SigV4** via Node `crypto` module | ✅ Converse API; auto-registered when AWS credentials are set; model mapping config in `model-router.json` |
+| E11 | Jira/Linear sync | `agent-executor/src/lib/issue-sync.ts` | ✅ `IssueSync` subscribes to `DagEventBus`; creates issues on `dag:end` failure/partial via Jira REST or Linear GraphQL |
+| E12 | Slack/Teams notifications | `agent-executor/src/lib/notification-sink.ts` | ✅ `NotificationSink` fires on `dag:end`; Slack incoming webhook + Teams incoming webhook; zero external SDK |
 | E13 | Run advisor (auto-tune) | `agent-executor/src/lib/run-advisor.ts` → **integrated into** `dag-orchestrator.js` post-execution | ✅ 6 recommendation types: HIGH_RETRY_RATE, SLOW_LANE, FLAKY_LANE, DOWNGRADE_MODEL, BUDGET_SUGGESTION, DAG_UNSTABLE |
 
-**Test coverage**: 396 tests passing across all packages (358 agent-executor + 12 cli + 26 mcp + 8 core).
+**Test coverage**: 424 tests passing across all packages.
 
 ---
 
@@ -113,13 +115,11 @@ Status as of latest commit. All **E1–E10, E13** items are shipped and actively
 
 ---
 
-## Backlog (E9, E11, E12, E14)
+## Backlog (E9)
 
 | ID | Feature | Priority | Notes |
-|----|---------|----------|-------|
+|----|---------|------------|-------|
 | E9 | Python MCP bridge | P2 | `subprocess` bridge so Python tools register as MCP servers |
-| E11 | Jira/Linear sync | P3 | Webhook → create issue on agent run failure |
-| E12 | Slack/Teams notifications | P3 | Outbound webhook on DAG completion/failure |
 ---
 
 ## SOC2 Path (Process Work — No Code Required)

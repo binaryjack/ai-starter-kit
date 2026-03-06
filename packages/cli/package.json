@@ -12,10 +12,13 @@
     "test": "jest",
     "lint": "tsc --noEmit"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@ai-agencee/ai-kit-agent-executor": "file:../agent-executor",
+    "@ai-agencee/ai-kit-agent-executor": "workspace:^1.1.0",
     "@ai-agencee/ai-kit-core": "^1.1.0",
-    "@ai-agencee/ai-kit-mcp": "^1.3.0",
+    "@ai-agencee/ai-kit-mcp": "workspace:^1.3.0",
     "commander": "^12.1.0"
   },
   "devDependencies": {

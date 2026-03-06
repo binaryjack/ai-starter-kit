@@ -1,0 +1,77 @@
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run — report what would be published without sending to npm'
+        type: boolean
+        default: true
+
+jobs:
+  publish:
+    name: Build and publish packages
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # enables npm provenance attestation
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Build in strict dependency order
+      - name: Build packages
+        run: |
+          pnpm --filter @ai-agencee/ai-kit-core            run build
+          pnpm --filter @ai-agencee/ai-kit-agent-executor  run build
+          pnpm --filter @ai-agencee/ai-kit-mcp             run build
+          pnpm --filter @ai-agencee/ai-kit-cli             run build
+
+      # Resolve --dry-run flag: set when manually dispatched with dry_run=true
+      - name: Set publish flags
+        id: flags
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo "extra=--dry-run" >> $GITHUB_OUTPUT
+            echo "::notice::Running in DRY-RUN mode — nothing will be published to npm."
+          else
+            echo "extra=" >> $GITHUB_OUTPUT
+            echo "::notice::Running in PUBLISH mode."
+          fi
+
+      # Publish in dependency order — workspace: refs are resolved to semver by pnpm publish
+      - name: Publish @ai-agencee/ai-kit-core
+        run: pnpm --filter @ai-agencee/ai-kit-core publish --no-git-checks ${{ steps.flags.outputs.extra }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @ai-agencee/ai-kit-agent-executor
+        run: pnpm --filter @ai-agencee/ai-kit-agent-executor publish --no-git-checks ${{ steps.flags.outputs.extra }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @ai-agencee/ai-kit-mcp
+        run: pnpm --filter @ai-agencee/ai-kit-mcp publish --no-git-checks ${{ steps.flags.outputs.extra }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @ai-agencee/ai-kit-cli
+        run: pnpm --filter @ai-agencee/ai-kit-cli publish --no-git-checks ${{ steps.flags.outputs.extra }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

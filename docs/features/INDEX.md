@@ -6,9 +6,9 @@ Welcome to the comprehensive feature documentation for ai-agencee/ai-kit. This d
 
 ### 🎯 Core Concepts
 - [DAG Definition & Orchestration](./01-dag-orchestration.md) — JSON-declarative parallel execution model
-- [Agent Types & Roles](./02-agent-types-roles.md) — Business Analyst, Architecture, Backend, Frontend, Testing, E2E
+- Agent Types & Roles — Business Analyst, Architecture, Backend, Frontend, Testing, E2E *(guide planned)*
 - [Model Routing & Cost Tracking](./03-model-routing-cost.md) — Intelligent provider selection and budget management
-- [Check Handlers & Validators](./04-check-handlers.md) — File validation, grepping, LLM reviews, command execution
+- Check Handlers & Validators — File validation, grepping, LLM reviews, command execution *(guide planned)*
 
 ### ⚡ Execution Features
 - [Streaming Output](./05-streaming-output.md) — Real-time token streaming from LLM providers
@@ -19,31 +19,31 @@ Welcome to the comprehensive feature documentation for ai-agencee/ai-kit. This d
 ### 🔐 Enterprise & Security
 - [Authentication & RBAC](./09-rbac-auth.md) — Role-based access control and identity management
 - [Audit Logging & Compliance](./10-audit-logging.md) — Hash-chained immutable audit trails
-- [Multi-Tenant Isolation](./11-multi-tenant.md) — Per-tenant run and data isolation
-- [PII Scrubbing & Injection Defense](./12-pii-security.md) — Data sanitization and prompt injection prevention
+- Multi-Tenant Isolation — Per-tenant run and data isolation *(guide planned)*
+- PII Scrubbing & Injection Defense — Data sanitization and prompt injection prevention *(guide planned)*
 
 ### 👨‍💻 Developer Experience
 - [TypeScript DAG Builder API](./13-dag-builder-api.md) — Type-safe, fluent DSL for DAG construction
-- [Plugin System & Custom Checks](./14-plugin-system.md) — Extend check types and handlers
-- [CLI Commands Reference](./15-cli-commands.md) — All CLI operations with examples
-- [MCP Integration](./16-mcp-integration.md) — Claude Desktop and VS Code integration
+- Plugin System & Custom Checks — Extend check types and handlers *(guide planned)*
+- CLI Commands Reference — All CLI operations with examples *(guide planned)*
+- MCP Integration — Claude Desktop and VS Code integration *(guide planned)*
 
 ### 📊 Observability & Analytics
-- [OpenTelemetry Integration](./17-opentelemetry.md) — Distributed tracing and metrics collection
-- [Real-time Dashboard](./18-dashboard.md) — Web UI for live lane status and cost visibility
-- [Cost Analytics & Reporting](./19-cost-analytics.md) — Detailed cost breakdown and budget enforcement
-- [Vector Memory & Cross-Run Learning](./20-vector-memory.md) — Persistent embeddings for semantic recall
+- OpenTelemetry Integration — Distributed tracing and metrics collection *(guide planned)*
+- Real-time Dashboard — Web UI for live lane status and cost visibility *(guide planned)*
+- Cost Analytics & Reporting — Detailed cost breakdown and budget enforcement *(guide planned)*
+- Vector Memory & Cross-Run Learning — Persistent embeddings for semantic recall *(guide planned)*
 
 ### 🔌 Integrations & Extensions
-- [Event-Driven Triggers](./21-event-triggers.md) — GitHub webhooks, file watchers, scheduled execution
-- [WebSocket/SSE Live API](./22-websocket-sse.md) — Real-time event streaming for external systems
-- [Provider Configuration](./23-provider-config.md) — Anthropic, OpenAI, Ollama, Gemini, Bedrock setup
-- [Slack/Teams Notifications](./24-notifications.md) — Run status and result routing to messaging platforms
+- Event-Driven Triggers — GitHub webhooks, file watchers, scheduled execution *(guide planned)*
+- WebSocket/SSE Live API — Real-time event streaming for external systems *(guide planned)*
+- Provider Configuration — Anthropic, OpenAI, Ollama, Gemini, Bedrock setup *(guide planned)*
+- Slack/Teams Notifications — Run status and result routing to messaging platforms *(guide planned)*
 
 ### 🚀 Quick-Start Features
-- [Demo Mode & Getting Started](./25-demo-mode.md) — Zero-API-key introduction and pnpm demo
-- [JSON Schema & IDE Support](./26-json-schema.md) — IntelliSense for DAG and agent files
-- [Secrets Management](./27-secrets-management.md) — Vault integration and scoped secrets
+- Demo Mode & Getting Started — Zero-API-key introduction and pnpm demo *(guide planned)*
+- JSON Schema & IDE Support — IntelliSense for DAG and agent files *(guide planned)*
+- Secrets Management — Vault integration and scoped secrets *(guide planned)*
 
 ---
 

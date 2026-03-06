@@ -7,39 +7,39 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 ## 📖 Documentation Guide
 
 ### 🚀 **Getting Started** (5 minutes)
-- **File**: [AGENT_QUICKSTART.md](AGENT_QUICKSTART.md)
+- **File**: [getting-started/agent-quickstart.md](getting-started/agent-quickstart.md)
 - **Best for**: First-time users, developers who want to try it out
 - **Covers**: Basic setup, first commands, troubleshooting quick issues
 - **Time**: ~5 minutes to read and run
 
 ### 📚 **Complete Integration Guide** (30 minutes)
-- **File**: [AGENT_INTEGRATION.md](AGENT_INTEGRATION.md)
+- **File**: [guides/agent-integration.md](guides/agent-integration.md)
 - **Best for**: Developers building features, understanding the system
 - **Covers**: All CLI commands, workflow architecture, file structure, best practices
 - **Time**: ~30 minutes to read thoroughly
 
 ### 💡 **Workflow Examples** (20 minutes)
-- **File**: [WORKFLOW_EXAMPLES.md](WORKFLOW_EXAMPLES.md)
+- **File**: [examples/workflow-examples.md](examples/workflow-examples.md)
 - **Best for**: Learning by example, copying patterns
 - **Covers**: Real-world workflows, code examples, batch processing, error handling
 - **Time**: ~20 minutes to read and understand
 
 ### 🏗️ **Technical Architecture** (15 minutes)
-- **File**: [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)
+- **File**: [architecture/dag-supervised-agents.md](architecture/dag-supervised-agents.md)
 - **Best for**: Architects, developers doing deep dives
 - **Covers**: Package structure, API design, dependencies, build details
 - **Time**: ~15 minutes for technical review
 
 ### 🔧 **Extending the System** (30 minutes)
-- **File**: [EXTENDING_AGENTS.md](EXTENDING_AGENTS.md)
+- **File**: [guides/extending-agents.md](guides/extending-agents.md)
 - **Best for**: Advanced developers, custom agent developers
 - **Covers**: Adding custom agents, integration patterns, best practices
 - **Time**: ~30 minutes to understand patterns
 
-### ✅ **Project Completion Report** (10 minutes)
-- **File**: [COMPLETION_REPORT.md](COMPLETION_REPORT.md)
+### ✅ **Enterprise Feature Status** (10 minutes)
+- **File**: [enterprise-readiness.md](enterprise-readiness.md)
 - **Best for**: Project review, acceptance criteria verification
-- **Covers**: What was built, deliverables checklist, next steps
+- **Covers**: All E1–E13 features, compliance status, SOC2 path
 - **Time**: ~10 minutes for status overview
 ### ⚡ **Quickies — Copy-Paste Recipes** (5 minutes)
 - **File**: [docs/quickies.md](quickies.md)
@@ -63,15 +63,15 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 ## 🎓 Learning Paths
 
 ### Path 1: **I Just Want to Use It** (5-10 min)
-1. Read [AGENT_QUICKSTART.md](AGENT_QUICKSTART.md) (5 min)
+1. Read [getting-started/agent-quickstart.md](getting-started/agent-quickstart.md) (5 min)
 2. Or jump to [docs/quickies.md](quickies.md) Q1 — get a result in 2 minutes
 3. Check `.agents/results/` for outputs
 4. Done! ✓
 
 ### Path 2: **I Want to Understand It** (45 min)
-1. Read [AGENT_QUICKSTART.md](AGENT_QUICKSTART.md) (5 min)
-2. Read [AGENT_INTEGRATION.md](AGENT_INTEGRATION.md) (30 min)
-3. Review [WORKFLOW_EXAMPLES.md](WORKFLOW_EXAMPLES.md) (10 min)
+1. Read [getting-started/agent-quickstart.md](getting-started/agent-quickstart.md) (5 min)
+2. Read [guides/agent-integration.md](guides/agent-integration.md) (30 min)
+3. Review [examples/workflow-examples.md](examples/workflow-examples.md) (10 min)
 4. Try some examples
 
 ### Path 5: **I Want to See the Engine Under Stress** (20 min)
@@ -82,13 +82,13 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 
 ### Path 3: **I Want to Build on It** (1.5 hours)
 1. Complete Path 2 (45 min)
-2. Read [EXTENDING_AGENTS.md](EXTENDING_AGENTS.md) (30 min)
-3. Review [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) (15 min)
+2. Read [guides/extending-agents.md](guides/extending-agents.md) (30 min)
+3. Review [architecture/dag-supervised-agents.md](architecture/dag-supervised-agents.md) (15 min)
 4. Build a custom agent
 
 ### Path 4: **I Want to Understand Everything** (2 hours)
 1. Complete Path 3 (1.5 hours)
-2. Read [COMPLETION_REPORT.md](COMPLETION_REPORT.md) (10 min)
+2. Read [enterprise-readiness.md](enterprise-readiness.md) (10 min)
 3. Browse the source code in `packages/agent-executor/src/`
 4. Review the type definitions
 
@@ -120,50 +120,50 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 → [docs/demo-scenarios.md](demo-scenarios.md) > The 5-Phase Plan Demo; run `pnpm demo:plan`
 
 **"I want to break down a specification"**
-→ [AGENT_QUICKSTART.md](AGENT_QUICKSTART.md) > Run `agent:breakdown`
+→ [getting-started/agent-quickstart.md](getting-started/agent-quickstart.md) > Run `agent:breakdown`
 
 **"I want to run a full workflow"**
-→ [AGENT_QUICKSTART.md](AGENT_QUICKSTART.md) > Run `agent:workflow`
+→ [getting-started/agent-quickstart.md](getting-started/agent-quickstart.md) > Run `agent:workflow`
 
 **"I want to check workflow status"**
-→ [AGENT_INTEGRATION.md](AGENT_INTEGRATION.md) > agent:status command
+→ [guides/agent-integration.md](guides/agent-integration.md) > agent:status command
 
 **"I want to validate output"**
-→ [AGENT_INTEGRATION.md](AGENT_INTEGRATION.md) > agent:validate command
+→ [guides/agent-integration.md](guides/agent-integration.md) > agent:validate command
 
 **"I want to understand the architecture"**
-→ [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)
+→ [architecture/dag-supervised-agents.md](architecture/dag-supervised-agents.md)
 
 **"I want to add a custom agent"**
-→ [EXTENDING_AGENTS.md](EXTENDING_AGENTS.md)
+→ [guides/extending-agents.md](guides/extending-agents.md)
 
 **"I want to see real examples"**
-→ [WORKFLOW_EXAMPLES.md](WORKFLOW_EXAMPLES.md)
+→ [examples/workflow-examples.md](examples/workflow-examples.md)
 
 **"I need to check what was built"**
-→ [COMPLETION_REPORT.md](COMPLETION_REPORT.md)
+→ [enterprise-readiness.md](enterprise-readiness.md)
 
 ### By Role
 
 **Developer**
-- Start: [AGENT_QUICKSTART.md](AGENT_QUICKSTART.md)
-- Deep dive: [AGENT_INTEGRATION.md](AGENT_INTEGRATION.md)
-- Examples: [WORKFLOW_EXAMPLES.md](WORKFLOW_EXAMPLES.md)
+- Start: [getting-started/agent-quickstart.md](getting-started/agent-quickstart.md)
+- Deep dive: [guides/agent-integration.md](guides/agent-integration.md)
+- Examples: [examples/workflow-examples.md](examples/workflow-examples.md)
 
 **Architect**
-- Start: [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)
-- Deep dive: [EXTENDING_AGENTS.md](EXTENDING_AGENTS.md)
-- References: [AGENT_INTEGRATION.md](AGENT_INTEGRATION.md)
+- Start: [architecture/dag-supervised-agents.md](architecture/dag-supervised-agents.md)
+- Deep dive: [guides/extending-agents.md](guides/extending-agents.md)
+- References: [guides/agent-integration.md](guides/agent-integration.md)
 
 **DevOps/SRE**
-- Overview: [COMPLETION_REPORT.md](COMPLETION_REPORT.md)
-- Deployment: [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) > Dependencies
-- Operations: [AGENT_INTEGRATION.md](AGENT_INTEGRATION.md) > Troubleshooting
+- Overview: [enterprise-readiness.md](enterprise-readiness.md)
+- Deployment: [architecture/dag-supervised-agents.md](architecture/dag-supervised-agents.md) > Dependencies
+- Operations: [guides/agent-integration.md](guides/agent-integration.md) > Troubleshooting
 
 **Project Manager**
-- Status: [COMPLETION_REPORT.md](COMPLETION_REPORT.md)
-- Capabilities: [AGENT_INTEGRATION.md](AGENT_INTEGRATION.md) > Overview
-- Examples: [WORKFLOW_EXAMPLES.md](WORKFLOW_EXAMPLES.md)
+- Status: [enterprise-readiness.md](enterprise-readiness.md)
+- Capabilities: [guides/agent-integration.md](guides/agent-integration.md) > Overview
+- Examples: [examples/workflow-examples.md](examples/workflow-examples.md)
 
 ---
 

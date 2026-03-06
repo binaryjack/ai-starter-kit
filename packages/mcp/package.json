@@ -14,9 +14,12 @@
     "test": "jest --passWithNoTests",
     "lint": "tsc --noEmit"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@ai-agencee/ai-kit-core": "^1.1.0",
-    "@ai-agencee/ai-kit-agent-executor": "file:../agent-executor",
+    "@ai-agencee/ai-kit-agent-executor": "workspace:^1.1.0",
     "@modelcontextprotocol/sdk": "^0.7.0"
   },
   "devDependencies": {

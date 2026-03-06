@@ -11,6 +11,9 @@
     "dist",
     "template"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc && node scripts/copy-template.js",
     "test": "jest",
