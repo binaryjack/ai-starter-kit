@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #FFFFFF;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- Plugin/integration icon -->
+    <path class="st0" d="M10,2v4H6v4H2v4h4v4h4v4h4v-4h4v-4h4v-4h-4V6h-4V2H10z" />
+    <rect class="st1" x="9" y="9" width="6" height="6" />
+</svg>

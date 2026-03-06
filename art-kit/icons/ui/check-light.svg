@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #231F20;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- Checkmark icon -->
+    <path class="st1" d="M9,16.2L4.8,12l-1.4,1.4L9,19L21,7l-1.4-1.4L9,16.2z" />
+</svg>

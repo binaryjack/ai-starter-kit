@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #FFFFFF;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- Chart/metrics/analytics icon -->
+    <path class="st1" d="M3,13l4-4l3,3l7-7v3l-7,7l-3-3l-4,4V13z" />
+    <path class="st1" d="M17,6h3v14H4V6h3" />
+</svg>

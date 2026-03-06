@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #231F20;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- Shield icon: security -->
+    <path class="st0" d="M12,2L4,6v5c0,5,3.4,9.7,8,11c4.6-1.3,8-6,8-11V6L12,2z" />
+    <path class="st1" d="M12,4L6,7v4c0,4.2,2.9,8.1,6,9c3.1-0.9,6-4.8,6-9V7L12,4z" />
+    <path class="st0" d="M10,12l1.5,1.5L15,10" />
+</svg>

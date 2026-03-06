@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #FFFFFF;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- User/profile icon -->
+    <path class="st0" d="M12,2C6.5,2,2,6.5,2,12s4.5,10,10,10s10-4.5,10-10S17.5,2,12,2z" />
+    <circle class="st1" cx="12" cy="9" r="3" />
+    <path class="st1" d="M12,14c-3.3,0-6,1.3-6,3v2h12v-2C18,15.3,15.3,14,12,14z" />
+</svg>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #FFFFFF;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- Summary/analytics icon (bar chart) -->
+    <rect class="st1" x="4" y="14" width="4" height="6" />
+    <rect class="st1" x="10" y="9" width="4" height="11" />
+    <rect class="st1" x="16" y="4" width="4" height="16" />
+</svg>

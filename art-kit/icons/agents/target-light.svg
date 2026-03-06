@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #231F20;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- Target/goal icon -->
+    <circle class="st0" cx="12" cy="12" r="10" />
+    <circle class="st1" cx="12" cy="12" r="6" />
+    <circle class="st0" cx="12" cy="12" r="3" />
+    <circle class="st1" cx="12" cy="12" r="1" />
+</svg>

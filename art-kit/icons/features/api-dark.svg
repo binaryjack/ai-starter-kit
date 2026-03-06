@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #FFFFFF;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- Signal/broadcast/API icon -->
+    <path class="st1" d="M5,13c0-3.9,3.1-7,7-7s7,3.1,7,7" />
+    <path class="st1" d="M8,13c0-2.2,1.8-4,4-4s4,1.8,4,4" />
+    <circle class="st0" cx="12" cy="13" r="2" />
+    <path class="st0" d="M2,13c0-5.5,4.5-10,10-10s10,4.5,10,10" />
+    <line class="st1" x1="12" y1="15" x2="12" y2="21" style="stroke:#818CF8;stroke-width:2;fill:none;" />
+</svg>

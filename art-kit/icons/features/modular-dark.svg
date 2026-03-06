@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #FFFFFF;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- Blocks/modular icon -->
+    <rect class="st0" x="3" y="3" width="8" height="8" />
+    <rect class="st1" x="13" y="3" width="8" height="8" />
+    <rect class="st1" x="3" y="13" width="8" height="8" />
+    <rect class="st0" x="13" y="13" width="8" height="8" />
+</svg>

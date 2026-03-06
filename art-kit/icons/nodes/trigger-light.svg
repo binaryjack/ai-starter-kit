@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #231F20;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- Lightning bolt icon: trigger/energy -->
+    <path class="st1" d="M13,2L3,14h8l-1,8l10-12h-8L13,2z" />
+    <path class="st0" d="M13,2L3,14h8l-1,8l10-12h-8L13,2z M11,15l1-6H8l6-5l-1,6h4L11,15z" />
+</svg>

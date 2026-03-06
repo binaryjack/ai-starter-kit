@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #231F20;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- Map/navigation icon -->
+    <path class="st0" d="M20,3l-8,4L4,3v16l8,4l8-4V3z" />
+    <polygon class="st1" points="12,7 12,19 8,17 8,5" />
+    <polygon class="st1" points="16,5 16,17 12,19 12,7" />
+</svg>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #231F20;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- Cloud icon -->
+    <path class="st1"
+        d="M19.4,10.1C18.7,6.5,15.6,4,12,4C9.1,4,6.6,5.6,5.4,8C2.3,8.4,0,11,0,14c0,3.3,2.7,6,6,6h13c2.8,0,5-2.2,5-5 C24,12.4,22,10.4,19.4,10.1z" />
+</svg>

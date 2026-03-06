@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agencee Icon System - Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #231F20;
+        }
+        
+        .subtitle {
+            color: #818CF8;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .theme-toggle {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .theme-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #818CF8;
+            background: white;
+            color: #231F20;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .theme-btn.active {
+            background: #818CF8;
+            color: white;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #231F20;
+            border-bottom: 3px solid #818CF8;
+            padding-bottom: 0.5rem;
+        }
+        
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .icon-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .icon-card:hover {
+            border-color: #818CF8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(129, 140, 248, 0.2);
+        }
+        
+        .icon-preview {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1rem;
+            transition: transform 0.3s;
+        }
+        
+        .icon-card:hover .icon-preview {
+            transform: scale(1.1);
+        }
+        
+        .icon-name {
+            font-size: 0.85rem;
+            color: #231F20;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        body.dark-theme {
+            background: #1a1a1a;
+        }
+        
+        body.dark-theme .container {
+            background: #231F20;
+        }
+        
+        body.dark-theme h1,
+        body.dark-theme .section-title,
+        body.dark-theme .icon-name {
+            color: #ffffff;
+        }
+        
+        body.dark-theme .icon-card {
+            background: #2a2a2a;
+            border-color: #404040;
+        }
+        
+        body.dark-theme .icon-card:hover {
+            border-color: #818CF8;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        body.dark-theme .stats {
+            background: #2a2a2a;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #818CF8;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        body.dark-theme .stat-label {
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Agencee Icon System</h1>
+        <p class="subtitle">Professional brand-consistent icons for all UI elements</p>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">43</div>
+                <div class="stat-label">Unique Icons</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">86</div>
+                <div class="stat-label">Total Files</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">4</div>
+                <div class="stat-label">Categories</div>
+            </div>
+        </div>
+        
+        <div class="theme-toggle">
+            <button class="theme-btn active" onclick="setTheme('light')">Light Theme</button>
+            <button class="theme-btn" onclick="setTheme('dark')">Dark Theme</button>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Node Icons</h2>
+            <div class="icon-grid">
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="nodes/worker-light.svg" data-light="nodes/worker-light.svg" data-dark="nodes/worker-dark.svg" alt="Worker">
+                    <div class="icon-name">Worker</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="nodes/supervisor-light.svg" data-light="nodes/supervisor-light.svg" data-dark="nodes/supervisor-dark.svg" alt="Supervisor">
+                    <div class="icon-name">Supervisor</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="nodes/trigger-light.svg" data-light="nodes/trigger-light.svg" data-dark="nodes/trigger-dark.svg" alt="Trigger">
+                    <div class="icon-name">Trigger</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="nodes/budget-light.svg" data-light="nodes/budget-light.svg" data-dark="nodes/budget-dark.svg" alt="Budget">
+                    <div class="icon-name">Budget</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Main Agents</h2>
+            <div class="icon-grid">
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/business-analyst-light.svg" data-light="agents/business-analyst-light.svg" data-dark="agents/business-analyst-dark.svg" alt="Business Analyst">
+                    <div class="icon-name">Business Analyst</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/architecture-light.svg" data-light="agents/architecture-light.svg" data-dark="agents/architecture-dark.svg" alt="Architecture">
+                    <div class="icon-name">Architecture</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/backend-light.svg" data-light="agents/backend-light.svg" data-dark="agents/backend-dark.svg" alt="Backend">
+                    <div class="icon-name">Backend</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/frontend-light.svg" data-light="agents/frontend-light.svg" data-dark="agents/frontend-dark.svg" alt="Frontend">
+                    <div class="icon-name">Frontend</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/testing-light.svg" data-light="agents/testing-light.svg" data-dark="agents/testing-dark.svg" alt="Testing">
+                    <div class="icon-name">Testing</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/e2e-light.svg" data-light="agents/e2e-light.svg" data-dark="agents/e2e-dark.svg" alt="E2E">
+                    <div class="icon-name">E2E Testing</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Demo Agents</h2>
+            <div class="icon-grid">
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/code-review-light.svg" data-light="agents/code-review-light.svg" data-dark="agents/code-review-dark.svg" alt="Code Review">
+                    <div class="icon-name">Code Review</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/summary-light.svg" data-light="agents/summary-light.svg" data-dark="agents/summary-dark.svg" alt="Summary">
+                    <div class="icon-name">Summary</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/search-light.svg" data-light="agents/search-light.svg" data-dark="agents/search-dark.svg" alt="Search">
+                    <div class="icon-name">Search</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/user-light.svg" data-light="agents/user-light.svg" data-dark="agents/user-dark.svg" alt="User">
+                    <div class="icon-name">User</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/database-light.svg" data-light="agents/database-light.svg" data-dark="agents/database-dark.svg" alt="Database">
+                    <div class="icon-name">Database</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/mobile-light.svg" data-light="agents/mobile-light.svg" data-dark="agents/mobile-dark.svg" alt="Mobile">
+                    <div class="icon-name">Mobile</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/target-light.svg" data-light="agents/target-light.svg" data-dark="agents/target-dark.svg" alt="Target">
+                    <div class="icon-name">Target</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/rocket-light.svg" data-light="agents/rocket-light.svg" data-dark="agents/rocket-dark.svg" alt="Rocket">
+                    <div class="icon-name">Rocket</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/sync-light.svg" data-light="agents/sync-light.svg" data-dark="agents/sync-dark.svg" alt="Sync">
+                    <div class="icon-name">Sync</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/map-light.svg" data-light="agents/map-light.svg" data-dark="agents/map-dark.svg" alt="Map">
+                    <div class="icon-name">Map</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/bug-light.svg" data-light="agents/bug-light.svg" data-dark="agents/bug-dark.svg" alt="Bug">
+                    <div class="icon-name">Bug</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/idea-light.svg" data-light="agents/idea-light.svg" data-dark="agents/idea-dark.svg" alt="Idea">
+                    <div class="icon-name">Idea</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/package-light.svg" data-light="agents/package-light.svg" data-dark="agents/package-dark.svg" alt="Package">
+                    <div class="icon-name">Package</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/cloud-light.svg" data-light="agents/cloud-light.svg" data-dark="agents/cloud-dark.svg" alt="Cloud">
+                    <div class="icon-name">Cloud</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/network-light.svg" data-light="agents/network-light.svg" data-dark="agents/network-dark.svg" alt="Network">
+                    <div class="icon-name">Network</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/tools-light.svg" data-light="agents/tools-light.svg" data-dark="agents/tools-dark.svg" alt="Tools">
+                    <div class="icon-name">Tools</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/metrics-light.svg" data-light="agents/metrics-light.svg" data-dark="agents/metrics-dark.svg" alt="Metrics">
+                    <div class="icon-name">Metrics</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/mail-light.svg" data-light="agents/mail-light.svg" data-dark="agents/mail-dark.svg" alt="Mail">
+                    <div class="icon-name">Mail</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="agents/calendar-light.svg" data-light="agents/calendar-light.svg" data-dark="agents/calendar-dark.svg" alt="Calendar">
+                    <div class="icon-name">Calendar</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Features</h2>
+            <div class="icon-grid">
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="features/branching-light.svg" data-light="features/branching-light.svg" data-dark="features/branching-dark.svg" alt="Branching">
+                    <div class="icon-name">Branching</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="features/security-light.svg" data-light="features/security-light.svg" data-dark="features/security-dark.svg" alt="Security">
+                    <div class="icon-name">Security</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="features/performance-light.svg" data-light="features/performance-light.svg" data-dark="features/performance-dark.svg" alt="Performance">
+                    <div class="icon-name">Performance</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="features/auth-light.svg" data-light="features/auth-light.svg" data-dark="features/auth-dark.svg" alt="Authentication">
+                    <div class="icon-name">Authentication</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="features/document-light.svg" data-light="features/document-light.svg" data-dark="features/document-dark.svg" alt="Document">
+                    <div class="icon-name">Document</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="features/enterprise-light.svg" data-light="features/enterprise-light.svg" data-dark="features/enterprise-dark.svg" alt="Enterprise">
+                    <div class="icon-name">Enterprise</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="features/encryption-light.svg" data-light="features/encryption-light.svg" data-dark="features/encryption-dark.svg" alt="Encryption">
+                    <div class="icon-name">Encryption</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="features/plugin-light.svg" data-light="features/plugin-light.svg" data-dark="features/plugin-dark.svg" alt="Plugin">
+                    <div class="icon-name">Plugin</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="features/modular-light.svg" data-light="features/modular-light.svg" data-dark="features/modular-dark.svg" alt="Modular">
+                    <div class="icon-name">Modular</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="features/api-light.svg" data-light="features/api-light.svg" data-dark="features/api-dark.svg" alt="API">
+                    <div class="icon-name">API</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">UI Elements</h2>
+            <div class="icon-grid">
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="ui/check-light.svg" data-light="ui/check-light.svg" data-dark="ui/check-dark.svg" alt="Check">
+                    <div class="icon-name">Check</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="ui/close-light.svg" data-light="ui/close-light.svg" data-dark="ui/close-dark.svg" alt="Close">
+                    <div class="icon-name">Close</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="ui/warning-light.svg" data-light="ui/warning-light.svg" data-dark="ui/warning-dark.svg" alt="Warning">
+                    <div class="icon-name">Warning</div>
+                </div>
+                <div class="icon-card">
+                    <img class="icon-preview icon-themed" src="ui/checkbox-light.svg" data-light="ui/checkbox-light.svg" data-dark="ui/checkbox-dark.svg" alt="Checkbox">
+                    <div class="icon-name">Checkbox</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function setTheme(theme) {
+            const buttons = document.querySelectorAll('.theme-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (theme === 'dark') {
+                document.body.classList.add('dark-theme');
+                buttons[1].classList.add('active');
+                
+                // Switch all icons to dark variants
+                document.querySelectorAll('.icon-themed').forEach(img => {
+                    img.src = img.dataset.dark;
+                });
+            } else {
+                document.body.classList.remove('dark-theme');
+                buttons[0].classList.add('active');
+                
+                // Switch all icons to light variants
+                document.querySelectorAll('.icon-themed').forEach(img => {
+                    img.src = img.dataset.light;
+                });
+            }
+        }
+    </script>
+</body>
+</html>

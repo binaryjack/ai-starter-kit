@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #231F20;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- Package/box icon -->
+    <path class="st0" d="M20,7l-8-4L4,7v10l8,4l8-4V7z" />
+    <polygon class="st1" points="12,3 20,7 12,11 4,7" />
+    <polygon class="st1" points="4,17 12,21 12,11 4,7" />
+</svg>

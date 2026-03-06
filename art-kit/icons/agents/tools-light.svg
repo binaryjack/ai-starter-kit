@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0 {
+            fill: #231F20;
+        }
+
+        .st1 {
+            fill: #818CF8;
+        }
+    </style>
+    <!-- Tools/wrench/service icon -->
+    <path class="st0"
+        d="M22.6,5.6l-3.5,3.5l-2.1-2.1l3.5-3.5C19.4,2.5,18.2,2,17,2c-2.8,0-5,2.2-5,5c0,0.3,0,0.6,0.1,0.9L2,18v4h4l10.1-10.1 C16.4,12,16.7,12,17,12c2.8,0,5-2.2,5-5C22,5.8,21.5,4.6,22.6,5.6z" />
+    <rect class="st1" x="3" y="19" width="3" height="2" />
+</svg>
