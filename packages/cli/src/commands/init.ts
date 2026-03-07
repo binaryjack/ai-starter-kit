@@ -1,7 +1,6 @@
+import { copyTemplateFiles, fileExists, TEMPLATE_DIR } from '@ai-agencee/core';
 import * as path from 'path';
 import * as readline from 'readline';
-import { copyTemplateFiles, fileExists } from '@ai-agencee/core';
-import { TEMPLATE_DIR } from '@ai-agencee/core';
 
 const ask = (question: string): Promise<string> =>
   new Promise((resolve) => {

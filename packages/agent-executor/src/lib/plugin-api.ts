@@ -45,9 +45,9 @@
  * ```
  */
 
-import * as fs from 'fs/promises'
-import * as path from 'path'
-import type { CheckHandlerRegistry } from './checks/check-handler-registry.js'
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import type { CheckHandlerRegistry } from './checks/check-handler-registry.js';
 
 // ─── Plugin manifest ──────────────────────────────────────────────────────────
 

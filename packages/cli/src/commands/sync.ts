@@ -1,6 +1,5 @@
+import { SyncResult, syncTemplateFiles, TEMPLATE_DIR } from '@ai-agencee/core';
 import * as path from 'path';
-import { syncTemplateFiles, SyncResult } from '@ai-agencee/core';
-import { TEMPLATE_DIR } from '@ai-agencee/core';
 
 export const runSync = async (): Promise<void> => {
   const dest = process.cwd();

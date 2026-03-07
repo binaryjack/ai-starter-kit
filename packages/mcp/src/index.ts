@@ -3,13 +3,13 @@ import { AuditLog, DagOrchestrator } from '@ai-agencee/engine'
 import { Server } from '@modelcontextprotocol/sdk/server/index.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import {
-  CallToolRequest,
-  CallToolRequestSchema,
-  ListResourcesRequestSchema,
-  ListToolsRequestSchema,
-  ReadResourceRequest,
-  ReadResourceRequestSchema,
-  Tool,
+    CallToolRequest,
+    CallToolRequestSchema,
+    ListResourcesRequestSchema,
+    ListToolsRequestSchema,
+    ReadResourceRequest,
+    ReadResourceRequestSchema,
+    Tool,
 } from '@modelcontextprotocol/sdk/types.js'
 import * as fs from 'fs/promises'
 import * as path from 'path'

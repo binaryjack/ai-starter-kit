@@ -25,8 +25,8 @@
  *   router.registerProvider(provider);
  */
 
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { LLMMessage, SamplingCallback } from '@ai-agencee/engine';
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 
 // MCP sampling request/response types (from MCP spec)
 interface MCPSamplingMessage {

@@ -15,7 +15,7 @@
  *     .build();
  */
 
-import type { CheckDefinition } from './agent-types.js'
+import type { CheckDefinition } from './agent-types.js';
 
 // ─── Inline types (mirrors dag-types.ts without creating a circular dep) ─────
 

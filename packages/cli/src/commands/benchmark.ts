@@ -9,9 +9,9 @@
  *   ai-kit agent:benchmark --runs 3 --output bench-report.json
  */
 
-import type { TaskType } from '@ai-agencee/engine'
-import { ModelRouterFactory } from '@ai-agencee/engine'
-import * as path from 'path'
+import type { TaskType } from '@ai-agencee/engine';
+import { ModelRouterFactory } from '@ai-agencee/engine';
+import * as path from 'path';
 
 // ─── Built-in prompt suites ───────────────────────────────────────────────────
 
