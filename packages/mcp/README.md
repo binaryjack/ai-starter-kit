@@ -1,41 +1,33 @@
 # @ai-agencee/mcp
 
-MCP (Model Context Protocol) Server for [@ai-agencee/cli](https://www.npmjs.com/package/@ai-agencee/cli). This server enables AI assistants to automatically load and enforce your project's ULTRA_HIGH coding standards when working with your codebase.
+[![npm](https://img.shields.io/npm/v/@ai-agencee/mcp)](https://www.npmjs.com/package/@ai-agencee/mcp)
+[![license](https://img.shields.io/npm/l/@ai-agencee/mcp)](https://github.com/binaryjack/ai-agencee/blob/main/LICENSE)
 
-## Features
+MCP (Model Context Protocol) server for the **AI Agencee** toolkit. Exposes DAG agent orchestration, project standard enforcement, and live event streaming directly to AI assistants — no API keys required when running through VS Code Copilot.
 
-✅ **Initialize AI Sessions** - Load TADEO/ULTRA_HIGH standards automatically  
-✅ **Project Validation** - Check project structure against rules  
-✅ **Standards Discovery** - Access project rules, patterns, and guidelines  
-✅ **Bootstrap Resources** - Load AI session initialization config  
+---
 
 ## Installation
 
 ```bash
 npm install @ai-agencee/mcp
+# or
+pnpm add @ai-agencee/mcp
 ```
+
+> **Node ≥ 20** required. ES module. Runtime dependencies: `@ai-agencee/core`, `@ai-agencee/engine`, `@modelcontextprotocol/sdk`.
+
+---
 
 ## Quick Start
 
-### 1. Start the MCP Server
+### VS Code / Copilot (no API keys needed)
 
-```bash
-npx @ai-agencee/mcp
-```
-
-The server starts on stdio and connects to your MCP client.
-
-### 2. Configure Your AI Assistant
-
-For Claude or other MCP-compatible AI assistants, add this server to your configuration:
-
-**Claude Desktop (macOS/Windows/Linux)**
-
-Edit `~/.config/Claude/claude_desktop_config.json` (or `%APPDATA%\Claude\claude_desktop_config.json` on Windows):
+Add to your VS Code MCP settings or `.vscode/mcp.json`:
 
 ```json
 {
-  "mcpServers": {
+  "servers": {
     "ai-kit": {
       "command": "npx",
       "args": ["@ai-agencee/mcp"]
@@ -44,140 +36,209 @@ Edit `~/.config/Claude/claude_desktop_config.json` (or `%APPDATA%\Claude\claude_
 }
 ```
 
-### 3. Use in AI Sessions
+The server bridges LLM calls back to VS Code Copilot via the MCP sampling protocol — no `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` required.
 
-Once configured, use these tools in your AI assistant:
+### Claude Desktop
+
+Edit `~/.config/Claude/claude_desktop_config.json` (`%APPDATA%\Claude\claude_desktop_config.json` on Windows):
+
+```json
+{
+  "mcpServers": {
+    "ai-kit": {
+      "command": "npx",
+      "args": ["@ai-agencee/mcp"],
+      "env": {
+        "ANTHROPIC_API_KEY": "sk-ant-..."
+      }
+    }
+  }
+}
+```
+
+### Standalone server
+
+```bash
+npx @ai-agencee/mcp
+# or, after installing globally:
+ai-kit-mcp
+```
+
+---
+
+## MCP Tools
+
+### `init`
+
+Initialize an AI session with ULTRA_HIGH standards. Loads all project rule files and prints the active configuration.
 
 ```
-@init              # Initialize session with ULTRA_HIGH standards
-@check             # Validate project structure
-@rules             # View coding standards
-@patterns          # View design patterns
-@bootstrap         # Get setup instructions
+Parameters:
+  strict  boolean  Enable STRICT_MODE (default: true)
 ```
 
-Example prompt:
+### `check`
+
+Validate current project structure against required files, kebab-case naming rules, and forbidden code patterns.
+
+### `rules`
+
+Return coding standards and conventions from `src/.ai/rules.md`.
 
 ```
-@init
-@rules
-
-Based on the project rules, how should I structure my TypeScript component?
+Parameters:
+  format  'markdown' | 'text'  (default: 'markdown')
 ```
 
-## Tools Available
+### `patterns`
 
-### @init
-
-Initializes AI session with TADEO/ULTRA_HIGH standards.
-
-**Parameters:**
-- `strict` (boolean, optional): Enable STRICT_MODE. Default: `true`
-
-**Returns:**
-- Configuration summary
-- Project rules loaded
-- Available tools list
-- Next steps
-
-### @check
-
-Validates current project structure against rules.
-
-**Returns:**
-- Type safety check status
-- Linting results  
-- Testing coverage
-- Rules compliance
-
-### @rules
-
-Get your project's coding standards and conventions.
-
-**Parameters:**
-- `format` (string): `markdown` or `text`. Default: `markdown`
-
-**Returns:**
-- File naming conventions
-- Export patterns
-- Type requirements
-- Testing standards
-- Forbidden patterns
-
-### @patterns
-
-Get design patterns and architecture guidelines for your project.
-
-**Parameters:**
-- `format` (string): `markdown` or `text`. Default: `markdown`
-
-**Returns:**
-- Architecture patterns
-- Best practices
-- Common examples
-- Anti-patterns
-
-### @bootstrap
-
-Get bootstrap configuration and setup instructions.
-
-**Parameters:**
-- `format` (string): `markdown`, `text`, or `config`. Default: `markdown`
-
-**Returns:**
-- Project setup guide
-- Environment configuration
-- Development workflow
-
-## Resources Available
-
-MCP Resources provide direct access to project files:
-
-- `bootstrap://init` - AI session initialization guide
-- `bootstrap://rules` - Project coding rules
-- `bootstrap://patterns` - Design patterns guide
-- `bootstrap://manifest` - Project manifest and capabilities
-
-## ULTRA_HIGH Standards Reference
-
-The MCP server enforces these TADEO/ULTRA_HIGH standards:
-
-| Standard | Rule |
-|----------|------|
-| **Naming** | kebab-case (no camelCase) |
-| **Files** | One export per file |
-| **Types** | No `any` type allowed |
-| **Functions** | `export const Name = function(...) { ... }` |
-| **Classes** | FORBIDDEN |
-| **Testing** | 95% minimum coverage required |
-| **Performance** | ≤10% solid-js overhead |
-
-### Configuration Flags
+Return design patterns and architecture guidelines from `src/.ai/patterns.md`.
 
 ```
-U=TADEO                 # Universe: TADEO framework
-STD=ULTRA_HIGH          # Standard level
-COM=BRUTAL              # Communication: Direct and honest
-VERBOSITY=0             # Minimal output
-POLITE=0                # Direct without pleasantries
-PROSE=0                 # Code-focused, minimal narrative
-HEADLESS=1              # Non-interactive mode
-DELEGATE=0              # No delegating tasks
-STRICT_MODE=1           # Strict type and rule checking
-IGNORE_HISTORY=1        # Fresh context each session
-NO_CHAT=1               # No chat mode, direct instructions
+Parameters:
+  format  'markdown' | 'text'  (default: 'markdown')
 ```
+
+### `bootstrap`
+
+Return session bootstrap guide from `src/.ai/bootstrap.md`.
+
+```
+Parameters:
+  format  'markdown' | 'text' | 'config'  (default: 'markdown')
+```
+
+### `agent-dag`
+
+Run a full multi-lane supervised DAG execution. LLM calls are delegated back to the AI assistant via MCP sampling — no API keys needed.
+
+```
+Parameters:
+  dagFile      string   Path to dag.json (default: 'agents/dag.json')
+  projectRoot  string   Absolute path to project root (default: cwd)
+  verbose      boolean  Emit per-checkpoint log lines (default: false)
+  budgetCapUSD number   Abort when estimated spend exceeds this USD amount
+```
+
+### `agent-breakdown`
+
+Use the Business Analyst agent to break down a specification into structured tasks.
+
+```
+Parameters:
+  specification  string  (required)  Feature description to analyse
+```
+
+### `agent-workflow`
+
+Run the full 6-agent pipeline: BA → Architecture → Backend → Frontend → Testing → E2E.
+
+```
+Parameters:
+  specification  string  (required)  Complete feature specification
+  featureName    string  (required)  Feature identifier
+```
+
+### `agent-validate`
+
+Use the Supervisor agent to validate implementation output against ULTRA_HIGH standards.
+
+```
+Parameters:
+  output       string    (required)  Code or output to validate
+  checkpoints  string[]  Which standards to check (all, code-quality, architecture, testing)
+```
+
+### `agent-status`
+
+Check workflow progress and active run state.
+
+---
+
+## MCP Resources
+
+The server exposes project documentation as MCP resources, readable by any compatible client:
+
+| URI | Contents |
+|-----|----------|
+| `bootstrap://init` | AI session initialization guide |
+| `bootstrap://rules` | Coding rules (`src/.ai/rules.md`) |
+| `bootstrap://patterns` | Design patterns (`src/.ai/patterns.md`) |
+| `bootstrap://manifest` | Project manifest and capabilities |
+
+---
+
+## Live Event Stream (SSE)
+
+Set the `AIKIT_SSE_PORT` environment variable to also start an HTTP Server-Sent Events server alongside the MCP stdio server:
+
+```bash
+AIKIT_SSE_PORT=3747 npx @ai-agencee/mcp
+```
+
+Subscribe from any HTTP client:
+
+```js
+const evtSource = new EventSource('http://localhost:3747/events');
+evtSource.addEventListener('lane:end', (e) => console.log(JSON.parse(e.data)));
+
+// Subscribe to a specific run only:
+const evtSource = new EventSource('http://localhost:3747/events?runId=abc123');
+```
+
+Emitted event types: `dag:start`, `dag:end`, `lane:start`, `lane:end`, `llm:call`, `budget:exceeded`, `rbac:denied`, `checkpoint:complete`.
+
+---
+
+## OIDC Authentication
+
+For enterprise deployments, set `AIKIT_OIDC_ISSUER` to enable OIDC JWT validation on the SSE endpoint:
+
+```bash
+AIKIT_SSE_PORT=3747 \
+AIKIT_OIDC_ISSUER=https://login.microsoftonline.com/<tenant>/v2.0 \
+npx @ai-agencee/mcp
+```
+
+---
+
+## ULTRA_HIGH Standards Enforced
+
+| Rule | Value |
+|------|-------|
+| File naming | kebab-case only |
+| Files | One export per file |
+| Types | No `any` allowed |
+| Functions | `export const Name = function(...) { ... }` |
+| Classes | FORBIDDEN |
+| Test coverage | ≥ 95% |
+| Performance | ≤ 10% solid-js overhead |
+
+---
 
 ## Architecture
 
-The MCP server is built on the [@modelcontextprotocol/sdk](https://github.com/modelcontextprotocol/python-sdk) with:
+- **Transport**: stdio (MCP protocol) + optional HTTP SSE
+- **Engine**: delegates DAG execution to [`@ai-agencee/engine`](https://www.npmjs.com/package/@ai-agencee/engine)
+- **VS Code bridge**: `createVSCodeSamplingBridge()` routes LLM calls back to Copilot
+- **GitHub reporter**: posts DAG run summaries as PR comments
+- **OIDC middleware**: JWT validation for the SSE endpoint
 
-- **Transport**: Stdio-based communication with MCP clients
-- **Tools**: Four request handlers for AI assistant integration
-- **Resources**: File-based resources for project documentation
-- **Error Handling**: Graceful error messages and fallback behavior
+---
 
-## Integration Examples
+## Related Packages
+
+| Package | Description |
+|---------|-------------|
+| [`@ai-agencee/core`](https://www.npmjs.com/package/@ai-agencee/core) | File system utilities and project validation |
+| [`@ai-agencee/engine`](https://www.npmjs.com/package/@ai-agencee/engine) | Multi-lane supervised DAG execution engine |
+| [`@ai-agencee/cli`](https://www.npmjs.com/package/@ai-agencee/cli) | CLI tool — `ai-kit agent:dag` / `agent:plan` |
+
+---
+
+## License
+
+MIT — see [LICENSE](https://github.com/binaryjack/ai-agencee/blob/main/LICENSE)
 
 ### With Claude
 

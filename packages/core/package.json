@@ -13,7 +13,8 @@
   },
   "files": [
     "dist",
-    "template"
+    "template",
+    "README.md"
   ],
   "publishConfig": {
     "access": "public"
