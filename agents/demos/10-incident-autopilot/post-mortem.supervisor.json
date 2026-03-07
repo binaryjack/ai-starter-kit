@@ -1,0 +1,20 @@
+{
+  "laneId": "post-mortem",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": "human-review-gate",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Review outcome contract empty. Proceed with post-mortem using available log analysis and root cause data."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

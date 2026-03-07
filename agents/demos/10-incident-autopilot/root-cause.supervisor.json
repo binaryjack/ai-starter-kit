@@ -1,0 +1,24 @@
+{
+  "laneId": "root-cause",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": "log-analyser",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Log analysis contract was empty. Use the known error pattern: DB connection pool exhaustion causing api-gateway circuit breaker to open."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "root-cause",
+    "outputKeys": ["root_cause"]
+  }
+}

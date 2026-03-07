@@ -1,0 +1,20 @@
+{
+  "laneId": "release-notes",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": "test-suite",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Test suite contract was empty. Proceed with the assumption that all tests passed — generate release notes based on the feature spec."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

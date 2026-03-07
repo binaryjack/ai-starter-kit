@@ -1,0 +1,21 @@
+{
+  "name": "Test Coverage Analyser",
+  "icon": "🧪",
+  "description": "Checks that new code paths introduced by the PR are covered by unit or integration tests. Verifies test file presence and analyses coverage delta.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "__tests__",
+      "pass": "✅ __tests__/ directory found — coverage analysis can proceed",
+      "fail": "❌ No __tests__/ directory — coverage cannot be measured"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Analyse the pull request diff and determine test coverage: (1) Which new functions or branches lack test coverage? (2) Are existing tests likely to break? (3) What is the estimated coverage delta (+ or - %)? Output structured findings per file.",
+      "outputKey": "coverage_analysis",
+      "pass": "🧪 Coverage analysis complete",
+      "fail": "⚠️  Coverage analysis failed"
+    }
+  ]
+}

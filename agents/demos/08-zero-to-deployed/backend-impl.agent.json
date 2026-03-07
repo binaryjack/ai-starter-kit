@@ -1,0 +1,31 @@
+{
+  "name": "Backend Engineer",
+  "icon": "⚙️",
+  "description": "Implements the server-side feature: API endpoints, database migrations, business logic, and event emission. Reads the architecture contract and publishes an API spec for the frontend to consume.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "waitFor": "architecture",
+      "contractKey": "architecture-design",
+      "outputKey": "arch_input",
+      "pass": "🔗 Architecture design loaded",
+      "fail": "⚠️  Architecture contract unavailable"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Implement the backend for this feature based on:\n{arch_input}\n\nGenerate:\n1. TypeScript API route handler (Express/Fastify style)\n2. Database migration SQL\n3. Notification event emitter (using the DAG event bus)\n4. Unit test skeletons\n\nContext: {retryContext}",
+      "outputKey": "backend_implementation",
+      "pass": "⚙️  Backend implementation generated",
+      "fail": "⚠️  Backend generation failed"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Generate the OpenAPI 3.0 spec for the notification API endpoints produced above. Include request schemas, response schemas, error responses, and authentication requirements.",
+      "outputKey": "api_spec",
+      "pass": "📄 API spec published",
+      "fail": "⚠️  API spec generation failed"
+    }
+  ]
+}

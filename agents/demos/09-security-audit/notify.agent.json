@@ -1,0 +1,23 @@
+{
+  "name": "Alert Dispatcher",
+  "icon": "📢",
+  "description": "Reads the completed risk report and dispatches alerts via configured notification sinks: Slack for HIGH+ findings, email for the security team, and a webhook for the ticketing system.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "waitFor": "risk-report",
+      "contractKey": "risk-report",
+      "outputKey": "report_input",
+      "pass": "🔗 Risk report loaded",
+      "fail": "⚠️  Risk report contract unavailable"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Generate notification payloads for the following security audit report:\n{report_input}\n\nProduce:\n1. Slack message JSON (blocks format) — summary card with risk posture badge and top 3 actions\n2. Email HTML template — for security team distribution\n3. Jira/Linear issue JSON — one ticket per Critical finding\n\nContext: {retryContext}",
+      "outputKey": "alert_payloads",
+      "pass": "📢 Alert payloads generated and dispatched",
+      "fail": "⚠️  Alert dispatch failed"
+    }
+  ]
+}

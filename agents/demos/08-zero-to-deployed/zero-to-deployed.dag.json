@@ -1,0 +1,70 @@
+{
+  "name": "Demo 08 — Zero-to-Deployed Feature",
+  "description": "A PM's feature brief goes end-to-end: BA analysis → architecture → parallel backend + frontend implementation → hard-barrier sync → test suite → release notes. Demonstrates: full SDLC pipeline, parallel implementation lanes, hard-barrier synchronisation, cost tracking across 6 agents.",
+  "lanes": [
+    {
+      "id": "brief-analysis",
+      "agentFile": "brief-analysis.agent.json",
+      "supervisorFile": "brief-analysis.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["requirements-analysis", "feature-spec"]
+    },
+    {
+      "id": "architecture",
+      "agentFile": "architecture.agent.json",
+      "supervisorFile": "architecture.supervisor.json",
+      "dependsOn": ["brief-analysis"],
+      "capabilities": ["architecture-decision", "component-design"]
+    },
+    {
+      "id": "backend-impl",
+      "agentFile": "backend-impl.agent.json",
+      "supervisorFile": "backend-impl.supervisor.json",
+      "dependsOn": ["architecture"],
+      "capabilities": ["backend-implementation", "api-spec"]
+    },
+    {
+      "id": "frontend-impl",
+      "agentFile": "frontend-impl.agent.json",
+      "supervisorFile": "frontend-impl.supervisor.json",
+      "dependsOn": ["architecture"],
+      "capabilities": ["frontend-implementation", "ui-spec"]
+    },
+    {
+      "id": "test-suite",
+      "agentFile": "test-suite.agent.json",
+      "supervisorFile": "test-suite.supervisor.json",
+      "dependsOn": ["backend-impl", "frontend-impl"],
+      "capabilities": ["test-generation", "integration-tests"]
+    },
+    {
+      "id": "release-notes",
+      "agentFile": "release-notes.agent.json",
+      "supervisorFile": "release-notes.supervisor.json",
+      "dependsOn": ["test-suite"],
+      "capabilities": ["release-notes", "changelog"]
+    }
+  ],
+  "globalBarriers": [
+    {
+      "name": "impl-ready",
+      "participants": ["backend-impl", "frontend-impl"],
+      "timeoutMs": 20000
+    }
+  ],
+  "capabilityRegistry": {
+    "requirements-analysis":   ["brief-analysis"],
+    "feature-spec":            ["brief-analysis"],
+    "architecture-decision":   ["architecture"],
+    "component-design":        ["architecture"],
+    "backend-implementation":  ["backend-impl"],
+    "api-spec":                ["backend-impl"],
+    "frontend-implementation": ["frontend-impl"],
+    "ui-spec":                 ["frontend-impl"],
+    "test-generation":         ["test-suite"],
+    "integration-tests":       ["test-suite"],
+    "release-notes":           ["release-notes"],
+    "changelog":               ["release-notes"]
+  },
+  "modelRouterFile": "../model-router.json"
+}

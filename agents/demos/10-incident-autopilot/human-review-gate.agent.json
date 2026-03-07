@@ -1,0 +1,23 @@
+{
+  "name": "Human Review Gate",
+  "icon": "👤",
+  "description": "Presents the proposed fix to an on-call engineer for review and sign-off before any changes are applied to production. In --interactive mode the engine pauses and waits for operator input.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "waitFor": "fix-generator",
+      "contractKey": "fix-proposal",
+      "outputKey": "fix_input",
+      "pass": "🔗 Fix proposal loaded for review",
+      "fail": "⚠️  Fix proposal unavailable"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Prepare a human review brief for the following fix proposal:\n{fix_input}\n\nFormat as a concise decision document:\n## Fix Review Required\n### Proposed Fix\n### Risk Assessment (1-5)\n### Blast Radius if Fix Fails\n### Reversibility\n### Operator Decision: [ ] APPROVE TO DEPLOY  [ ] REQUEST_CHANGES  [ ] ESCALATE TO L3\n\nContext: {retryContext}",
+      "outputKey": "review_brief",
+      "pass": "👤 Human review brief prepared",
+      "fail": "⚠️  Review brief generation failed"
+    }
+  ]
+}

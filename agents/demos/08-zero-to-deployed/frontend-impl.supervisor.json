@@ -1,0 +1,32 @@
+{
+  "laneId": "frontend-impl",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": "architecture",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Architecture contract empty — use SSE + REST notification pattern as the assumed design."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Frontend implementation incomplete. Must include NotificationBell, useNotifications hook, and TypeScript types."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "hard-barrier",
+      "barrierName": "impl-ready",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "ui-spec",
+    "outputKeys": ["frontend_implementation", "reviewed_frontend"]
+  }
+}

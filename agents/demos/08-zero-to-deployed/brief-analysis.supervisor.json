@@ -1,0 +1,23 @@
+{
+  "laneId": "brief-analysis",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "The feature spec was incomplete. Ensure all 5 sections are present: user stories, acceptance criteria, API surface, complexity estimate, and dependencies."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "feature-spec",
+    "outputKeys": ["feature_spec", "approved_spec"]
+  }
+}

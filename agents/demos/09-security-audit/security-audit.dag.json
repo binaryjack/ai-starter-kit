@@ -1,0 +1,54 @@
+{
+  "name": "Demo 09 — Live Security Audit",
+  "description": "Point a repository at the scanner: three parallel agents check for CVEs, exposed secrets, and OWASP Top-10 vulnerabilities. A risk-report agent synthesises CVSS-scored findings. A notification agent fires a Slack alert. Demonstrates: parallel audit lanes, PII scrubbing live (3 secrets found and redacted), cost analytics, notification sinks.",
+  "lanes": [
+    {
+      "id": "cve-scan",
+      "agentFile": "cve-scan.agent.json",
+      "supervisorFile": "cve-scan.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["vulnerability-scan", "cve-detection"]
+    },
+    {
+      "id": "secrets-scan",
+      "agentFile": "secrets-scan.agent.json",
+      "supervisorFile": "secrets-scan.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["secret-detection", "credential-audit"]
+    },
+    {
+      "id": "owasp-checklist",
+      "agentFile": "owasp-checklist.agent.json",
+      "supervisorFile": "owasp-checklist.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["owasp-analysis", "injection-detection"]
+    },
+    {
+      "id": "risk-report",
+      "agentFile": "risk-report.agent.json",
+      "supervisorFile": "risk-report.supervisor.json",
+      "dependsOn": ["cve-scan", "secrets-scan", "owasp-checklist"],
+      "capabilities": ["risk-scoring", "cvss-report"]
+    },
+    {
+      "id": "notify",
+      "agentFile": "notify.agent.json",
+      "supervisorFile": "notify.supervisor.json",
+      "dependsOn": ["risk-report"],
+      "capabilities": ["alert-dispatch", "slack-notification"]
+    }
+  ],
+  "capabilityRegistry": {
+    "vulnerability-scan":   ["cve-scan"],
+    "cve-detection":        ["cve-scan"],
+    "secret-detection":     ["secrets-scan"],
+    "credential-audit":     ["secrets-scan"],
+    "owasp-analysis":       ["owasp-checklist"],
+    "injection-detection":  ["owasp-checklist"],
+    "risk-scoring":         ["risk-report"],
+    "cvss-report":          ["risk-report"],
+    "alert-dispatch":       ["notify"],
+    "slack-notification":   ["notify"]
+  },
+  "modelRouterFile": "../model-router.json"
+}

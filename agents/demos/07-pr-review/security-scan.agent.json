@@ -1,0 +1,29 @@
+{
+  "name": "Security Scanner",
+  "icon": "🔍",
+  "description": "Scans the PR diff for hardcoded secrets, vulnerable dependencies, injection vectors, and insecure patterns. PII scrubbing is applied to the entire diff before every LLM call — any detected secrets are replaced with [REDACTED:TYPE] before leaving the process.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "📦 package.json present — dependency audit can proceed",
+      "fail": "⚠️  package.json not found — skipping dependency CVE check"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "security-review",
+      "prompt": "You are a security engineer reviewing a pull request diff. Analyse the changes for: (1) hardcoded secrets or API keys, (2) SQL/command injection vectors, (3) insecure direct object references, (4) missing authentication checks, (5) vulnerable package version bumps. For each finding output: severity (CRITICAL/HIGH/MEDIUM/LOW), file path, line range, description, and remediation. Context: {retryContext}",
+      "outputKey": "security_findings",
+      "pass": "🔍 Security scan complete — findings documented",
+      "fail": "⚠️  Security scan returned no structured output"
+    },
+    {
+      "type": "llm-review",
+      "taskType": "security-review",
+      "prompt": "Review the security findings list and eliminate false positives. Confirm each CRITICAL and HIGH finding is real and actionable. Output the final confirmed findings with one-line remediation per issue.",
+      "outputKey": "confirmed_findings",
+      "pass": "✅ Security findings verified and confirmed",
+      "fail": "⚠️  Finding verification could not complete"
+    }
+  ]
+}

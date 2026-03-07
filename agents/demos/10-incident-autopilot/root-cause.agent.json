@@ -1,0 +1,23 @@
+{
+  "name": "Root Cause Analyst",
+  "icon": "🔍",
+  "description": "Reads the log analysis and performs 5-Whys root cause analysis. Generates ranked hypotheses with supporting evidence and confidence scores.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "waitFor": "log-analyser",
+      "contractKey": "log-analysis",
+      "outputKey": "logs_input",
+      "pass": "🔗 Log analysis loaded",
+      "fail": "⚠️  Log analysis contract unavailable"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Perform root cause analysis on this incident:\n{logs_input}\n\nUsing the 5-Whys method:\n1. List top 3 hypotheses with confidence scores (0-100%)\n2. For the primary hypothesis, conduct full 5-Whys chain\n3. Identify contributing factors (deploys, config changes, load patterns)\n4. Classify the root cause: Bug / Scaling / Configuration / Dependency / Human Error\n5. Estimate blast radius: what else could be affected?\n\nContext: {retryContext}",
+      "outputKey": "root_cause",
+      "pass": "🔍 Root cause identified",
+      "fail": "⚠️  Root cause analysis failed"
+    }
+  ]
+}

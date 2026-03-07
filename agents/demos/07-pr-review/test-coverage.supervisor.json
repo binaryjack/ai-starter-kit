@@ -1,0 +1,19 @@
+{
+  "laneId": "test-coverage",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "noErrorFindings": true },
+      "onFail": "RETRY",
+      "retryInstructions": "__tests__/ not found. Check for test/ or src/**/*.test.ts patterns instead. If no test directory exists in any form, record this as a coverage gap."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

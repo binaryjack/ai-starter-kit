@@ -1,0 +1,24 @@
+{
+  "laneId": "human-review-gate",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": "fix-generator",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Fix proposal contract empty. Generate review brief from available root cause data."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "needs-human-review",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "review-outcome",
+    "outputKeys": ["review_brief"]
+  }
+}

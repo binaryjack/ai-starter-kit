@@ -1,0 +1,62 @@
+{
+  "name": "Demo 10 — Incident Autopilot",
+  "description": "A P1 PagerDuty alert fires. Log analyser and root-cause agents diagnose the issue in sequence. Fix generator proposes a patch and HANDOFFs a complex DB issue to a specialist. A human-review gate pauses for operator sign-off. Post-mortem agent closes the loop. Demonstrates: sequential diagnosis pipeline, HANDOFF to specialist, needs-human-review gate, event triggers.",
+  "lanes": [
+    {
+      "id": "log-analyser",
+      "agentFile": "log-analyser.agent.json",
+      "supervisorFile": "log-analyser.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["log-analysis", "pattern-detection"]
+    },
+    {
+      "id": "root-cause",
+      "agentFile": "root-cause.agent.json",
+      "supervisorFile": "root-cause.supervisor.json",
+      "dependsOn": ["log-analyser"],
+      "capabilities": ["root-cause-analysis", "hypothesis-generation"]
+    },
+    {
+      "id": "fix-generator",
+      "agentFile": "fix-generator.agent.json",
+      "supervisorFile": "fix-generator.supervisor.json",
+      "dependsOn": ["root-cause"],
+      "capabilities": ["fix-generation", "patch-creation"]
+    },
+    {
+      "id": "db-specialist",
+      "agentFile": "db-specialist.agent.json",
+      "supervisorFile": "db-specialist.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["db-expertise", "query-optimisation"]
+    },
+    {
+      "id": "human-review-gate",
+      "agentFile": "human-review-gate.agent.json",
+      "supervisorFile": "human-review-gate.supervisor.json",
+      "dependsOn": ["fix-generator"],
+      "capabilities": ["human-approval"]
+    },
+    {
+      "id": "post-mortem",
+      "agentFile": "post-mortem.agent.json",
+      "supervisorFile": "post-mortem.supervisor.json",
+      "dependsOn": ["human-review-gate"],
+      "capabilities": ["post-mortem", "runbook-update"]
+    }
+  ],
+  "capabilityRegistry": {
+    "log-analysis":          ["log-analyser"],
+    "pattern-detection":     ["log-analyser"],
+    "root-cause-analysis":   ["root-cause"],
+    "hypothesis-generation": ["root-cause"],
+    "fix-generation":        ["fix-generator"],
+    "patch-creation":        ["fix-generator"],
+    "db-expertise":          ["db-specialist"],
+    "query-optimisation":    ["db-specialist"],
+    "human-approval":        ["human-review-gate"],
+    "post-mortem":           ["post-mortem"],
+    "runbook-update":        ["post-mortem"]
+  },
+  "modelRouterFile": "../model-router.json"
+}

@@ -1,0 +1,17 @@
+{
+  "laneId": "log-analyser",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Log analysis returned incomplete data. Focus specifically on the DB connection pool errors and the circuit breaker OPEN event — these appear to be the primary failure mode."
+    }
+  ],
+  "publishContract": {
+    "key": "log-analysis",
+    "outputKeys": ["log_analysis"]
+  }
+}
