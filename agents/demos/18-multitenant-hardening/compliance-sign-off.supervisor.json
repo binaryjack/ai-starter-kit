@@ -1,0 +1,37 @@
+{
+  "laneId": "compliance-sign-off",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "allContractsAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "gdprCompliant": true,
+        "socTwoCoverage": true
+      },
+      "onFail": "ESCALATE",
+      "retryInstructions": "Compliance gaps must be resolved before sign-off"
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "needs-human-review",
+      "expect": {
+        "dpoSignedOff": true
+      },
+      "onFail": "ESCALATE",
+      "retryInstructions": "GDPR/SOC2 compliance sign-off requires DPO/CISO authorisation — cannot be automated"
+    }
+  ],
+  "publishContract": {
+    "key": "compliance-summary",
+    "outputKeys": ["compliance-summary"]
+  }
+}

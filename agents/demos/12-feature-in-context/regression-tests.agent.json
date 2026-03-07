@@ -1,0 +1,22 @@
+{
+  "name": "Regression Tests",
+  "icon": "🧪",
+  "description": "Runs the full test suite against the feature implementation. Identifies failures caused by new code, distinguishes them from pre-existing failures, applies targeted auto-fixes for DTO validation and type issues, and reports any logic failures that require human attention.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "implementation",
+      "waitFor": "implementation",
+      "pass": "implementation contract loaded",
+      "fail": "implementation contract missing"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Analyse the feature implementation against the existing test suite. Identify: (1) Tests failing due to new code — classify as DTO_VALIDATION, TYPE_MISMATCH, or LOGIC_ERROR, (2) For DTO_VALIDATION and TYPE_MISMATCH: provide the minimal auto-fix, (3) For LOGIC_ERROR: describe the issue and escalate, (4) New tests needed to cover the new functionality with target coverage %, (5) Overall test suite status: PASS / PASS_WITH_FIXES / FAIL. Apply auto-fixes automatically.",
+      "outputKey": "test-results",
+      "pass": "test suite analysis complete — fixes applied",
+      "fail": "test suite analysis failed"
+    }
+  ]
+}

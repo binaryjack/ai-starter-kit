@@ -1,0 +1,23 @@
+{
+  "laneId": "product-brief",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "hasUserStories": true, "hasComplexityEstimate": true },
+      "onFail": "RETRY",
+      "retryInstructions": "Re-run brief analysis ensuring user stories and complexity estimate are explicitly present in the output."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noAmbiguousRequirements": true },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "product-requirements",
+    "outputKeys": ["product-requirements"]
+  }
+}

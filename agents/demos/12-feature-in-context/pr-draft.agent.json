@@ -1,0 +1,29 @@
+{
+  "name": "PR Draft",
+  "icon": "📝",
+  "description": "Composes a comprehensive pull request from all upstream contracts. Automatically prepends BREAKING CHANGE label when the impact analyser detected API surface regressions. Requires operator sign-off before the PR is opened — especially critical when breaking changes are present.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "impact-analysis",
+      "waitFor": "impact-analyser",
+      "pass": "impact analysis contract loaded",
+      "fail": "impact analysis contract missing"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "test-results",
+      "waitFor": "regression-tests",
+      "pass": "test results contract loaded",
+      "fail": "test results contract missing"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Generate a comprehensive PR description from all upstream contracts. Include: (1) Feature summary and motivation, (2) Changes made — files, migration, API surface (auto-populate BREAKING CHANGE block from impact-analysis), (3) Testing — test results summary and coverage delta, (4) Migration guide for API consumers (when breaking), (5) Reviewer checklist with specific review focus areas, (6) Labels: breaking-change (if applicable), needs-migration-guide, has-db-migration, (7) Deferred or escalated items from conflict-resolver and ai-integrator.",
+      "outputKey": "pr-description",
+      "pass": "PR description generated",
+      "fail": "PR generation failed"
+    }
+  ]
+}

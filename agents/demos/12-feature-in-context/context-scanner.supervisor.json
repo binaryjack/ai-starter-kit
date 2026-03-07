@@ -1,0 +1,23 @@
+{
+  "laneId": "context-scanner",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "sourceDirPresent": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "contextMapComplete": true, "piiRemoved": true },
+      "onFail": "RETRY",
+      "retryInstructions": "Re-run context scan with explicit PII scrubbing pass (strip all emails and usernames) and ensure all required sections — module map, API surface, DB models — are present."
+    }
+  ],
+  "publishContract": {
+    "key": "codebase-context",
+    "outputKeys": ["codebase-context"]
+  }
+}

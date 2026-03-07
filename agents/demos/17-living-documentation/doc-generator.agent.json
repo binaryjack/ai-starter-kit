@@ -1,0 +1,21 @@
+{
+  "name": "Doc Generator",
+  "icon": "📝",
+  "description": "Reads the api-schema contract and generates full Markdown documentation: README structure, endpoint reference pages (one per resource), TypeScript API reference, event catalogue, error code reference, and integration guide with curl examples. If documentation output exceeds context window, chunks by domain and notes which chunks were produced separately.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "api-schema",
+      "pass": "api-schema contract available — proceeding with documentation generation",
+      "fail": "api-schema contract not available — cannot generate documentation without schema"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Using the api-schema contract, generate complete Markdown documentation: (1) README with project overview, quick-start instructions, prerequisites, and navigation index, (2) endpoint reference pages — one page per resource group (e.g. /auth, /users, /orders) covering all methods, parameters, request/response examples, and error responses, (3) TypeScript API reference with all exported types, interfaces, and enums documented with descriptions, (4) event catalogue listing all system events with payload schemas, emitter source, and consumer guidance, (5) error code reference covering all defined error codes with descriptions and suggested resolutions, (6) integration guide with curl examples for the most common operations using realistic placeholder data. If producing all sections would exceed the context window, chunk output by domain (auth, users, orders, events) and clearly state at the start of the response which domains are included and which require a separate generation pass.",
+      "outputKey": "generated-docs",
+      "pass": "Documentation generated — all sections produced or domain-chunked appropriately",
+      "fail": "Documentation generation incomplete — retry in chunked mode splitting by domain"
+    }
+  ]
+}

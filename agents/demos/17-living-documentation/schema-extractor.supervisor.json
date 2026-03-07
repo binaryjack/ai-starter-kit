@@ -1,0 +1,28 @@
+{
+  "laneId": "schema-extractor",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "contractAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "hasOpenApiSpec": true,
+        "hasTypeDefinitions": true
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Re-extract ensuring OpenAPI 3.0 spec and TypeScript interface definitions are both present"
+    }
+  ],
+  "publishContract": {
+    "key": "api-schema",
+    "outputKeys": ["api-schema"]
+  }
+}

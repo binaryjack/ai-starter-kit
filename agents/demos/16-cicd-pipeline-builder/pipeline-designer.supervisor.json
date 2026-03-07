@@ -1,0 +1,23 @@
+{
+  "laneId": "pipeline-designer",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "runnerCompatible": true },
+      "onFail": "RETRY",
+      "retryInstructions": "Runner version incompatibility detected — update workflow to use ubuntu-22.04 runner and pin action versions to avoid deprecation"
+    }
+  ],
+  "publishContract": {
+    "key": "pipeline-config",
+    "outputKeys": ["pipeline-config"]
+  }
+}

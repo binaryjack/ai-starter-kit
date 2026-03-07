@@ -1,0 +1,36 @@
+{
+  "name": "Deploy Configurator",
+  "icon": "🚀",
+  "description": "Reads pipeline-config, secrets-plan, and test-config contracts to produce the final merge deployment configuration. Requires human review before the workflow YAML is applied to the repository. Any decline of review escalates rather than aborting — the config can be revised and resubmitted.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "pipeline-config",
+      "waitFor": "pipeline-designer",
+      "pass": "pipeline-config contract available — loading GitHub Actions workflow YAML",
+      "fail": "pipeline-config contract not available — cannot produce final config without pipeline design"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "secrets-plan",
+      "waitFor": "secrets-rotator",
+      "pass": "secrets-plan contract available — loading secrets storage and access configuration",
+      "fail": "secrets-plan contract not available — cannot configure deployment without secrets management plan"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "test-config",
+      "waitFor": "test-config",
+      "pass": "test-config contract available — loading coverage thresholds and test commands",
+      "fail": "test-config contract not available — cannot configure deployment without validated test configuration"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Produce the final deployment configuration by merging the pipeline-config, secrets-plan, and test-config contracts into a complete, ready-to-apply package. Include: (1) COMPLETE WORKFLOW YAML: final merged .github/workflows/ci-cd.yml file incorporating all jobs, caching strategy, matrix config, environment gates, secrets references (by name, not value), test commands with thresholds, and Docker build steps. (2) ENVIRONMENT MATRIX: three-environment definition — dev (auto-deploy on feature branch push), staging (auto-deploy on main merge, smoke tests required), production (manual approval gate, 1-hour window, requires two approvers). (3) ROLLBACK STRATEGY PER ENVIRONMENT: dev — no rollback needed; staging — redeploy previous tag; production — immediate revert via git revert + emergency deploy workflow. (4) DEPLOYMENT NOTIFICATIONS: Slack webhook notification template for deploy start, success, and failure events with job name, environment, commit SHA, and actor. (5) SLA TARGETS: lint:<3min, test:<10min, build:<5min, docker-build:<8min, deploy-staging:<5min, deploy-production:<10min. Set hasRollbackStrategy:true and hasEnvironmentMatrix:true when all three environments are defined.",
+      "outputKey": "deploy-config",
+      "pass": "Deploy configuration complete — all environments, rollback strategies, notifications, and SLA targets defined; ready for human review",
+      "fail": "Deploy configuration incomplete — missing required environment definitions or rollback strategies"
+    }
+  ]
+}

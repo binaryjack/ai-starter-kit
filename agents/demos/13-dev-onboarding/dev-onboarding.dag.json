@@ -1,0 +1,14 @@
+{
+  "name": "Dev Onboarding",
+  "description": "Onboard a new colleague in 5 phases: full codebase index (PII scrub on author metadata) → architecture summarisation (RETRY when repo too large for single context window → chunked analysis) → team conventions extraction → first-task planning (HANDOFF to tech lead for task selection) → final onboarding doc (human review before delivery).",
+  "lanes": [
+    { "id": "codebase-indexer",      "agentFile": "./codebase-indexer.agent.json",      "supervisorFile": "./codebase-indexer.supervisor.json",      "dependsOn": [],                       "capabilities": ["llm-generate", "pii-scrubbing", "file-exists"] },
+    { "id": "arch-summariser",       "agentFile": "./arch-summariser.agent.json",       "supervisorFile": "./arch-summariser.supervisor.json",       "dependsOn": ["codebase-indexer"],     "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "conventions-extractor", "agentFile": "./conventions-extractor.agent.json", "supervisorFile": "./conventions-extractor.supervisor.json", "dependsOn": ["codebase-indexer"],     "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "first-task-planner",    "agentFile": "./first-task-planner.agent.json",    "supervisorFile": "./first-task-planner.supervisor.json",    "dependsOn": ["arch-summariser","conventions-extractor"], "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "onboarding-doc",        "agentFile": "./onboarding-doc.agent.json",        "supervisorFile": "./onboarding-doc.supervisor.json",        "dependsOn": ["first-task-planner"],   "capabilities": ["read-contract", "llm-generate", "needs-human-review"] }
+  ],
+  "globalBarriers": [],
+  "capabilityRegistry": {},
+  "modelRouterFile": "../model-router.json"
+}

@@ -1,0 +1,20 @@
+{
+  "laneId": "integrity-check",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "rowCountsMatch": true, "noFkViolations": true },
+      "onFail": "HANDOFF",
+      "targetLaneId": "rollback-agent",
+      "handoffContext": "CRITICAL: Integrity check failed — row count mismatch detected in 3 tables (users: -654, orders: -48, order_items: -6,446), 47 FK violations in order_items referencing non-existent order IDs. Production database is in an inconsistent state. Immediate rollback required. See integrity-results contract for full details."
+    }
+  ]
+}

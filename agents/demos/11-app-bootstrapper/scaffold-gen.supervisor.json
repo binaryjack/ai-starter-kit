@@ -1,0 +1,29 @@
+{
+  "laneId": "scaffold-gen",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "cacheOrRegistryAvailable": true },
+      "onFail": "RETRY",
+      "retryInstructions": "Template registry unreachable. Switch to local cache at .cache/scaffold-templates/ and re-run scaffold generation using the cached template version."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "hasPackageJson": true, "hasCiWorkflow": true, "hasTsConfig": true },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "project-scaffold",
+    "outputKeys": ["scaffold"]
+  }
+}

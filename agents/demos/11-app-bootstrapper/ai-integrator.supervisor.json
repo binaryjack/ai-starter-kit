@@ -1,0 +1,28 @@
+{
+  "laneId": "ai-integrator",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "envFilePresent": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "noMissingApiKeys": true },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "ai-integration",
+    "outputKeys": ["ai-integration"]
+  }
+}

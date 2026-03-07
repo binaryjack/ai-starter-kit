@@ -1,0 +1,39 @@
+{
+  "name": "Compliance Sign-Off",
+  "icon": "✅",
+  "description": "Reads isolation-audit, permission-matrix, secrets-vault-plan, and audit-design contracts to produce a final compliance summary: GDPR data isolation compliance status, SOC 2 Type II security controls coverage, ISO 27001 relevant controls addressed, outstanding gaps requiring additional work, and remediation timeline. Final human-reviewed gate — requires operator/DPO sign-off before hardening changes are applied to production.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "isolation-audit",
+      "pass": "isolation-audit contract available",
+      "fail": "isolation-audit contract not available — compliance summary cannot be produced"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "permission-matrix",
+      "pass": "permission-matrix contract available",
+      "fail": "permission-matrix contract not available — compliance summary cannot be produced"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "secrets-vault-plan",
+      "pass": "secrets-vault-plan contract available",
+      "fail": "secrets-vault-plan contract not available — compliance summary cannot be produced"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "audit-design",
+      "pass": "audit-design contract available — proceeding with compliance summary generation",
+      "fail": "audit-design contract not available — compliance summary cannot be produced"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Using the isolation-audit, permission-matrix, secrets-vault-plan, and audit-design contracts, produce a comprehensive multi-tenant hardening compliance summary: (1) GDPR data isolation compliance status — assess whether the tenant isolation model satisfies GDPR data segregation requirements (Articles 25 and 32), identify any gaps, and rate overall GDPR compliance readiness, (2) SOC 2 Type II security controls coverage — map the implemented controls to the five Trust Services Criteria (Security, Availability, Processing Integrity, Confidentiality, Privacy) and identify which criteria have gaps, (3) ISO 27001 relevant controls addressed — identify which Annex A controls are covered by the hardening work completed (isolation, permissions, secrets, audit) and which remain unaddressed, (4) outstanding gaps requiring additional work — produce a prioritised list of remaining compliance gaps categorised by severity: critical (must fix before production), high (fix within 30 days), medium (fix within 90 days), (5) remediation timeline — provide a realistic schedule for addressing each outstanding gap. NOTE: this summary is the final gate before production deployment of hardening changes. It requires explicit sign-off by the DPO and/or CISO — this step cannot be automated or bypassed.",
+      "outputKey": "compliance-summary",
+      "pass": "Compliance summary produced — GDPR, SOC 2 Type II, and ISO 27001 coverage assessed with gaps and remediation timeline",
+      "fail": "Compliance summary incomplete — one or more frameworks not assessed"
+    }
+  ]
+}

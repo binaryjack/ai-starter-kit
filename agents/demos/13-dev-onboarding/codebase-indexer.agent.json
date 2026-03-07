@@ -1,0 +1,21 @@
+{
+  "name": "Codebase Indexer",
+  "icon": "🗂️",
+  "description": "Indexes a full codebase for onboarding. Scrubs PII (developer emails and names) from git log and code comments before any LLM sees the data, then builds a complete module index.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "src/",
+      "pass": "Source directory found — proceeding to index.",
+      "fail": "Source directory 'src/' not found. Cannot index codebase."
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "You are indexing a codebase for developer onboarding. IMPORTANT: Before processing, strip all PII from the input — remove developer email addresses, personal names from git log entries, and author attributions from code comments. Once scrubbed, produce a full module index: for each module/package, document its name, responsibility, public API surface, key dependencies, and notable internal patterns. Output as structured JSON under outputKey 'codebase-index'.",
+      "outputKey": "codebase-index",
+      "pass": "Module index built and PII scrubbed from metadata.",
+      "fail": "Codebase indexing failed or PII scrubbing could not be verified."
+    }
+  ]
+}

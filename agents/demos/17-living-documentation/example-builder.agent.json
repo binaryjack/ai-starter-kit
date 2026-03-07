@@ -1,0 +1,27 @@
+{
+  "name": "Example Builder",
+  "icon": "💡",
+  "description": "Reads generated-docs and api-schema contracts and creates runnable code examples for each endpoint and key API method: JavaScript/TypeScript fetch examples, React hook usage patterns, curl commands with real-looking placeholder data, and common error handling patterns. Flags complex UI component examples for optional HANDOFF to frontend specialist.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "generated-docs",
+      "pass": "generated-docs contract available",
+      "fail": "generated-docs contract not available — cannot build examples without documentation"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "api-schema",
+      "pass": "api-schema contract available — proceeding with example generation",
+      "fail": "api-schema contract not available — cannot build examples without schema"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Using the generated-docs and api-schema contracts, create runnable code examples for each endpoint and key API method: (1) JavaScript/TypeScript fetch examples using async/await with proper TypeScript types and error handling, (2) React hook usage patterns for data-fetching endpoints (e.g. useQuery / useMutation patterns), (3) curl commands with real-looking placeholder data (UUIDs, realistic names, dates), (4) common error handling patterns per HTTP status code (400, 401, 403, 404, 422, 500). For complex UI component examples (e.g. data grids, forms with complex multi-step validation, file upload components), note that frontend specialist input would improve accuracy and flag those sections with a prominent comment: <!-- FLAGGED FOR FRONTEND SPECIALIST REVIEW: [reason] -->.",
+      "outputKey": "code-examples",
+      "pass": "Code examples generated for all endpoints and API methods",
+      "fail": "Example generation incomplete — missing examples for one or more endpoints"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Critical Data Migration",
+  "description": "7-phase production data migration with full rollback capability: schema analysis (PII/GDPR field scrubbing) → migration plan → backup validation (hard barrier) → dry-run (RETRY on constraint violations) → human gate before live execution → integrity check → ROLLBACK TRIGGERED when integrity check fails → DAG:ABORT. The most dramatic scenario — shows the engine failing safely.",
+  "lanes": [
+    { "id": "schema-analyser",  "agentFile": "./schema-analyser.agent.json",  "supervisorFile": "./schema-analyser.supervisor.json",  "dependsOn": [],                        "capabilities": ["llm-generate", "pii-scrubbing", "file-exists"] },
+    { "id": "migration-planner","agentFile": "./migration-planner.agent.json","supervisorFile": "./migration-planner.supervisor.json","dependsOn": ["schema-analyser"],        "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "backup-validator", "agentFile": "./backup-validator.agent.json", "supervisorFile": "./backup-validator.supervisor.json", "dependsOn": ["migration-planner"],      "capabilities": ["file-exists", "llm-generate"] },
+    { "id": "dry-run",          "agentFile": "./dry-run.agent.json",          "supervisorFile": "./dry-run.supervisor.json",          "dependsOn": ["backup-validator"],       "capabilities": ["llm-generate", "read-contract"] },
+    { "id": "live-migration",   "agentFile": "./live-migration.agent.json",   "supervisorFile": "./live-migration.supervisor.json",   "dependsOn": ["dry-run"],               "capabilities": ["read-contract", "llm-generate", "needs-human-review"] },
+    { "id": "integrity-check",  "agentFile": "./integrity-check.agent.json",  "supervisorFile": "./integrity-check.supervisor.json",  "dependsOn": ["live-migration"],        "capabilities": ["llm-generate", "read-contract"] },
+    { "id": "rollback-agent",   "agentFile": "./rollback-agent.agent.json",   "supervisorFile": "./rollback-agent.supervisor.json",   "dependsOn": ["integrity-check"],       "capabilities": ["read-contract", "llm-generate"] }
+  ],
+  "globalBarriers": [
+    { "name": "backup-complete", "waitFor": ["backup-validator"], "releaseWhen": "all-pass" }
+  ],
+  "capabilityRegistry": {},
+  "modelRouterFile": "../model-router.json"
+}

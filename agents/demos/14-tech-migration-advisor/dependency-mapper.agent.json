@@ -1,0 +1,21 @@
+{
+  "name": "Dependency Mapper",
+  "icon": "🗺️",
+  "description": "Reads the stack audit contract and maps all dependency relationships: direct and peer dependencies, CVE-based security advisories per package, deprecated or unmaintained packages, packages with 0 maintainers, circular dependencies, and the hardest-to-migrate dependencies. Escalates if any CRITICAL deprecated dependency (e.g. end-of-life framework) is found.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "stack-audit",
+      "pass": "Stack audit contract available — ready to map dependencies.",
+      "fail": "Stack audit contract not found. Cannot map dependencies without stack audit."
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Using the stack audit provided, map all dependency relationships in detail. Produce a dependency map covering: (1) direct and peer dependency graph — which packages depend on which, (2) security advisories per package using CVE data from the audit — list CVE IDs, severity, and affected versions, (3) deprecated packages — packages that are no longer actively maintained, with last publish date and deprecation notice if available, (4) packages with 0 maintainers — flag any package where the maintainer count has dropped to zero (supply chain risk), (5) circular dependencies — identify any circular dependency chains that would complicate migration, (6) hardest-to-migrate dependencies — rank the top 5 dependencies that would be most costly or risky to replace, with justification. CRITICAL: if any dependency is an end-of-life framework or runtime with no active security patching, flag as CRITICAL_DEPRECATED and set noCriticalDeprecations to false.",
+      "outputKey": "dependency-map",
+      "pass": "Dependency map complete — no critical deprecated dependencies found.",
+      "fail": "CRITICAL deprecated dependency found. Migration risk is HIGH. Escalating before assessment proceeds."
+    }
+  ]
+}

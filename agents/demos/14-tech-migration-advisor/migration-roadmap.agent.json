@@ -1,0 +1,21 @@
+{
+  "name": "Migration Roadmap",
+  "icon": "🗓️",
+  "description": "Reads the risk assessment contract and generates a phased migration plan across four phases: Phase 0 (preparation), Phase 1 (lowest-risk modules), Phase 2 (core business logic), Phase 3 (final cutover and decommission). Each phase includes scope, effort estimate, rollback strategy, success criteria, and team structure.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "risk-assessment",
+      "pass": "Risk assessment contract available — ready to generate migration roadmap.",
+      "fail": "Risk assessment contract not found. Cannot generate roadmap without accepted risk assessment."
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Using the risk assessment provided, generate a phased migration roadmap. The roadmap must contain exactly 4 phases: Phase 0 — Preparation: tooling setup, branch strategy (feature flags, strangler fig pattern), team training plan, monitoring and observability improvements before any migration begins. Phase 1 — Lowest-risk modules first: start with leaf-node services or utility packages with minimal dependencies; scope, sequence, and team assignment. Phase 2 — Core business logic: migrate the central domain modules; includes integration testing strategy, staged rollout plan, and parallel-run period. Phase 3 — Final cutover and decommission: cut all traffic to new stack, decommission old infrastructure, archive old code. For each phase provide: (a) scope — what is migrated, (b) effort estimate in person-weeks, (c) rollback strategy — explicit steps to revert if the phase fails, (d) success criteria — measurable conditions that confirm the phase is complete, (e) team structure — roles and headcount needed. The roadmap should be a document a CTO could present to a board.",
+      "outputKey": "migration-roadmap",
+      "pass": "Migration roadmap produced with 4 phases each including rollback strategy.",
+      "fail": "Migration roadmap incomplete — missing phases or rollback strategies."
+    }
+  ]
+}

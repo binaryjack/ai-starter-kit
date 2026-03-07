@@ -1,0 +1,27 @@
+{
+  "laneId": "stack-auditor",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": {
+        "packageJsonFound": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "auditComplete": true
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Re-run stack audit ensuring dependency version matrix and migration complexity estimates are complete"
+    }
+  ],
+  "publishContract": {
+    "key": "stack-audit",
+    "outputKeys": ["stack-audit"]
+  }
+}

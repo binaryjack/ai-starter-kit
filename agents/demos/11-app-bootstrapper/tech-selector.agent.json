@@ -1,0 +1,22 @@
+{
+  "name": "Technology Selector",
+  "icon": "🔬",
+  "description": "Evaluates candidate tech stacks against product requirements using a weighted scoring matrix. Requires human sign-off before locking in the framework choice for scaffold generation.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "product-requirements",
+      "waitFor": "product-brief",
+      "pass": "product requirements contract loaded",
+      "fail": "product requirements contract unavailable"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Evaluate these 3 framework candidates: Next.js 15, SvelteKit, Vite+React. Score each on: DX (20%), performance (15%), ecosystem (15%), hiring pool (10%), scalability (15%), AI tooling (10%), deployment simplicity (15%). Use the product requirements as the scoring context. Output: ranked scoreboard, recommendation with confidence %, and key trade-offs per candidate.",
+      "outputKey": "tech-recommendation",
+      "pass": "technology scoring matrix generated with recommendation",
+      "fail": "technology evaluation failed"
+    }
+  ]
+}

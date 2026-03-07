@@ -1,0 +1,22 @@
+{
+  "name": "Conflict Resolver",
+  "icon": "🔀",
+  "description": "Analyses merge conflicts between feature branch and main. Resolves syntactic conflicts automatically. Identifies SEMANTIC conflicts (business logic ambiguity where two valid approaches exist) and hands off to a senior developer for those cases, documenting each with full context and both versions.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "implementation",
+      "waitFor": "implementation",
+      "pass": "implementation contract loaded",
+      "fail": "implementation contract missing"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Analyse the diff for merge conflicts between feature branch and main. For each conflict: (1) Classify as SYNTACTIC (formatting/import order — auto-resolvable) or SEMANTIC (business logic ambiguity — requires human judgement), (2) For SYNTACTIC: output the resolved version with explanation, (3) For SEMANTIC: output both versions side-by-side, describe the business logic ambiguity, and rate escalation priority (HIGH/MEDIUM). If ANY semantic conflicts exist, set handoffRequired: true in output.",
+      "outputKey": "conflict-analysis",
+      "pass": "conflict analysis complete — all conflicts classified",
+      "fail": "conflict analysis failed"
+    }
+  ]
+}

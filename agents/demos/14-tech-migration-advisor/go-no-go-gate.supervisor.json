@@ -1,0 +1,35 @@
+{
+  "laneId": "go-no-go-gate",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "contractAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "hasDecision": true,
+        "hasNextActions": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "needs-human-review",
+      "expect": {
+        "decisionConfirmed": true
+      },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "migration-decision",
+    "outputKeys": ["migration-decision"]
+  }
+}

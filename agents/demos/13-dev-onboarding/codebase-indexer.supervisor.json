@@ -1,0 +1,28 @@
+{
+  "laneId": "codebase-indexer",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": {
+        "sourceDirPresent": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "codebaseIndexComplete": true,
+        "piiScrubbedFromMetadata": true
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Re-run codebase indexing with an explicit PII scrubbing pass: remove all developer email addresses and personal names from git log and code comments before the LLM processes any content. Verify piiScrubbedFromMetadata flag is set before publishing."
+    }
+  ],
+  "publishContract": {
+    "key": "codebase-index",
+    "outputKeys": ["codebase-index"]
+  }
+}

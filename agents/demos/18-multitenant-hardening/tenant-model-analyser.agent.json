@@ -1,0 +1,21 @@
+{
+  "name": "Tenant Model Analyser",
+  "icon": "🏢",
+  "description": "Scans the source directory to map the current tenant isolation model: data storage strategy (separate DB / shared DB / row-level security), tenant identification in requests (subdomain/header/JWT claim), authentication boundaries, and existing isolation mechanisms. Produces a threat model for multi-tenancy covering what currently prevents cross-tenant data access.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "src/",
+      "pass": "Source directory found — proceeding with tenant model analysis",
+      "fail": "Source directory not found at src/ — cannot analyse tenant model"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Analyse the codebase to map the current multi-tenant isolation model: (1) data storage strategy — identify whether the system uses separate databases per tenant, a shared database with schema-per-tenant separation, or a shared schema with row-level security (RLS) enforced via tenant_id columns, (2) tenant identification in requests — determine how the system resolves tenant context from incoming HTTP requests (subdomain, custom header such as X-Tenant-ID, JWT claim, or URL path prefix), (3) authentication boundaries — document how authentication tokens are scoped to tenants and how cross-tenant token reuse is prevented, (4) existing isolation mechanisms — enumerate all current controls that prevent cross-tenant data access. Then produce a threat model: (a) enumerate precisely what currently prevents cross-tenant data leakage at each layer (DB, API, cache, file storage), (b) identify any gaps or assumptions in the current isolation that could lead to a breach.",
+      "outputKey": "tenant-model",
+      "pass": "Tenant isolation model and threat model documented",
+      "fail": "Analysis incomplete — tenant model or threat model missing"
+    }
+  ]
+}

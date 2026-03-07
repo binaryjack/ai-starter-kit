@@ -1,0 +1,22 @@
+{
+  "name": "Impact Analyser",
+  "icon": "💥",
+  "description": "Maps the blast radius of a proposed feature change: direct file modifications, transitive dependency effects, and public API surface changes. Escalates immediately when a BREAKING change is detected to prevent silent API contract violations from reaching the implementation phase.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "codebase-context",
+      "waitFor": "context-scanner",
+      "pass": "codebase context contract loaded",
+      "fail": "codebase context contract missing"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Analyse the blast radius of the proposed feature addition using the codebase context. Determine: (1) Files directly modified by the change, (2) Transitive dependencies affected (depth 1and 2), (3) Public API surface changes — flag BREAKING if any exported symbol is renamed/removed/parameter-changed, (4) Database schema changes required, (5) Downstream consumer migration effort in person-hours, (6) Overall risk classification: SAFE / CAUTIOUS / BREAKING.",
+      "outputKey": "impact-analysis",
+      "pass": "impact analysis complete",
+      "fail": "impact analysis failed"
+    }
+  ]
+}

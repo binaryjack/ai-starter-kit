@@ -1,0 +1,28 @@
+{
+  "name": "Scaffold Generator",
+  "icon": "🏗️",
+  "description": "Generates the full project directory structure using the approved tech stack. Installs dependencies, configures TypeScript, ESLint, Tailwind, and CI workflow files. Falls back to local template cache if the registry is unreachable — retried automatically on connectivity failure.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "tech-stack",
+      "waitFor": "tech-selector",
+      "pass": "tech stack contract loaded",
+      "fail": "tech stack contract unavailable"
+    },
+    {
+      "type": "file-exists",
+      "path": ".cache/scaffold-templates/",
+      "pass": "local scaffold template cache available as fallback",
+      "fail": "no local cache — registry required"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Generate the complete project scaffold for the approved tech stack. Output: (1) Full directory tree listing, (2) package.json with all dependencies and exact versions pinned, (3) tsconfig.json for strict TypeScript, (4) .eslintrc with recommended rules, (5) tailwind.config.ts with design token placeholders, (6) .github/workflows/ci.yml with lint+test+build jobs, (7) README.md with local setup instructions.",
+      "outputKey": "scaffold",
+      "pass": "project scaffold generated with all configuration files",
+      "fail": "scaffold generation failed"
+    }
+  ]
+}

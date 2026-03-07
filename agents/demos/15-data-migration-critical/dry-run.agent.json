@@ -1,0 +1,29 @@
+{
+  "name": "Dry Run",
+  "icon": "🧪",
+  "description": "Simulates the full migration against a staging database copy without committing any changes. Executes each SQL statement from the migration plan, captures all errors, and proposes targeted fixes. No data is written to the production database during this phase.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "migration-plan",
+      "waitFor": "migration-planner",
+      "pass": "migration-plan contract available — loading migration SQL statements",
+      "fail": "migration-plan contract not available — cannot perform dry run without migration plan"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "backup-validation",
+      "waitFor": "backup-validator",
+      "pass": "backup-validation contract available — confirmed clean backup exists before dry run",
+      "fail": "backup-validation contract not available — backup gate has not been cleared"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Simulate the migration SQL from the migration-plan contract on a staging database copy. For EVERY SQL statement: (1) EXECUTE the statement and record success or failure. (2) For failures, classify the error type: CONSTRAINT_VIOLATION (FK or unique), TYPE_MISMATCH (cast error), NULL_VIOLATION (NOT NULL breach), PERMISSION_ERROR, or OTHER. (3) For each failure, propose a SPECIFIC fix: exact SQL amendment or statement reordering. (4) Report whether the dry run is clean (noConstraintViolations:true, dryRunClean:true) or failed. DO NOT commit any changes — all statements run within an automatically-rolled-back transaction. Output a per-statement result table and a summary fixes list.",
+      "outputKey": "dry-run-results",
+      "pass": "Dry run complete — no constraint violations, all statements executed successfully",
+      "fail": "Dry run found errors — see dry-run-results for per-statement failures and proposed fixes"
+    }
+  ]
+}

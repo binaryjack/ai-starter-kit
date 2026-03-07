@@ -1,0 +1,22 @@
+{
+  "name": "Feature Implementation",
+  "icon": "⚙️",
+  "description": "Generates production-ready feature code aligned to existing codebase patterns. Produces DB migration, TypeORM entity changes, service layer, controller, DTOs with validation, and unit test scaffolding — all following naming conventions discovered by the context scanner.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "codebase-context",
+      "waitFor": "context-scanner",
+      "pass": "codebase context contract loaded",
+      "fail": "codebase context contract missing"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Generate the full feature implementation following existing codebase patterns from the context contract. Include: (1) SQL migration with up/down scripts, (2) TypeORM entity updates, (3) Service class with business logic and error handling, (4) NestJS controller with route handlers and Swagger decorators, (5) DTOs using class-validator with full validation messages, (6) Unit test scaffolding with describe/it blocks for every public method. Match naming conventions, file naming, and architectural patterns exactly.",
+      "outputKey": "implementation",
+      "pass": "feature implementation generated following codebase patterns",
+      "fail": "implementation generation failed"
+    }
+  ]
+}

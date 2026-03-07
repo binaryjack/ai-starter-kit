@@ -1,0 +1,23 @@
+{
+  "laneId": "schema-analyser",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "schemaFileFound": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "hasPiiFieldMap": true, "hasTableInventory": true },
+      "onFail": "RETRY",
+      "retryInstructions": "Re-run ensuring PII field map and complete table inventory with row counts are documented"
+    }
+  ],
+  "publishContract": {
+    "key": "schema-analysis",
+    "outputKeys": ["schema-analysis"]
+  }
+}

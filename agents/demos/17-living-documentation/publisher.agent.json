@@ -1,0 +1,27 @@
+{
+  "name": "Publisher",
+  "icon": "📤",
+  "description": "Reads generated-docs and code-examples contracts and prepares the final documentation package: merges all sections, validates internal links, checks all code examples for syntax errors, generates navigation sidebar YAML, creates docs version metadata, and produces a deployment manifest (files to write, CDN invalidation list). Requires human sign-off on content accuracy before publishing.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "generated-docs",
+      "pass": "generated-docs contract available",
+      "fail": "generated-docs contract not available — cannot publish without documentation"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "code-examples",
+      "pass": "code-examples contract available — proceeding with publish preparation",
+      "fail": "code-examples contract not available — cannot publish without code examples"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Using the generated-docs and code-examples contracts, prepare the final documentation package: (1) merge all documentation sections into a coherent structure, resolving any cross-references and deduplicating overlapping content, (2) validate all internal links and produce a list of any broken links found, (3) check all code examples for syntax errors (invalid JSON, TypeScript type errors, malformed curl commands) and flag any issues, (4) generate a navigation sidebar YAML defining the complete docs hierarchy with titles, paths, and nesting, (5) create docs version metadata including version number, release date, and a changelog summary, (6) produce a deployment manifest listing all files to write with target paths, a CDN invalidation list, and any required redirect rules for renamed or moved pages. NOTE: this manifest will not be executed until human sign-off on content accuracy is received.",
+      "outputKey": "publish-manifest",
+      "pass": "Publish manifest prepared — awaiting human content review and sign-off",
+      "fail": "Publish preparation failed — broken links or invalid code examples found"
+    }
+  ]
+}

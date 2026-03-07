@@ -1,0 +1,28 @@
+{
+  "name": "AI Integrator",
+  "icon": "🤖",
+  "description": "Wires AI/LLM capabilities into the scaffolded app: validates API key presence, generates the AI service module with streaming, rate-limiting, and graceful degradation. Escalates if the OPENAI_API_KEY is absent — the lane completes with ESCALATED status so launch-gate can document it as a deferred item.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "project-scaffold",
+      "waitFor": "scaffold-gen",
+      "pass": "project scaffold contract loaded",
+      "fail": "project scaffold contract unavailable"
+    },
+    {
+      "type": "file-exists",
+      "path": ".env",
+      "pass": "environment file found — checking API key presence",
+      "fail": "no .env file — API key validation cannot proceed"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Generate the AI service module for this application. Include: (1) OpenAI client initialisation with env-var validation guard (throw descriptive error if OPENAI_API_KEY missing), (2) Streaming chat completion service with async generator pattern, (3) Exponential-backoff retry with jitter for rate-limit errors, (4) Token usage tracker class, (5) Graceful degradation mode (return placeholder content when API unavailable). Flag all missing environment variables as ESCALATION items in the output.",
+      "outputKey": "ai-integration",
+      "pass": "AI service module generated",
+      "fail": "AI integration generation failed"
+    }
+  ]
+}

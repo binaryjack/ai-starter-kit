@@ -1,0 +1,22 @@
+{
+  "laneId": "impact-analyser",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noBreakingChanges": true },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "impact-analysis",
+    "outputKeys": ["impact-analysis"]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Repo Analyser",
+  "icon": "📦",
+  "description": "Analyses the repository structure to build a complete profile for CI/CD pipeline generation: runtime version, test framework, build output, deployment target, existing CI config, and branch strategy.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "package.json found — proceeding with repository analysis",
+      "fail": "package.json not found — cannot detect Node runtime, test framework, or build config without package.json"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Analyse the repository to produce a complete CI/CD profile. Detect and report: (1) RUNTIME: Node.js version from .nvmrc, .node-version, or package.json engines field — if absent, recommend current LTS. (2) TEST FRAMEWORK: identify Jest, Vitest, Mocha, or other framework from devDependencies and test script. (3) BUILD OUTPUT: identify output directory (dist/, build/, .next/, out/) from build script or framework convention. (4) DEPLOYMENT TARGET: detect Vercel (vercel.json), AWS (serverless.yml / CDK), GCP (app.yaml), or Docker (Dockerfile) — if multiple, list all. (5) EXISTING CI CONFIG: check for .github/workflows/, .gitlab-ci.yml, .circleci/config.yml — if found, note conflicts to resolve. (6) BRANCH STRATEGY: detect gitflow (develop/release branches), trunk-based (main only), or feature-branch from git history patterns. Output as structured repo-profile with repoProfileComplete:true when all six dimensions are detected.",
+      "outputKey": "repo-profile",
+      "pass": "Repo profile complete — runtime, test framework, build output, deployment target, CI config, and branch strategy detected",
+      "fail": "Repo profile incomplete — unable to detect one or more required dimensions"
+    }
+  ]
+}

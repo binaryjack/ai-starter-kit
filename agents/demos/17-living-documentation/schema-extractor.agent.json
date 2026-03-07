@@ -1,0 +1,21 @@
+{
+  "name": "Schema Extractor",
+  "icon": "📊",
+  "description": "Reads the code-scan contract and extracts a structured API schema: OpenAPI 3.0 spec from REST endpoints, TypeScript interface definitions from exported types, database schema from ORM models, and event schema for all emitted events. Groups documentation by domain.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "code-scan",
+      "pass": "code-scan contract available — proceeding with schema extraction",
+      "fail": "code-scan contract not available — cannot extract schema without prior code scan"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Using the code-scan contract, extract a structured API schema: (1) generate a complete OpenAPI 3.0 spec from all discovered REST endpoints, including request/response schemas, status codes, and path/query parameters, (2) produce TypeScript interface definitions for all exported types and models found during scanning, (3) extract database schema from ORM model definitions including entity relationships and field types, (4) document event schema for all emitted events including payload shapes and emitter source. Group all output documentation by domain (e.g. auth, users, orders, events).",
+      "outputKey": "api-schema",
+      "pass": "API schema extracted — OpenAPI spec, TypeScript definitions, DB schema, and event schema produced",
+      "fail": "Schema extraction incomplete — missing OpenAPI spec or TypeScript definitions"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "laneId": "rollback-agent",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "rollbackComplete": true },
+      "onFail": "RETRY",
+      "retryInstructions": "Rollback partially failed — attempt restore-from-backup path: restore latest.sql.gz and replay incremental WAL logs to pre-migration point"
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "databaseRestored": true },
+      "onFail": "ABORT",
+      "abortReason": "Rollback failed after retry — database may be in inconsistent state; aborting DAG and escalating to DBA team immediately"
+    }
+  ],
+  "publishContract": {
+    "key": "rollback-report",
+    "outputKeys": ["rollback-report"]
+  }
+}

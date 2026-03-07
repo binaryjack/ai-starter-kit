@@ -1,0 +1,21 @@
+{
+  "name": "Stack Auditor",
+  "icon": "🔍",
+  "description": "Audits the current tech stack by reading package.json and analysing all dependencies. Produces a detailed audit covering current vs latest versions, framework major version gaps, Node.js version, TypeScript config strictness, build tooling age, and estimated migration complexity per layer.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "package.json",
+      "pass": "package.json found — proceeding to audit stack.",
+      "fail": "package.json not found. Cannot audit tech stack without dependency manifest."
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Audit the current tech stack using the package.json provided. Produce a structured stack audit covering: (1) all dependencies with current version vs latest available version and the version gap, (2) framework major version gap — how many major versions behind each core framework is, (3) Node.js version in use vs current LTS and end-of-life status, (4) TypeScript config strictness — which strict flags are enabled/disabled and what risk that poses, (5) build tooling age — bundler, transpiler, test runner versions relative to current standards, (6) estimated migration complexity per layer — rate each layer (frontend, backend, database, build, test) as LOW/MEDIUM/HIGH with justification. Format as a structured audit report that a tech lead can act on.",
+      "outputKey": "stack-audit",
+      "pass": "Stack audit complete with dependency version matrix and migration complexity estimates.",
+      "fail": "Stack audit incomplete — missing version matrix or migration complexity estimates."
+    }
+  ]
+}

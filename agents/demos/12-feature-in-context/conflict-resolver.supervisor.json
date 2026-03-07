@@ -1,0 +1,24 @@
+{
+  "laneId": "conflict-resolver",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noSemanticConflicts": true },
+      "onFail": "HANDOFF",
+      "targetLaneId": "senior-reviewer",
+      "handoffContext": "Semantic merge conflict detected in feature branch. Business logic ambiguity cannot be safely auto-resolved. See conflict-analysis contract for both versions and escalation priority."
+    }
+  ],
+  "publishContract": {
+    "key": "conflict-resolution",
+    "outputKeys": ["conflict-analysis"]
+  }
+}

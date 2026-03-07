@@ -1,0 +1,29 @@
+{
+  "laneId": "backup-validator",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "backupsDirFound": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "latestBackupFound": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "hard-barrier",
+      "expect": { "backupVerified": true },
+      "onFail": "ABORT",
+      "abortReason": "No migration without verified backup — backup validation failed; aborting DAG immediately"
+    }
+  ],
+  "publishContract": {
+    "key": "backup-validation",
+    "outputKeys": ["backup-validation"]
+  }
+}

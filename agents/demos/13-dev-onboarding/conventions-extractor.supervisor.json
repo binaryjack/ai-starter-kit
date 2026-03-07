@@ -1,0 +1,28 @@
+{
+  "laneId": "conventions-extractor",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "contractAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "hasNamingConventions": true,
+        "hasCommitFormat": true
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Re-extract conventions ensuring naming patterns and commit format are explicitly documented"
+    }
+  ],
+  "publishContract": {
+    "key": "conventions",
+    "outputKeys": ["conventions"]
+  }
+}

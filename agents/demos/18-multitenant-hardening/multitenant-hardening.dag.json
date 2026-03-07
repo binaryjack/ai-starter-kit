@@ -1,0 +1,17 @@
+{
+  "name": "Multi-Tenant Hardening",
+  "description": "6-lane security hardening for SaaS multi-tenancy: tenant model analysis → isolation audit (IMMEDIATE ESCALATE on cross-tenant data leak) → permission matrix + secrets vault (×4 PII scrubs) in parallel → hard barrier → audit trail generation → GDPR/SOC2 compliance sign-off (human gate required). Critical path: isolation must be confirmed before any secrets changes land.",
+  "lanes": [
+    { "id": "tenant-model-analyser", "agentFile": "./tenant-model-analyser.agent.json", "supervisorFile": "./tenant-model-analyser.supervisor.json", "dependsOn": [],                                             "capabilities": ["llm-generate", "file-exists"] },
+    { "id": "isolation-auditor",     "agentFile": "./isolation-auditor.agent.json",     "supervisorFile": "./isolation-auditor.supervisor.json",     "dependsOn": ["tenant-model-analyser"],                      "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "permission-matrix",     "agentFile": "./permission-matrix.agent.json",     "supervisorFile": "./permission-matrix.supervisor.json",     "dependsOn": ["isolation-auditor"],                          "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "secrets-vaulter",       "agentFile": "./secrets-vaulter.agent.json",       "supervisorFile": "./secrets-vaulter.supervisor.json",       "dependsOn": ["isolation-auditor"],                          "capabilities": ["read-contract", "llm-generate", "pii-scrubbing"] },
+    { "id": "audit-trail",           "agentFile": "./audit-trail.agent.json",           "supervisorFile": "./audit-trail.supervisor.json",           "dependsOn": ["permission-matrix","secrets-vaulter"],        "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "compliance-sign-off",   "agentFile": "./compliance-sign-off.agent.json",   "supervisorFile": "./compliance-sign-off.supervisor.json",   "dependsOn": ["audit-trail"],                                "capabilities": ["read-contract", "llm-generate", "needs-human-review"] }
+  ],
+  "globalBarriers": [
+    { "name": "security-complete", "waitFor": ["permission-matrix","secrets-vaulter"], "releaseWhen": "all-complete" }
+  ],
+  "capabilityRegistry": {},
+  "modelRouterFile": "../model-router.json"
+}

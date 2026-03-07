@@ -1,0 +1,27 @@
+{
+  "name": "Permission Matrix",
+  "icon": "📋",
+  "description": "Reads isolation-audit and tenant-model contracts and designs the permission matrix: roles per tenant (OWNER/ADMIN/MEMBER/VIEWER), permission bitmask per action per role, cross-tenant administrative roles, API endpoint-to-permission mapping, and ABAC policy rules. Includes permission escalation prevention ensuring no tenant can grant permissions beyond their own role.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "isolation-audit",
+      "pass": "isolation-audit contract available",
+      "fail": "isolation-audit contract not available — cannot design permissions without isolation audit"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "tenant-model",
+      "pass": "tenant-model contract available — proceeding with permission matrix design",
+      "fail": "tenant-model contract not available — cannot design permissions without tenant model"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Using the isolation-audit and tenant-model contracts, design a complete permission matrix for the multi-tenant system: (1) define four roles per tenant — OWNER (full control, can delete tenant), ADMIN (manage members and config, cannot delete tenant), MEMBER (read/write access to tenant resources), VIEWER (read-only access) — document the precise scope and authority of each role, (2) design a permission bitmask per action per role covering: read, write, delete, invite-member, manage-roles, configure-tenant, access-billing, and platform-admin actions, (3) design cross-tenant administrative roles (e.g. platform SUPERADMIN) with strictly controlled and audited access scope, (4) map every API endpoint to the minimum required permission level for enforcement at middleware, (5) produce ABAC (Attribute-Based Access Control) policy rules that can be expressed as middleware logic. ESCALATION PREVENTION: explicitly state and enforce that no tenant-level principal can grant permissions exceeding their own current role, preventing privilege escalation within or across tenant boundaries.",
+      "outputKey": "permission-matrix",
+      "pass": "Permission matrix designed — all roles, bitmasks, endpoint mappings, ABAC rules, and escalation prevention documented",
+      "fail": "Permission matrix incomplete — missing roles or escalation prevention rules"
+    }
+  ]
+}

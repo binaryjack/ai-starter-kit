@@ -1,0 +1,36 @@
+{
+  "laneId": "publisher",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "contractAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "noBrokenLinks": true,
+        "allExamplesValid": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "needs-human-review",
+      "expect": {
+        "contentApproved": true
+      },
+      "onFail": "ESCALATE",
+      "retryInstructions": "Documentation content must be reviewed for accuracy before publishing to production"
+    }
+  ],
+  "publishContract": {
+    "key": "publish-manifest",
+    "outputKeys": ["publish-manifest"]
+  }
+}

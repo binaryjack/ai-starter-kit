@@ -1,0 +1,28 @@
+{
+  "laneId": "poc-spec",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "contractAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "hasSuccessCriteria": true,
+        "hasEffortEstimate": true
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "PoC spec must include explicit success/failure criteria and effort estimate in person-days"
+    }
+  ],
+  "publishContract": {
+    "key": "poc-spec",
+    "outputKeys": ["poc-spec"]
+  }
+}

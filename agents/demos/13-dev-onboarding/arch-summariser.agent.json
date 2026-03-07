@@ -1,0 +1,21 @@
+{
+  "name": "Architecture Summariser",
+  "icon": "🏛️",
+  "description": "Reads the codebase index and produces a newcomer-friendly architecture summary covering module responsibilities, key design patterns, data flow diagrams (text form), tech debt areas, and 'gotchas' for new developers. Handles large codebases by chunking when the full index exceeds a single context window.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "codebase-index",
+      "pass": "Codebase index contract available — ready to summarise.",
+      "fail": "Codebase index contract not found. Cannot produce architecture summary."
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Using the codebase index provided, produce a newcomer-friendly architecture summary. Include: (1) module responsibilities — what each module owns and why it exists, (2) key design patterns used across the codebase (e.g. repository pattern, event-driven, CQRS), (3) data flow diagrams in text/ASCII form showing how data moves between key layers, (4) tech debt areas — parts of the codebase that are fragile, under-tested, or due for refactor, (5) 'gotchas' for new developers — non-obvious behaviour, implicit conventions, and common mistakes. If the codebase index is too large for a single context window, note that chunking was required and describe how modules were grouped for summarisation.",
+      "outputKey": "arch-summary",
+      "pass": "Architecture summary produced including gotchas section.",
+      "fail": "Architecture summary incomplete or missing required sections."
+    }
+  ]
+}

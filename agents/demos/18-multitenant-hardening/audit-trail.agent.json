@@ -1,0 +1,27 @@
+{
+  "name": "Audit Trail",
+  "icon": "📋",
+  "description": "Reads permission-matrix and secrets-vault-plan contracts and designs a comprehensive audit trail system: events to log, structured JSON log format with tenant context fields, retention policy per event type, SIEM integration points, tamper-evident log storage design, and compliance report generation covering SOC 2 Type II, GDPR, and ISO 27001.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "permission-matrix",
+      "pass": "permission-matrix contract available",
+      "fail": "permission-matrix contract not available — cannot design audit trail without permission matrix"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "secrets-vault-plan",
+      "pass": "secrets-vault-plan contract available — proceeding with audit trail design",
+      "fail": "secrets-vault-plan contract not available — cannot design audit trail without secrets vault plan"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Using the permission-matrix and secrets-vault-plan contracts, design a comprehensive audit trail system for the multi-tenant platform: (1) enumerate all events to log: data access events (reads and writes to tenant data), permission-change events (role assignments, revocations), secret rotation events, tenant lifecycle operations (create, suspend, delete), admin actions, login/logout events, failed authorisation attempts, and API quota events, (2) define a structured JSON log format with mandatory fields: tenant_id, actor_id, action, resource_type, resource_id, timestamp (ISO 8601 with ms precision), source_ip, user_agent, request_id, session_id, and outcome (success/failure with reason), (3) retention policy per event category with specific retention durations (e.g. security and audit events 2 years, operational events 90 days, debug events 7 days) and archival strategy, (4) SIEM integration points — define the log shipping mechanism (e.g. structured syslog, Kafka, direct API), required normalisation fields, and correlation identifiers for SIEM rule authoring, (5) tamper-evident log storage design using append-only storage with cryptographic hash chaining (each log entry includes a hash of the previous entry), (6) describe how the audit log directly supports SOC 2 Type II evidence collection, GDPR Article 30 records of processing activity, and ISO 27001 Annex A.12.4 logging controls.",
+      "outputKey": "audit-design",
+      "pass": "Audit trail design complete — event catalogue, log format, retention, SIEM integration, tamper-evidence, and compliance documentation produced",
+      "fail": "Audit trail design incomplete — missing SOC 2 events or retention policy"
+    }
+  ]
+}

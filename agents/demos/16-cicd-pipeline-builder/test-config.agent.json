@@ -1,0 +1,22 @@
+{
+  "name": "Test Config",
+  "icon": "🧪",
+  "description": "Reads the repo-profile contract and configures the full test pipeline including coverage thresholds, integration test timeouts, flaky test detection, reporter formats, and seed data strategy. Escalates if flaky tests are detected that would compromise CI pipeline reliability.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "repo-profile",
+      "waitFor": "repo-analyser",
+      "pass": "repo-profile contract available — loading test framework and existing test configuration",
+      "fail": "repo-profile contract not available — cannot configure test pipeline without repository profile"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Configure the CI test pipeline based on the repo-profile contract. Produce the following: (1) UNIT TESTS: exact test command with coverage flags; enforce thresholds of lines:80% and branches:70% — fail the CI job if either threshold is not met. (2) INTEGRATION TESTS: test command with timeout flag (default 30s per test, 5min suite timeout); identify any database or network dependencies and specify how they are provided in CI (service containers). (3) FLAKY TEST DETECTION: analyse test history metadata if available — any test with a failure rate > 3% across recent runs is classified as FLAKY. If flaky tests are found: list each test name, failure rate, and last failure reason; set noFlakyTestsBlocking:false and escalate. If no flaky tests found, set noFlakyTestsBlocking:true. (4) REPORTERS: configure JUnit XML reporter for CI test result upload (compatible with GitHub Actions test-results action) and lcov for coverage upload to Codecov or similar. (5) SEED DATA: specify strategy for integration test fixtures — use faker.js for synthetic PII, never use production data.",
+      "outputKey": "test-config",
+      "pass": "Test configuration complete — coverage thresholds, integration timeouts, reporters, and seed data strategy defined; no flaky tests blocking CI",
+      "fail": "Test configuration flagged issues — flaky tests detected or coverage threshold configuration failed"
+    }
+  ]
+}
