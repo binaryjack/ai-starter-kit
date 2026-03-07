@@ -1,0 +1,23 @@
+{
+  "laneId": "migration-planner",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "hasRollbackScript": true, "hasIntegrityChecks": true },
+      "onFail": "RETRY",
+      "retryInstructions": "Migration plan must include complete rollback SQL script and post-migration integrity check queries"
+    }
+  ],
+  "publishContract": {
+    "key": "migration-plan",
+    "outputKeys": ["migration-plan"]
+  }
+}

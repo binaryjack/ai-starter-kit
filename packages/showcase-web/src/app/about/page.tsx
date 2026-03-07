@@ -47,7 +47,7 @@ export default function AboutPage() {
       <SectionWrapper className="bg-neutral-800/20 border-y border-neutral-700/40 py-12">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           {STATS.map((s) => (
-            <StatCard key={s.label} value={s.value} label={s.label} />
+            <StatCard key={s.label} value={s.value} label={s.label} href={s.href} />
           ))}
         </div>
       </SectionWrapper>

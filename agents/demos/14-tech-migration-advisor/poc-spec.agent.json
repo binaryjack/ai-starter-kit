@@ -1,0 +1,27 @@
+{
+  "name": "PoC Specification",
+  "icon": "🔬",
+  "description": "Reads the risk assessment and migration roadmap contracts to specify a proof-of-concept: selects the single highest-risk module to migrate first, produces a detailed technical spec, defines success and failure criteria, estimates effort in person-days, and articulates what the PoC proves or disproves. The PoC provides the go/no-go evidence.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "risk-assessment",
+      "pass": "Risk assessment contract available.",
+      "fail": "Risk assessment contract not found. Cannot specify PoC without risk assessment."
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "migration-roadmap",
+      "pass": "Migration roadmap contract available.",
+      "fail": "Migration roadmap contract not found. Cannot specify PoC without roadmap context."
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Using the risk assessment and migration roadmap provided, specify a proof-of-concept (PoC) for the migration. Select the single highest-risk module that, if successfully migrated, provides the most evidence that the full migration is feasible. Produce a PoC specification containing: (1) Module selection — which module was chosen and why it is the highest-risk / most representative, (2) Detailed technical spec — exact steps to migrate this module: dependency replacements, code changes required, interface adaptations, test updates, (3) Success criteria — measurable, binary conditions that confirm the PoC succeeded (e.g. all tests pass, no performance regression beyond X%, zero data loss), (4) Failure criteria — conditions that would declare the PoC failed and trigger a NO_GO recommendation, (5) Effort estimate — total person-days required for the PoC including implementation, testing, and documentation, (6) What the PoC proves or disproves — explicit hypotheses being tested (e.g. 'proves that the ORM can be swapped without breaking the data layer', 'disproves the assumption that migration is safe for legacy modules'). The PoC spec must be precise enough for a senior engineer to execute it independently.",
+      "outputKey": "poc-spec",
+      "pass": "PoC specification complete with success criteria and effort estimate.",
+      "fail": "PoC specification incomplete — missing success/failure criteria or effort estimate."
+    }
+  ]
+}

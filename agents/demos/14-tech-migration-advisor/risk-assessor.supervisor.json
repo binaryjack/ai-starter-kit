@@ -1,0 +1,35 @@
+{
+  "laneId": "risk-assessor",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "contractAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "hasThreeTimelineScenarios": true,
+        "hasBusinessRisk": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "needs-human-review",
+      "expect": {
+        "riskAccepted": true
+      },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "risk-assessment",
+    "outputKeys": ["risk-assessment"]
+  }
+}

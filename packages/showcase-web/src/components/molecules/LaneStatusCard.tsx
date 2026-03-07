@@ -7,6 +7,7 @@ export type LaneStatus =
   | 'escalated'
   | 'handed-off'
   | 'human-review'
+  | 'aborted'
   | 'pass'
 
 export interface LaneState {
@@ -25,6 +26,7 @@ const STATUS_META: Record<LaneStatus, { label: string; border: string; badge: st
   escalated:     { label: 'Escalated',    border: 'border-l-red-500',       badge: 'bg-red-900/60 text-red-300',       text: 'text-red-300'    },
   'handed-off':  { label: 'Handed Off',   border: 'border-l-purple-500',    badge: 'bg-purple-900/60 text-purple-300', text: 'text-purple-300' },
   'human-review': { label: 'Awaiting ✋', border: 'border-l-indigo-500',    badge: 'bg-indigo-900/60 text-indigo-300', text: 'text-indigo-300' },
+  aborted:       { label: 'Aborted ✕',    border: 'border-l-rose-600',      badge: 'bg-rose-900/60 text-rose-300',     text: 'text-rose-300'   },
   pass:          { label: 'Pass ✓',       border: 'border-l-green-500',     badge: 'bg-green-900/60 text-green-300',   text: 'text-green-300'  },
 }
 

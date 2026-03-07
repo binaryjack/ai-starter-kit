@@ -1,0 +1,27 @@
+{
+  "laneId": "isolation-auditor",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "contractAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "noCrossTenantLeaks": true
+      },
+      "onFail": "ESCALATE",
+      "retryInstructions": "CRITICAL: cross-tenant data access vectors found — this is a data breach risk requiring immediate remediation before any other security changes proceed"
+    }
+  ],
+  "publishContract": {
+    "key": "isolation-audit",
+    "outputKeys": ["isolation-audit"]
+  }
+}

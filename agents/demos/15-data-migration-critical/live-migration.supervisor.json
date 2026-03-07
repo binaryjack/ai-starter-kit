@@ -1,0 +1,24 @@
+{
+  "laneId": "live-migration",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "needs-human-review",
+      "expect": { "migrationAuthorised": true },
+      "onFail": "ABORT",
+      "abortReason": "No live migration without explicit human authorisation — operator declined or did not respond; aborting DAG",
+      "reviewPrompt": "A live production migration of PII data is pending execution. Review the migration-execution script above. Authorise only if: (1) you have verified the rollback script is present, (2) the write-freeze and transaction wrapper are in place, (3) a backup < 1 hour old is confirmed. APPROVE to proceed or DECLINE to abort."
+    }
+  ],
+  "publishContract": {
+    "key": "migration-execution",
+    "outputKeys": ["migration-execution"]
+  }
+}

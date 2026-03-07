@@ -1,0 +1,21 @@
+{
+  "name": "Conventions Extractor",
+  "icon": "📐",
+  "description": "Reads the codebase index and extracts a comprehensive set of team conventions, producing a day-1 conventions cheatsheet for new developers covering naming patterns, commit format, PR workflow, code review norms, test organisation, error handling style, and logging conventions.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "codebase-index",
+      "pass": "Codebase index contract available — ready to extract conventions.",
+      "fail": "Codebase index contract not found. Cannot extract team conventions."
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Using the codebase index provided, extract all observable team conventions and produce a 'day-1 conventions cheatsheet'. Cover: (1) naming patterns — file names, variable names, function names, DB column names with concrete examples, (2) commit message format — prefix style, scope, tense, length limits, (3) PR workflow — branch naming, PR size norms, required reviewers, merge strategy, (4) code review norms — what reviewers check for, what is auto-approved, (5) test organisation patterns — unit vs integration separation, test file naming, fixture patterns, (6) error handling style — how errors are caught, typed, wrapped, and propagated, (7) logging conventions — log levels usage, structured logging fields, what is never logged (PII). Format as a concise cheatsheet developers can reference daily.",
+      "outputKey": "conventions",
+      "pass": "Conventions cheatsheet produced with naming patterns and commit format sections.",
+      "fail": "Conventions extraction incomplete — missing naming patterns or commit format."
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 'use client'
 
+import { Icon } from '@ai-agencee/ui/icons'
 import { useEffect, useState } from 'react'
 
 const NAV_LINKS = [
@@ -64,14 +65,17 @@ export function SiteHeader() {
               href="https://github.com/binaryjack/ai-agencee"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden text-sm text-neutral-400 transition-colors hover:text-neutral-100 sm:block"
+              aria-label="View on GitHub"
+              className="hidden items-center gap-1.5 text-sm text-neutral-400 transition-colors hover:text-neutral-100 sm:flex"
             >
-              GitHub ↗
+              <Icon name="network" theme="dark" size={16} aria-hidden />
+              GitHub
             </a>
             <a
               href="/pricing"
-              className="hidden rounded-node bg-brand-500 px-3.5 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-400 md:inline-flex"
+              className="hidden items-center gap-1.5 rounded-node bg-brand-500 px-3.5 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-400 md:inline-flex"
             >
+              <Icon name="rocket" theme="dark" size={14} aria-hidden />
               Get started
             </a>
 
@@ -83,20 +87,10 @@ export function SiteHeader() {
               onClick={() => setOpen((v) => !v)}
               className="flex h-9 w-9 items-center justify-center rounded-node text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-neutral-100 md:hidden"
             >
-              {open ? (
-                /* X icon */
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <line x1="2" y1="2" x2="16" y2="16" />
-                  <line x1="16" y1="2" x2="2" y2="16" />
-                </svg>
-              ) : (
-                /* Hamburger icon */
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <line x1="2" y1="4"  x2="16" y2="4"  />
-                  <line x1="2" y1="9"  x2="16" y2="9"  />
-                  <line x1="2" y1="14" x2="16" y2="14" />
-                </svg>
-              )}
+                {open
+                ? <Icon name="close"   theme="dark" size={18} aria-hidden />
+                : <Icon name="network" theme="dark" size={18} aria-hidden />
+              }
             </button>
           </div>
         </div>
@@ -136,10 +130,7 @@ export function SiteHeader() {
             onClick={() => setOpen(false)}
             className="flex h-8 w-8 items-center justify-center rounded-node text-neutral-500 transition-colors hover:bg-neutral-800 hover:text-neutral-100"
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <line x1="2" y1="2" x2="14" y2="14" />
-              <line x1="14" y1="2" x2="2" y2="14" />
-            </svg>
+            <Icon name="close" theme="dark" size={16} aria-hidden />
           </button>
         </div>
 
@@ -165,13 +156,15 @@ export function SiteHeader() {
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 rounded-node border border-neutral-700 px-4 py-2.5 text-sm font-medium text-neutral-300 transition-colors hover:border-neutral-500 hover:text-neutral-100"
           >
-            GitHub ↗
+            <Icon name="network" theme="dark" size={18} aria-hidden />
+            GitHub
           </a>
           <a
             href="/pricing"
             onClick={() => setOpen(false)}
-            className="flex items-center justify-center rounded-node bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-400"
+            className="flex items-center justify-center gap-2 rounded-node bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-400"
           >
+            <Icon name="rocket" theme="dark" size={18} aria-hidden />
             Get started
           </a>
         </div>

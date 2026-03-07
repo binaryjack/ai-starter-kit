@@ -1,0 +1,28 @@
+{
+  "laneId": "code-scanner",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": {
+        "sourceDirFound": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "piiScrubbedFromJsDoc": true,
+        "exportedApisCaptured": true
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Re-scan with explicit PII scrubbing of @author tags and ensure all exported symbols including REST endpoints are captured"
+    }
+  ],
+  "publishContract": {
+    "key": "code-scan",
+    "outputKeys": ["code-scan"]
+  }
+}

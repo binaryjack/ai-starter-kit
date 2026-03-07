@@ -1,0 +1,16 @@
+{
+  "name": "CI/CD Pipeline Builder",
+  "description": "End-to-end pipeline setup: repo analysis → pipeline design (RETRY on runner incompatibility) → bulk secrets rotation (×5 PII scrubs) + test configuration (ESCALATE on flaky tests) in parallel → hard barrier → deploy configuration (human gate before apply). Shows secrets management and environment hardening.",
+  "lanes": [
+    { "id": "repo-analyser",       "agentFile": "./repo-analyser.agent.json",       "supervisorFile": "./repo-analyser.supervisor.json",       "dependsOn": [],                               "capabilities": ["llm-generate", "file-exists"] },
+    { "id": "pipeline-designer",   "agentFile": "./pipeline-designer.agent.json",   "supervisorFile": "./pipeline-designer.supervisor.json",   "dependsOn": ["repo-analyser"],                "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "secrets-rotator",     "agentFile": "./secrets-rotator.agent.json",     "supervisorFile": "./secrets-rotator.supervisor.json",     "dependsOn": ["repo-analyser"],                "capabilities": ["llm-generate", "pii-scrubbing"] },
+    { "id": "test-config",         "agentFile": "./test-config.agent.json",         "supervisorFile": "./test-config.supervisor.json",         "dependsOn": ["repo-analyser"],                "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "deploy-configurator", "agentFile": "./deploy-configurator.agent.json", "supervisorFile": "./deploy-configurator.supervisor.json", "dependsOn": ["pipeline-designer","secrets-rotator","test-config"], "capabilities": ["read-contract", "llm-generate", "needs-human-review"] }
+  ],
+  "globalBarriers": [
+    { "name": "pipeline-ready", "waitFor": ["pipeline-designer","secrets-rotator","test-config"], "releaseWhen": "all-complete" }
+  ],
+  "capabilityRegistry": {},
+  "modelRouterFile": "../model-router.json"
+}

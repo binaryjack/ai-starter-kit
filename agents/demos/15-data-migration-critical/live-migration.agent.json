@@ -1,0 +1,29 @@
+{
+  "name": "Live Migration",
+  "icon": "⚡",
+  "description": "Generates the production-ready migration execution script from validated plan and clean dry-run. Requires explicit human operator authorisation before any execution — all live migrations touching PII data require sign-off. Any decline of authorisation aborts the DAG.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "migration-plan",
+      "waitFor": "migration-planner",
+      "pass": "migration-plan contract available — loading ordered SQL statements",
+      "fail": "migration-plan contract not available — cannot generate execution script without plan"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "dry-run-results",
+      "waitFor": "dry-run",
+      "pass": "dry-run-results contract available — confirmed dry run is clean",
+      "fail": "dry-run-results contract not available — dry run gate has not been cleared"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Generate the production migration execution script for DBA review. The script MUST include: (1) WRITE FREEZE: exact command to set the database to read-only mode for all application users. (2) TRANSACTION WRAPPER: BEGIN statement at the top, ROLLBACK ON ERROR handler, and COMMIT only if all migration steps succeed — any single failure must trigger full rollback. (3) MIGRATION STATEMENTS: each SQL statement from the migration plan, preceded by a progress log INSERT (migration_log table), ordered by FK dependency. (4) COMMIT GUARD: final COMMIT executes only after a confirmation SELECT confirming all tables were migrated successfully. (5) POST-COMMIT: write-unfreeze command and success notification. This script will be presented to a human operator for authorisation — it must be readable and auditable. Output key: migration-execution.",
+      "outputKey": "migration-execution",
+      "pass": "Migration execution script generated — ready for human operator review and authorisation",
+      "fail": "Failed to generate complete execution script — missing required sections"
+    }
+  ]
+}

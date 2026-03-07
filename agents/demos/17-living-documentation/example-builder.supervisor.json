@@ -1,0 +1,36 @@
+{
+  "laneId": "example-builder",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "contractAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "examplesGeneratedPerEndpoint": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": {
+        "uiComponentExamplesNeeded": true
+      },
+      "onFail": "HANDOFF",
+      "targetLaneId": "frontend-specialist",
+      "handoffContext": "UI component code examples require frontend specialist review for accuracy. React patterns and hook usage in generated-docs may need expert refinement. See code-examples contract for sections flagged for review."
+    }
+  ],
+  "publishContract": {
+    "key": "code-examples",
+    "outputKeys": ["code-examples"]
+  }
+}

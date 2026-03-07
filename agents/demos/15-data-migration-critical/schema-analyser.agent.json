@@ -1,0 +1,21 @@
+{
+  "name": "Schema Analyser",
+  "icon": "🔍",
+  "description": "Analyses the source database schema to produce a full table inventory, FK relationship map, PII/GDPR field classification, and migration complexity scores. All PII field values are scrubbed before the LLM sees actual data — only field names and types are processed.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "db/schema.sql",
+      "pass": "Schema file found — proceeding with analysis",
+      "fail": "db/schema.sql not found — cannot analyse schema without source DDL"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Analyse the provided database schema file for migration readiness. You MUST: (1) Produce a complete table inventory with estimated row counts and storage size. (2) Map all FK relationships and identify dependency ordering for migration. (3) Identify ALL PII/GDPR fields: emails, names, IP addresses, payment card numbers, national IDs, dates of birth. Classify each as personal/sensitive/payment under GDPR Article 4. Document them prominently in a dedicated PII Field Map section. (4) Rate each table migration complexity as LOW/MEDIUM/HIGH based on constraint count, row volume, and transformation requirements. NOTE: The PII field map contains only column names and types — actual data values have been scrubbed before this prompt.",
+      "outputKey": "schema-analysis",
+      "pass": "Schema analysis complete — table inventory, FK map, and PII field map produced",
+      "fail": "Schema analysis incomplete — missing required sections"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "First Task Planner",
+  "icon": "🎯",
+  "description": "Reads the architecture summary and conventions contracts to suggest 3 ideal first tasks for a new developer: one orientation task (codebase tour), one easy bug fix (complexity XS), and one small feature (complexity S). Each task includes files to touch, expected effort, learning objectives, and mentor review points. Task selection requires tech lead confirmation before assignment.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "arch-summary",
+      "pass": "Architecture summary contract available.",
+      "fail": "Architecture summary contract not found. Cannot plan first tasks without architectural context."
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "conventions",
+      "pass": "Conventions contract available.",
+      "fail": "Conventions contract not found. Cannot plan first tasks without conventions context."
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "business-analysis",
+      "prompt": "Using the architecture summary and conventions provided, suggest exactly 3 good first tasks for a new developer joining the team. Task 1 — Orientation (complexity XS): a guided tour of the codebase, read-only, no code changes; describe what files and modules to read and in what order, expected effort 0.5 days. Task 2 — Easy Bug Fix (complexity XS): identify a low-risk, well-tested area where a small concrete fix is appropriate; describe the bug type, affected files, expected effort 1-2 days, what tests to run. Task 3 — Small Feature (complexity S): a self-contained feature addition that touches one or two modules; describe the feature, files to touch, expected effort 3-5 days, learning objectives. For each task include: (a) description, (b) files to touch, (c) expected effort in days, (d) learning objectives, (e) mentor review points — specific things the tech lead should review. IMPORTANT: task selection requires tech lead confirmation before the task is assigned to the new developer.",
+      "outputKey": "first-task-plan",
+      "pass": "Three first tasks generated with effort estimates and mentor review points.",
+      "fail": "Task plan incomplete — fewer than 3 tasks or missing required fields."
+    }
+  ]
+}

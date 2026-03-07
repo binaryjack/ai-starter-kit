@@ -83,11 +83,12 @@ export const COMPARISON_ROWS: ComparisonRow[] = [
 export interface StatItem {
   value: string
   label: string
+  href?:  string
 }
 
 export const STATS: StatItem[] = [
   { value: '424',  label: 'Tests passing' },
   { value: '13',   label: 'Enterprise features (E1–E13)' },
   { value: '7',    label: 'LLM providers' },
-  { value: '$0',   label: 'Cost to evaluate (mock mode)' },
+  { value: '$0',   label: 'Cost to try — live simulator', href: '/simulate' },
 ]

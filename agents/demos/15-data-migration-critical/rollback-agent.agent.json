@@ -1,0 +1,22 @@
+{
+  "name": "Rollback Agent",
+  "icon": "⏪",
+  "description": "Activated by HANDOFF from integrity-check when migration integrity fails. Executes the rollback plan from the migration-planner contract, reversing all transformations in reverse FK-dependency order or restoring from backup for non-reversible changes. Completing this lane means the rollback succeeded — but the overall migration DAG is ABORTED.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "integrity-results",
+      "waitFor": "integrity-check",
+      "pass": "integrity-results contract available — loading failure details and affected tables for targeted rollback",
+      "fail": "integrity-results contract not available — proceeding with full rollback from backup as precaution"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Execute the rollback plan from the migration-planner contract. Perform the following steps in order: (1) REVERSE TRANSFORMS: execute rollback SQL from migration-plan in reverse FK-dependency order (child tables before parents). For each table flagged in integrity-results, apply the reverse transformation. (2) NON-REVERSIBLE TABLES: for any table where the transform cannot be reversed cleanly, restore that table from backups/latest.sql.gz using selective pg_restore --table flag. (3) ROW COUNT VERIFICATION: after rollback, run row count queries to confirm counts match the pre-migration snapshot from migration-plan. Set rollbackComplete:true only when all counts match. (4) WRITE UNFREEZE: restore write access to all application users. (5) INCIDENT NOTIFICATION: generate incident report with: rollback trigger reason (row count mismatch + FK violations), affected tables, rollback duration, DBA verification steps required, and recommendation to investigate root cause before re-attempting migration. (6) DBA ESCALATION: flag all 3 affected tables for manual DBA verification. Set databaseRestored:true after confirmation of clean state.",
+      "outputKey": "rollback-report",
+      "pass": "Rollback complete — database restored to pre-migration state, writes unfrozen, incident notification generated",
+      "fail": "Rollback encountered errors — escalating to DBA team for manual intervention"
+    }
+  ]
+}

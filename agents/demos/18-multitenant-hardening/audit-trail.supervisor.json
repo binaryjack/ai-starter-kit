@@ -1,0 +1,28 @@
+{
+  "laneId": "audit-trail",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "contractAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "coversSocTwoEvents": true,
+        "hasRetentionPolicy": true
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Audit trail design must cover all SOC 2 Type II required events and include a retention policy with specific durations per event category"
+    }
+  ],
+  "publishContract": {
+    "key": "audit-design",
+    "outputKeys": ["audit-design"]
+  }
+}

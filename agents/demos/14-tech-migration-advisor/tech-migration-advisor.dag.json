@@ -1,0 +1,15 @@
+{
+  "name": "Tech Migration Advisor",
+  "description": "6-phase migration feasibility analysis: stack audit → dependency mapping (ESCALATE on deprecated critical dependency) → risk assessment (human gate) → phased migration roadmap → PoC specification → go/no-go decision gate (human review). Produces actionable NOT_NOW recommendation with concrete phased plan.",
+  "lanes": [
+    { "id": "stack-auditor",     "agentFile": "./stack-auditor.agent.json",     "supervisorFile": "./stack-auditor.supervisor.json",     "dependsOn": [],                   "capabilities": ["llm-generate", "file-exists"] },
+    { "id": "dependency-mapper", "agentFile": "./dependency-mapper.agent.json", "supervisorFile": "./dependency-mapper.supervisor.json", "dependsOn": ["stack-auditor"],    "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "risk-assessor",     "agentFile": "./risk-assessor.agent.json",     "supervisorFile": "./risk-assessor.supervisor.json",     "dependsOn": ["dependency-mapper"], "capabilities": ["read-contract", "llm-generate", "needs-human-review"] },
+    { "id": "migration-roadmap", "agentFile": "./migration-roadmap.agent.json", "supervisorFile": "./migration-roadmap.supervisor.json", "dependsOn": ["risk-assessor"],    "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "poc-spec",          "agentFile": "./poc-spec.agent.json",          "supervisorFile": "./poc-spec.supervisor.json",          "dependsOn": ["migration-roadmap"], "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "go-no-go-gate",     "agentFile": "./go-no-go-gate.agent.json",     "supervisorFile": "./go-no-go-gate.supervisor.json",     "dependsOn": ["poc-spec","risk-assessor"], "capabilities": ["read-contract", "needs-human-review"] }
+  ],
+  "globalBarriers": [],
+  "capabilityRegistry": {},
+  "modelRouterFile": "../model-router.json"
+}

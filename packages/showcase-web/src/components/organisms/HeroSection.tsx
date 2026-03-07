@@ -80,12 +80,27 @@ export function HeroSection() {
 
         {/* Stats row */}
         <div className="mt-14 grid grid-cols-2 gap-6 border-t border-neutral-700 pt-10 sm:grid-cols-4">
-          {STATS.map((s) => (
-            <div key={s.label} className="flex flex-col gap-0.5 text-center">
-              <span className="text-2xl font-extrabold text-brand-400">{s.value}</span>
-              <span className="text-xs text-neutral-400">{s.label}</span>
-            </div>
-          ))}
+          {STATS.map((s) => {
+            const inner = (
+              <>
+                <span className="text-2xl font-extrabold text-brand-400">{s.value}</span>
+                <span className="text-xs text-neutral-400">{s.label}</span>
+              </>
+            )
+            return s.href ? (
+              <a
+                key={s.label}
+                href={s.href}
+                className="flex flex-col gap-0.5 text-center transition-opacity hover:opacity-80"
+              >
+                {inner}
+              </a>
+            ) : (
+              <div key={s.label} className="flex flex-col gap-0.5 text-center">
+                {inner}
+              </div>
+            )
+          })}
         </div>
       </div>
     </section>

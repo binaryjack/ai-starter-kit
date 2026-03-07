@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-import { SCENARIOS, type SimScenario } from '@/data/scenarios'
 import { SimulatorPanel } from '@/components/organisms/SimulatorPanel'
+import { SCENARIOS, type SimScenario } from '@/data/scenarios'
+import { useState } from 'react'
 
 const ACCENT_CLASSES: Record<string, { bg: string; border: string; text: string }> = {
   blue:   { bg: 'from-blue-950/60 to-neutral-900',   border: 'border-blue-700/40',   text: 'text-blue-400'   },

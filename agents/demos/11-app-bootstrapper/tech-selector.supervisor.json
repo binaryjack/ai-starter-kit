@@ -1,0 +1,22 @@
+{
+  "laneId": "tech-selector",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "needs-human-review",
+      "expect": { "frameworkSelected": true },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "tech-stack",
+    "outputKeys": ["tech-recommendation"]
+  }
+}

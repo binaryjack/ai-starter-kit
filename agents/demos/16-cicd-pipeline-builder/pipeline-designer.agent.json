@@ -1,0 +1,22 @@
+{
+  "name": "Pipeline Designer",
+  "icon": "⚙️",
+  "description": "Reads the repo-profile contract and designs a complete GitHub Actions CI/CD workflow with lint, test, build, docker-build, and deploy jobs. Includes caching, matrix testing, environment gates, timeouts, and retry configuration.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "repo-profile",
+      "waitFor": "repo-analyser",
+      "pass": "repo-profile contract available — loading runtime, test framework, and deployment target",
+      "fail": "repo-profile contract not available — cannot design pipeline without repository profile"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Design a complete GitHub Actions CI/CD workflow YAML based on the repo-profile contract. The workflow MUST include: (1) JOBS IN ORDER: lint (ESLint/oxlint) → test (with coverage) → build → docker-build → deploy. Each job depends on the previous. (2) CACHING: cache node_modules using actions/cache with package-lock.json or pnpm-lock.yaml hash key; cache build outputs for incremental builds. (3) MATRIX TESTING: test job runs on matrix [node: 20, 22] using the detected Node version plus next LTS. (4) ENVIRONMENT GATES: staging deploys automatically on merge to main; production deploy requires GitHub environment approval with a 1-hour timeout window. (5) TIMEOUTS: set job-level timeout-minutes (lint:10, test:20, build:15, docker-build:20, deploy:30). (6) RETRY CONFIG: flaky-step retry using nick-fields/retry@v3 for docker-build (max 3 attempts). (7) RUNNER COMPATIBILITY: check if runner version is compatible — if ubuntu-latest maps to ubuntu-24.04 and any action requires ubuntu-22.04, flag runnerCompatible:false with fix instructions; otherwise set runnerCompatible:true. Output complete YAML in pipeline-config.",
+      "outputKey": "pipeline-config",
+      "pass": "Pipeline YAML designed — all jobs, caching, matrix, environment gates, timeouts, and retry config included",
+      "fail": "Pipeline design incomplete — missing required jobs or configuration sections"
+    }
+  ]
+}

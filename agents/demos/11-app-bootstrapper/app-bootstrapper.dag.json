@@ -1,0 +1,15 @@
+{
+  "name": "App Bootstrapper",
+  "description": "Full 5-phase app build: PM brief → technology selection (human gate) → scaffold + UX in parallel → AI integration → launch readiness gate. Shows human-in-the-loop for framework decisions and graceful ESCALATE on missing infrastructure credentials.",
+  "lanes": [
+    { "id": "product-brief",  "agentFile": "./product-brief.agent.json",  "supervisorFile": "./product-brief.supervisor.json",  "dependsOn": [],                          "capabilities": ["llm-generate", "llm-review"] },
+    { "id": "tech-selector",  "agentFile": "./tech-selector.agent.json",  "supervisorFile": "./tech-selector.supervisor.json",  "dependsOn": ["product-brief"],           "capabilities": ["llm-generate", "needs-human-review"] },
+    { "id": "ux-wireframe",   "agentFile": "./ux-wireframe.agent.json",   "supervisorFile": "./ux-wireframe.supervisor.json",   "dependsOn": ["product-brief"],           "capabilities": ["llm-generate"] },
+    { "id": "scaffold-gen",   "agentFile": "./scaffold-gen.agent.json",   "supervisorFile": "./scaffold-gen.supervisor.json",   "dependsOn": ["tech-selector"],           "capabilities": ["llm-generate", "file-exists"] },
+    { "id": "ai-integrator",  "agentFile": "./ai-integrator.agent.json",  "supervisorFile": "./ai-integrator.supervisor.json",  "dependsOn": ["scaffold-gen"],            "capabilities": ["llm-generate", "file-exists"] },
+    { "id": "launch-gate",    "agentFile": "./launch-gate.agent.json",    "supervisorFile": "./launch-gate.supervisor.json",    "dependsOn": ["ai-integrator","ux-wireframe"], "capabilities": ["read-contract", "needs-human-review"] }
+  ],
+  "globalBarriers": [],
+  "capabilityRegistry": {},
+  "modelRouterFile": "../model-router.json"
+}

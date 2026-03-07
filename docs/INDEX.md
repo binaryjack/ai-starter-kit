@@ -58,6 +58,13 @@ Welcome to the **Multi-Agent Orchestration System** for the AI Starter Kit! This
 - **Covers**: OIDC JWT auth, rate limiting, PII scrubbing, multi-tenant isolation, GDPR CLI, DAG visualizer — all enforced at runtime
 - **Time**: ~15 minutes
 
+### 📖 **Lexicon & Glossary** (reference)
+- **File**: [docs/lexicon.md](lexicon.md)
+- **Web**: `/lexicon` — searchable + filterable in the showcase app
+- **Best for**: Anyone unfamiliar with the project vocabulary, AI jargon, or acronyms used throughout the codebase and docs
+- **Covers**: All acronyms (DAG, MCP, RBAC, PII, OIDC, …), AI/LLM concepts (embedding, hallucination, cosine similarity, …), project-specific names (TADEO, Supervisor, Barrier, VectorMemory, …) and patterns (Prototype Pattern, Feature-Sliced Design, …)
+- **Time**: Reference as needed
+
 ---
 
 ## 🎓 Learning Paths

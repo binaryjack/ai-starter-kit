@@ -1,0 +1,28 @@
+{
+  "laneId": "arch-summariser",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "contractAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "summaryComplete": true,
+        "hasGotchasSection": true
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Codebase too large for single pass — re-run in chunked mode: split modules into 3 groups and summarise each, then synthesise"
+    }
+  ],
+  "publishContract": {
+    "key": "arch-summary",
+    "outputKeys": ["arch-summary"]
+  }
+}

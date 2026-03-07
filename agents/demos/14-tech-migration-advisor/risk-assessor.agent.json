@@ -1,0 +1,27 @@
+{
+  "name": "Risk Assessor",
+  "icon": "⚖️",
+  "description": "Reads the stack audit and dependency map contracts to produce a comprehensive migration risk assessment. Covers technical risk (breaking changes, API incompatibilities), business risk (team upskilling, productivity dip), operational risk (deployment complexity, rollback difficulty), data risk (DB schema/ORM migration), and three timeline scenarios: optimistic, realistic, and pessimistic. Requires human review because risk decisions have business impact.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "stack-audit",
+      "pass": "Stack audit contract available.",
+      "fail": "Stack audit contract not found. Cannot assess migration risk."
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "dependency-map",
+      "pass": "Dependency map contract available.",
+      "fail": "Dependency map contract not found. Cannot assess migration risk."
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Using the stack audit and dependency map provided, produce a comprehensive migration risk assessment. The assessment must cover: (1) Technical risk — breaking changes between current and target versions, API incompatibilities, deprecated APIs that must be replaced, test coverage gaps that increase risk, (2) Business risk — team upskilling time estimate in person-weeks, expected productivity dip during migration (percentage and duration), key-person dependency risk if few developers know the target stack, (3) Operational risk — deployment complexity increase, rollback difficulty per layer (database changes are hardest), monitoring and observability gaps during transition, (4) Data risk — database schema migration requirements, ORM version compatibility, data transformation scripts needed, zero-downtime migration feasibility, (5) Timeline estimate — provide three scenarios: OPTIMISTIC (best case, no blockers), REALISTIC (expected with normal friction), PESSIMISTIC (worst case including discovered unknowns). Each scenario must include total elapsed time, team size required, and key assumptions. Rate overall migration risk as LOW/MEDIUM/HIGH/CRITICAL.",
+      "outputKey": "risk-assessment",
+      "pass": "Risk assessment complete with three timeline scenarios and business risk section.",
+      "fail": "Risk assessment incomplete — missing timeline scenarios or business risk section."
+    }
+  ]
+}

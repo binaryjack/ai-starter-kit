@@ -1,0 +1,21 @@
+{
+  "name": "Isolation Auditor",
+  "icon": "🔐",
+  "description": "Reads the tenant-model contract and audits isolation boundaries: checks all DB queries for missing tenant_id WHERE clauses, all API endpoints for missing tenant scope validation, file storage paths for tenant segregation, cache keys for tenant prefix, and background job queues for tenant context propagation. Immediately flags CRITICAL and recommends escalation if any cross-tenant data access vector is found.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "tenant-model",
+      "pass": "tenant-model contract available — proceeding with isolation audit",
+      "fail": "tenant-model contract not available — cannot audit isolation without tenant model"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "security-review",
+      "prompt": "Using the tenant-model contract, perform a comprehensive isolation boundary audit across all system layers: (1) database layer — scan all DB query sites for missing tenant_id WHERE clauses that could permit cross-tenant data reads or writes; check ORM scopes and repository methods for consistent tenant filtering, (2) API layer — audit all endpoint handlers for missing tenant scope validation (verify the authenticated tenant owns or is permitted to access the requested resource), (3) file storage — audit all file path construction for tenant segregation (storage paths must include an unambiguous tenant identifier segment), (4) cache layer — check all cache key construction for mandatory tenant prefix to prevent cross-tenant cache poisoning or data bleed, (5) background jobs — inspect all job producers and consumers for correct tenant context injection and propagation. CRITICAL RULE: if ANY cross-tenant data access vector is identified at any layer, immediately mark the finding as CRITICAL severity, describe the exact vector, and include an explicit recommendation for immediate escalation before any further security changes are made.",
+      "outputKey": "isolation-audit",
+      "pass": "Isolation audit complete — no critical cross-tenant vectors found",
+      "fail": "CRITICAL: cross-tenant data access vector(s) detected — immediate escalation required"
+    }
+  ]
+}

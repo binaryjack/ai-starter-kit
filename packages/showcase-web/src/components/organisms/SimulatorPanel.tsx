@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import type { SimScenario, SimEventKind } from '@/data/scenarios'
 import { LaneStatusCard, type LaneState, type LaneStatus } from '@/components/molecules/LaneStatusCard'
+import type { SimEventKind, SimScenario } from '@/data/scenarios'
+import { useEffect, useRef, useState } from 'react'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -10,7 +10,8 @@ interface ParsedEvent {
   type:          SimEventKind
   laneId?:       string
   content?:      string
-  status?:       'pass' | 'escalated' | 'handed-off'
+  status?:       'pass' | 'escalated' | 'handed-off' | 'aborted'
+  abortReason?:  string
   costUsd?:      number
   totalUsd?:     number
   attempt?:      number
@@ -27,7 +28,7 @@ interface ParsedEvent {
   verdict?:      string
 }
 
-type Phase = 'idle' | 'running' | 'done'
+type Phase = 'idle' | 'running' | 'done' | 'aborted'
 
 interface LogEntry {
   ts:    string
@@ -217,11 +218,19 @@ export function SimulatorPanel({ scenario, onReset }: Props) {
         }
         break
 
+      case 'lane:abort':
+        if (evt.laneId) {
+          updateLane(evt.laneId, { status: 'aborted', streamTokens: evt.reason ?? evt.abortReason ?? 'Lane aborted' })
+          log = addLog(log, `✘  [${lanes[evt.laneId]?.label ?? evt.laneId}] ABORTED: ${evt.reason ?? evt.abortReason ?? ''}`, 'text-rose-400')
+        }
+        break
+
       case 'lane:complete':
         if (evt.laneId) {
           const finalStatus: LaneStatus =
             evt.status === 'escalated'   ? 'escalated'   :
-            evt.status === 'handed-off'  ? 'handed-off'  : 'pass'
+            evt.status === 'handed-off'  ? 'handed-off'  :
+            evt.status === 'aborted'     ? 'aborted'     : 'pass'
           updateLane(evt.laneId, { status: finalStatus, costUsd: evt.costUsd })
           log = addLog(
             log,
@@ -255,7 +264,14 @@ export function SimulatorPanel({ scenario, onReset }: Props) {
         )
         totalCostUsd = evt.totalUsd ?? totalCostUsd
         break
-    }
+      case 'dag:abort':
+        log = addLog(
+          log,
+          `✘  DAG ABORTED — ${evt.reason ?? evt.abortReason ?? 'critical failure'} / cost $${(evt.totalUsd ?? totalCostUsd).toFixed(4)}`,
+          'text-rose-400',
+        )
+        totalCostUsd = evt.totalUsd ?? totalCostUsd
+        return { ...s, lanes, log, totalCostUsd, phase: 'aborted' as Phase }    }
 
     return { ...s, lanes, log, totalCostUsd }
   }
@@ -282,9 +298,12 @@ export function SimulatorPanel({ scenario, onReset }: Props) {
           <span className={`rounded-full px-3 py-1 text-xs font-semibold ${
             state.phase === 'idle'    ? 'bg-neutral-700 text-neutral-400' :
             state.phase === 'running' ? 'bg-blue-900/60 text-blue-300 animate-pulse' :
+            state.phase === 'aborted' ? 'bg-rose-900/60 text-rose-300' :
                                         'bg-green-900/60 text-green-300'
           }`}>
-            {state.phase === 'idle' ? 'Ready' : state.phase === 'running' ? 'Running' : 'Done'}
+            {state.phase === 'idle'    ? 'Ready'   :
+             state.phase === 'running' ? 'Running' :
+             state.phase === 'aborted' ? '✘ Aborted' : 'Done'}
           </span>
 
           {/* Cost */}
@@ -305,7 +324,7 @@ export function SimulatorPanel({ scenario, onReset }: Props) {
               onClick={start}
               className="rounded-md bg-brand-500 hover:bg-brand-600 px-4 py-1.5 text-xs font-semibold text-white transition-colors"
             >
-              {state.phase === 'done' ? '↺ Replay' : '▶ Run Simulation'}
+              {state.phase === 'done' || state.phase === 'aborted' ? '↺ Replay' : '▶ Run Simulation'}
             </button>
           )}
           <button

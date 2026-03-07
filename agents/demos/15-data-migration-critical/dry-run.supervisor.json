@@ -1,0 +1,30 @@
+{
+  "laneId": "dry-run",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noConstraintViolations": true },
+      "onFail": "RETRY",
+      "retryInstructions": "Constraint violations detected in dry run. Apply proposed fixes from dry-run-results output: (1) Add DEFAULT values to NOT NULL columns, (2) Fix type cast errors in transformation scripts, (3) Reorder statements to respect FK dependencies. Re-run dry run."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "dryRunClean": true },
+      "onFail": "ABORT",
+      "abortReason": "Dry run failed after retry — migration SQL contains unresolvable errors; aborting DAG"
+    }
+  ],
+  "publishContract": {
+    "key": "dry-run-results",
+    "outputKeys": ["dry-run-results"]
+  }
+}

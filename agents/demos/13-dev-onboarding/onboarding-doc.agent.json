@@ -1,0 +1,33 @@
+{
+  "name": "Onboarding Document",
+  "icon": "📚",
+  "description": "Reads the architecture summary, conventions, and first-task-plan contracts to produce a complete welcome document for the new developer. Covers environment setup, architecture overview, team conventions, their first task with acceptance criteria, and a reading list. All contact references are anonymised (no real names or emails per PII scrubbing policy). Requires human review before delivery to the new colleague.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "arch-summary",
+      "pass": "Architecture summary contract available.",
+      "fail": "Architecture summary contract not found. Cannot produce onboarding document."
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "conventions",
+      "pass": "Conventions contract available.",
+      "fail": "Conventions contract not found. Cannot produce onboarding document."
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "first-task-plan",
+      "pass": "First task plan contract available.",
+      "fail": "First task plan contract not found. Cannot produce onboarding document."
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "business-analysis",
+      "prompt": "Using the architecture summary, conventions cheatsheet, and first task plan provided, produce a complete welcome document for a new developer joining the team. The document must include: (1) Environment setup steps — local dev setup from zero, required tools and versions, how to run tests, how to start the app locally, (2) Architecture overview — friendly summary of the system, key modules, and how data flows (sourced from arch-summary), (3) Team conventions summary — the most important naming, commit, and PR conventions (sourced from conventions), (4) Their first task — the selected onboarding task with clear acceptance criteria and definition of done, (5) Who to contact for what — use anonymised role titles only (e.g. 'Tech Lead', 'Platform Engineer', 'QA Lead') — NO real names or email addresses due to PII scrubbing policy, (6) Reading list — links or references to key internal docs, ADRs, and external resources worth reading in week 1. The document should be warm, clear, and actionable. It requires human review before being sent to the new colleague.",
+      "outputKey": "onboarding-doc",
+      "pass": "Onboarding document produced with setup instructions and first task section.",
+      "fail": "Onboarding document incomplete — missing setup instructions or first task section."
+    }
+  ]
+}

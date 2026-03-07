@@ -1,0 +1,22 @@
+{
+  "name": "UX Wireframe Generator",
+  "icon": "🎨",
+  "description": "Produces text-based screen wireframes, component inventory, and navigation maps from the product requirements. Runs in parallel with tech-selector to keep total wall time low.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "product-requirements",
+      "waitFor": "product-brief",
+      "pass": "product requirements contract loaded",
+      "fail": "product requirements contract unavailable"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "frontend-design",
+      "prompt": "Generate text wireframes for every screen in the product requirements. For each screen: (1) Layout description — mobile-first grid, (2) Component list with parent-child hierarchy, (3) User interaction flows and state transitions, (4) Navigation map between screens, (5) Responsive breakpoint plan (mobile/tablet/desktop), (6) Estimated Figma token count (colors, spacing, typography). Assume the approved tech stack will be Next.js with Tailwind.",
+      "outputKey": "wireframes",
+      "pass": "wireframes generated for all screens",
+      "fail": "wireframe generation failed"
+    }
+  ]
+}

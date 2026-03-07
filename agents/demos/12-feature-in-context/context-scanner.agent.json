@@ -1,0 +1,21 @@
+{
+  "name": "Context Scanner",
+  "icon": "🔭",
+  "description": "Deep structural scan of an existing codebase. Builds a comprehensive context map covering module graph, public API surface, database models, and dependency chains. PII scrubbing removes developer email addresses and usernames found in git history and code comments before any data reaches the LLM.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "src/",
+      "pass": "source directory found — beginning context extraction",
+      "fail": "source directory not found — cannot scan codebase"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Perform a comprehensive codebase context scan. NOTE: all PII (developer emails, usernames, real names in comments) is pre-scrubbed. Document: (1) Tech stack and pinned versions, (2) Top-level module structure with responsibilities, (3) All exported public API symbols grouped by module, (4) Database models with column types and relations, (5) Dependency graph highlighting circular deps and unused packages, (6) Approximate codebase age and estimated complexity (LOC/cyclomatic). Output in structured JSON.",
+      "outputKey": "codebase-context",
+      "pass": "codebase context map generated",
+      "fail": "codebase context scan failed"
+    }
+  ]
+}

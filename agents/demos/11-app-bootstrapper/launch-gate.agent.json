@@ -1,0 +1,29 @@
+{
+  "name": "Launch Gate",
+  "icon": "🚀",
+  "description": "Final readiness checkpoint before project handoff. Reads all upstream contracts, generates a structured launch checklist (PASS/WARN/FAIL/DEFERRED per item), and requires operator sign-off. Deferred items (e.g. escalated AI keys) are documented with owner, due date, and the ticket to track them — they do not block launch.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "project-scaffold",
+      "waitFor": "scaffold-gen",
+      "pass": "project scaffold contract loaded",
+      "fail": "project scaffold contract missing"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "ux-design",
+      "waitFor": "ux-wireframe",
+      "pass": "UX design contract loaded",
+      "fail": "UX design contract missing"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Generate a comprehensive launch readiness checklist by synthesising all upstream contracts. For each item indicate: PASS, WARN, FAIL, or DEFERRED. Categories: (1) Core scaffold completeness, (2) UX screen coverage, (3) AI integration status (note any escalated items as DEFERRED), (4) Security baseline (HTTPS, env vars, no hardcoded secrets), (5) CI/CD pipeline, (6) Documentation. For DEFERRED items include: owner field, due date, and tracking reference.",
+      "outputKey": "launch-checklist",
+      "pass": "launch readiness checklist generated",
+      "fail": "launch checklist generation failed"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "laneId": "test-config",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noFlakyTestsBlocking": true },
+      "onFail": "ESCALATE",
+      "escalateReason": "Flaky tests detected that would make the CI pipeline unreliable — tests must be fixed or quarantined before the pipeline can be applied"
+    }
+  ],
+  "publishContract": {
+    "key": "test-config",
+    "outputKeys": ["test-config"]
+  }
+}

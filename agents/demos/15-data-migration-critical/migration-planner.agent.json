@@ -1,0 +1,22 @@
+{
+  "name": "Migration Planner",
+  "icon": "📋",
+  "description": "Reads the schema-analysis contract and produces a complete, ordered migration plan including pre-migration steps, parameterised SQL migration scripts, data transformation rules, per-table duration estimates, rollback SQL, and post-migration integrity checks.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "schema-analysis",
+      "waitFor": "schema-analyser",
+      "pass": "schema-analysis contract available — loading table inventory, FK map, and PII field map",
+      "fail": "schema-analysis contract not available — cannot plan migration without schema analysis"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Using the schema-analysis contract, produce a complete step-by-step database migration plan with six mandatory sections: (1) PRE-MIGRATION STEPS: full backup command, write-freeze procedure, user notification template, maintenance window duration. (2) MIGRATION SCRIPT: exact SQL statements ordered by FK dependency (parent tables before children), wrapped in a transaction block. (3) DATA TRANSFORMATION RULES: for each table, specify column renames, type casts, default injections, and PII pseudonymisation transforms. (4) DURATION ESTIMATES: per-table estimated migration time based on row count and transformation complexity. (5) ROLLBACK SCRIPT: reverse SQL for every transformation in reverse FK-dependency order — must be executable without data loss. (6) INTEGRITY CHECKS: post-migration row-count queries, FK constraint validation queries, and spot-check SELECT statements for 5 representative rows per table.",
+      "outputKey": "migration-plan",
+      "pass": "Migration plan produced — all six sections complete including rollback script and integrity checks",
+      "fail": "Migration plan incomplete — missing required sections"
+    }
+  ]
+}

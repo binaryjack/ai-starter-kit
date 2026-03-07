@@ -1,0 +1,36 @@
+{
+  "laneId": "first-task-planner",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "contractAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "threeTasksGenerated": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": {
+        "techLeadConfirmationRequired": true
+      },
+      "onFail": "HANDOFF",
+      "targetLaneId": "tech-lead-reviewer",
+      "handoffContext": "3 first-task candidates generated for new developer. Tech lead must select and schedule the onboarding task. See first-task-plan contract."
+    }
+  ],
+  "publishContract": {
+    "key": "first-task-plan",
+    "outputKeys": ["first-task-plan"]
+  }
+}

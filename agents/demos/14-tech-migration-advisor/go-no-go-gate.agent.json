@@ -1,0 +1,27 @@
+{
+  "name": "Go/No-Go Gate",
+  "icon": "🚦",
+  "description": "Reads the risk assessment and PoC specification contracts to synthesize the final migration recommendation. Weighs total risk, team capacity, business value, and PoC evidence to output one of four decisions: GO (migrate now), GO_PHASED (migrate in phases per roadmap), NOT_NOW (defer with re-evaluate trigger conditions), or NO_GO (abandon — risk exceeds benefit). Always includes concrete next actions regardless of decision. Requires human review and authorisation before the decision is acted upon.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "risk-assessment",
+      "pass": "Risk assessment contract available.",
+      "fail": "Risk assessment contract not found. Cannot make go/no-go decision without risk assessment."
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "poc-spec",
+      "pass": "PoC specification contract available.",
+      "fail": "PoC specification contract not found. Cannot make go/no-go decision without PoC evidence."
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Using the risk assessment and PoC specification provided, synthesize the final migration recommendation. You must weigh: (1) total risk rating from the risk assessment, (2) team capacity — do we have the skills and bandwidth, (3) business value — what is the benefit of migrating vs the cost of staying, (4) PoC evidence — did the PoC succeed or fail, and what does that tell us about the full migration's feasibility. Output exactly ONE of the following decisions: GO — migrate now, all evidence supports proceeding; GO_PHASED — migrate in phases exactly as per the migration roadmap, risk is manageable if phased correctly; NOT_NOW — defer migration, with explicit trigger conditions that would prompt re-evaluation (e.g. 'revisit when Node.js 18 reaches end-of-life' or 're-evaluate if team grows to 8+ engineers'); NO_GO — abandon migration, the risk and cost exceed the business benefit. For any decision, always provide concrete next actions — the immediate steps the team should take this week regardless of the decision. Be explicit, direct, and decisive. This document will be reviewed and authorised by a human decision-maker before it is acted upon.",
+      "outputKey": "migration-decision",
+      "pass": "Migration decision produced with one of GO/GO_PHASED/NOT_NOW/NO_GO and concrete next actions.",
+      "fail": "Migration decision incomplete — missing decision value or next actions."
+    }
+  ]
+}

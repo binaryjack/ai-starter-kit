@@ -1,0 +1,28 @@
+{
+  "laneId": "tenant-model-analyser",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": {
+        "sourceDirFound": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "hasTenantModel": true,
+        "hasThreatModel": true
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Re-analyse ensuring both the tenant data isolation model AND a threat model (what prevents cross-tenant access) are documented"
+    }
+  ],
+  "publishContract": {
+    "key": "tenant-model",
+    "outputKeys": ["tenant-model"]
+  }
+}

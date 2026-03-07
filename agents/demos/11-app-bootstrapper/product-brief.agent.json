@@ -1,0 +1,21 @@
+{
+  "name": "Product Brief Analyst",
+  "icon": "📋",
+  "description": "Parses a raw PM brief or natural-language app request into a structured PRD with user stories, acceptance criteria, complexity estimate, and tech constraints.",
+  "checks": [
+    {
+      "type": "llm-generate",
+      "taskType": "business-analysis",
+      "prompt": "You are a senior Business Analyst. Parse this PM brief and produce a structured PRD: (1) Project summary, (2) Target users, (3) Core features ranked by priority, (4) Non-functional requirements, (5) Complexity estimate S/M/L/XL with rationale, (6) Tech constraints and integrations. Output structured JSON.",
+      "outputKey": "product-requirements",
+      "pass": "PRD generated with all required sections",
+      "fail": "PRD generation failed or incomplete"
+    },
+    {
+      "type": "llm-review",
+      "prompt": "Review the PRD for completeness and ambiguities. Confirm it contains sufficient detail for architecture and UX planning to begin.",
+      "pass": "PRD is complete and unambiguous",
+      "fail": "PRD has critical gaps preventing design from starting"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Backup Validator",
+  "icon": "💾",
+  "description": "Hard gate before any live migration. Validates that a recent, complete database backup exists and is restorable. The migration pipeline CANNOT proceed without a verified backup. Any backup failure immediately aborts the DAG.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "backups/",
+      "pass": "backups/ directory found",
+      "fail": "backups/ directory not found — no backup directory present on this host"
+    },
+    {
+      "type": "file-exists",
+      "path": "backups/latest.sql.gz",
+      "pass": "backups/latest.sql.gz found — proceeding with integrity validation",
+      "fail": "backups/latest.sql.gz not found — latest backup file missing"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Validate the backup file at backups/latest.sql.gz for migration readiness. You MUST verify: (1) TIMESTAMP: backup must be less than 1 hour old — report exact age and pass/fail. (2) RESTORE SYNTAX: generate and validate the exact pg_restore command with all required flags. (3) TABLE COVERAGE: cross-reference backup table list against the migration plan — identify any tables present in the plan but absent from backup. (4) RESTORE TIME ESTIMATE: calculate estimated restore duration based on compressed file size. This is a HARD GATE — if any check fails, report backupVerified:false. Migration cannot proceed without a backup timestamp < 1 hour, correct restore syntax, and 100% table coverage.",
+      "outputKey": "backup-validation",
+      "pass": "Backup validated — timestamp current, restore syntax correct, all tables covered",
+      "fail": "Backup validation FAILED — migration must not proceed; see backup-validation output for details"
+    }
+  ]
+}

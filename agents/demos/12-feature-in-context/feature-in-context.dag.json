@@ -1,0 +1,15 @@
+{
+  "name": "Feature in Context",
+  "description": "Implement a new feature inside a real existing codebase: code context scanning (PII scrub) → blast-radius impact analysis (ESCALATE on breaking change) → implementation → merge-conflict resolution (HANDOFF) → regression tests (RETRY) → PR draft (human gate). Mirrors real-world DevX workflows.",
+  "lanes": [
+    { "id": "context-scanner",    "agentFile": "./context-scanner.agent.json",    "supervisorFile": "./context-scanner.supervisor.json",    "dependsOn": [],                       "capabilities": ["llm-generate", "pii-scrubbing"] },
+    { "id": "impact-analyser",    "agentFile": "./impact-analyser.agent.json",    "supervisorFile": "./impact-analyser.supervisor.json",    "dependsOn": ["context-scanner"],      "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "implementation",     "agentFile": "./implementation.agent.json",     "supervisorFile": "./implementation.supervisor.json",     "dependsOn": ["impact-analyser"],      "capabilities": ["llm-generate", "read-contract"] },
+    { "id": "conflict-resolver",  "agentFile": "./conflict-resolver.agent.json",  "supervisorFile": "./conflict-resolver.supervisor.json",  "dependsOn": ["implementation"],       "capabilities": ["llm-generate", "llm-review"] },
+    { "id": "regression-tests",   "agentFile": "./regression-tests.agent.json",   "supervisorFile": "./regression-tests.supervisor.json",   "dependsOn": ["implementation"],       "capabilities": ["llm-generate", "file-exists"] },
+    { "id": "pr-draft",           "agentFile": "./pr-draft.agent.json",           "supervisorFile": "./pr-draft.supervisor.json",           "dependsOn": ["conflict-resolver","regression-tests"], "capabilities": ["read-contract", "needs-human-review"] }
+  ],
+  "globalBarriers": [],
+  "capabilityRegistry": {},
+  "modelRouterFile": "../model-router.json"
+}

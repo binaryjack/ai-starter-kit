@@ -1,0 +1,23 @@
+{
+  "laneId": "regression-tests",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "noLogicErrors": true, "dtaAndTypeFixesApplied": true },
+      "onFail": "RETRY",
+      "retryInstructions": "Apply the auto-fixes generated for DTO_VALIDATION and TYPE_MISMATCH failures, then re-run the test suite. LOGIC_ERROR failures require separate escalation."
+    }
+  ],
+  "publishContract": {
+    "key": "test-results",
+    "outputKeys": ["test-results"]
+  }
+}

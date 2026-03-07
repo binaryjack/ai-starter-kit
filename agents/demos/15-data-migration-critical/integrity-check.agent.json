@@ -1,0 +1,29 @@
+{
+  "name": "Integrity Check",
+  "icon": "🔎",
+  "description": "Verifies the live migration succeeded by checking row counts, FK constraints, spot-checking random rows, validating PII pseudonymisation, and assessing index health. In this demo scenario the integrity check WILL find a row count mismatch and FK violations, triggering a HANDOFF to the rollback-agent.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "contractKey": "migration-execution",
+      "waitFor": "live-migration",
+      "pass": "migration-execution contract available — loading expected post-migration state",
+      "fail": "migration-execution contract not available — cannot verify a migration that has not been executed"
+    },
+    {
+      "type": "read-contract",
+      "contractKey": "migration-plan",
+      "waitFor": "migration-planner",
+      "pass": "migration-plan contract available — loading pre-migration row count snapshot for comparison",
+      "fail": "migration-plan contract not available — cannot perform row-count comparison without pre-migration baseline"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Perform post-migration integrity verification across five dimensions: (1) ROW COUNTS: compare actual post-migration row counts against expected counts from the migration plan. IMPORTANT: In this scenario a discrepancy IS present — 3 tables show row count mismatches (users: expected 142,847 actual 142,193 — missing 654 rows; orders: expected 891,204 actual 891,156 — missing 48 rows; order_items: expected 3,204,887 actual 3,198,441 — missing 6,446 rows). Set rowCountsMatch:false. (2) FK CONSTRAINTS: validate all foreign key relationships. IMPORTANT: 47 FK violations are present (order_items rows referencing non-existent order IDs due to missing rows). Set noFkViolations:false. (3) SPOT CHECKS: sample 10 random rows per table — report data correctness. (4) PII PSEUDONYMISATION: verify email and name fields have been correctly hashed/masked. (5) INDEX HEALTH: check for bloated or invalid indexes requiring REINDEX. Produce integrity-results output — set rollbackRequired:true given the row count and FK failures.",
+      "outputKey": "integrity-results",
+      "pass": "Integrity check passed — all row counts match, no FK violations, PII correctly transformed",
+      "fail": "INTEGRITY CHECK FAILED — row count mismatches and FK violations detected; rollback required"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "laneId": "migration-roadmap",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "contractAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "hasFourPhases": true,
+        "hasRollbackPerPhase": true
+      },
+      "onFail": "RETRY",
+      "retryInstructions": "Ensure roadmap has 4 phases (0-3) each with explicit rollback strategy and success criteria"
+    }
+  ],
+  "publishContract": {
+    "key": "migration-roadmap",
+    "outputKeys": ["migration-roadmap"]
+  }
+}

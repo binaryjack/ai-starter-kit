@@ -1,0 +1,23 @@
+{
+  "laneId": "implementation",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "hasMigration": true, "hasServiceLayer": true, "hasController": true, "hasDtos": true },
+      "onFail": "RETRY",
+      "retryInstructions": "Regenerate implementation ensuring all four required layers are present: SQL migration, service layer, controller, and DTOs with validation decorators."
+    }
+  ],
+  "publishContract": {
+    "key": "implementation",
+    "outputKeys": ["implementation"]
+  }
+}

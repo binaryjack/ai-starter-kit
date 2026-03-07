@@ -800,7 +800,7 @@ Custom patterns are appended after the built-ins. The \`flags\` field defaults t
       {
         id:      'config',
         label:   'model-router.json',
-        content: `\`\`\`json\n{\n  "defaultProvider": "anthropic",\n  "budgetUsd": 5.00,\n  "providers": {\n    "anthropic": { "apiKey": "${SECRET:ANTHROPIC_API_KEY}" },\n    "openai":    { "apiKey": "${SECRET:OPENAI_API_KEY}", "model": "gpt-4o" },\n    "ollama":    { "baseUrl": "http://localhost:11434" },\n    "mock":      { "enabled": true }\n  },\n  "tiers": {\n    "haiku":  { "provider": "anthropic", "model": "claude-haiku-4-5" },\n    "sonnet": { "provider": "anthropic", "model": "claude-sonnet-4-5" },\n    "opus":   { "provider": "anthropic", "model": "claude-opus-4-5" }\n  }\n}\n\`\`\``,
+        content: `\`\`\`json\n{\n  "defaultProvider": "anthropic",\n  "budgetUsd": 5.00,\n  "providers": {\n    "anthropic": { "apiKey": "\${SECRET:ANTHROPIC_API_KEY}" },\n    "openai":    { "apiKey": "\${SECRET:OPENAI_API_KEY}", "model": "gpt-4o" },\n    "ollama":    { "baseUrl": "http://localhost:11434" },\n    "mock":      { "enabled": true }\n  },\n  "tiers": {\n    "haiku":  { "provider": "anthropic", "model": "claude-haiku-4-5" },\n    "sonnet": { "provider": "anthropic", "model": "claude-sonnet-4-5" },\n    "opus":   { "provider": "anthropic", "model": "claude-opus-4-5" }\n  }\n}\n\`\`\``,
       },
       {
         id:      'env',
@@ -899,7 +899,7 @@ Custom patterns are appended after the built-ins. The \`flags\` field defaults t
       {
         id:      'overview',
         label:   'Overview',
-        content: `The \`SecretsProvider\` interface decouples secret resolution from configuration. DAG and model-router JSON files reference secrets as \`${SECRET:NAME}\` — the engine resolves them at runtime using the configured provider.`,
+        content: `The \`SecretsProvider\` interface decouples secret resolution from configuration. DAG and model-router JSON files reference secrets as \`\${SECRET:NAME}\` — the engine resolves them at runtime using the configured provider.`,
       },
       {
         id:      'providers',

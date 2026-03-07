@@ -1,0 +1,23 @@
+{
+  "laneId": "ux-wireframe",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "contractAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "allScreensCovered": true, "hasNavigationMap": true },
+      "onFail": "RETRY",
+      "retryInstructions": "Ensure wireframes cover every screen listed in product requirements and include a complete navigation map with all user flows."
+    }
+  ],
+  "publishContract": {
+    "key": "ux-design",
+    "outputKeys": ["wireframes"]
+  }
+}

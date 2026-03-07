@@ -1,0 +1,21 @@
+{
+  "name": "Code Scanner",
+  "icon": "🔭",
+  "description": "Scans the source directory for documentation generation: extracts exported functions with JSDoc, public class APIs, REST endpoints with HTTP methods and paths, event emitters/listeners, and error codes. PII SCRUBBING: email addresses found in @author JSDoc tags are redacted before reaching the LLM.",
+  "checks": [
+    {
+      "type": "file-exists",
+      "path": "src/",
+      "pass": "Source directory found — proceeding with code scan",
+      "fail": "Source directory not found at src/ — cannot proceed with documentation scan"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "Scan the source code for documentation generation. Extract: (1) all exported functions with their JSDoc comments, (2) all public class APIs including methods and properties, (3) all REST endpoints with HTTP methods and paths, (4) all event emitters and listeners with their event names and payload shapes, (5) all error codes and their meanings. NOTE: email addresses in @author JSDoc tags have been redacted for PII compliance — do not attempt to recover or infer them. Produce a structured scan report covering all discovered symbols.",
+      "outputKey": "code-scan",
+      "pass": "Code scan complete — exported APIs, endpoints, events, and error codes captured",
+      "fail": "Code scan failed or incomplete — retry with explicit PII scrubbing of @author tags"
+    }
+  ]
+}

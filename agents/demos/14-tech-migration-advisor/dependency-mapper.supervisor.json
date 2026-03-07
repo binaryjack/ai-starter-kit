@@ -1,0 +1,26 @@
+{
+  "laneId": "dependency-mapper",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": {
+        "contractAvailable": true
+      },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": {
+        "noCriticalDeprecations": true
+      },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "dependency-map",
+    "outputKeys": ["dependency-map"]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "laneId": "repo-analyser",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "packageJsonFound": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "repoProfileComplete": true },
+      "onFail": "RETRY",
+      "retryInstructions": "Re-run repo analysis including Node version detection, test framework identification, and deployment target detection"
+    }
+  ],
+  "publishContract": {
+    "key": "repo-profile",
+    "outputKeys": ["repo-profile"]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Living Documentation",
+  "description": "Auto-generate and publish accurate docs from source code: code scan (PII scrub on author emails in JSDoc) → OpenAPI schema extraction → doc generation (RETRY when output too large → chunked) → example building (HANDOFF to frontend specialist for UI examples) → publisher (human gate for accuracy sign-off before deploy).",
+  "lanes": [
+    { "id": "code-scanner",    "agentFile": "./code-scanner.agent.json",    "supervisorFile": "./code-scanner.supervisor.json",    "dependsOn": [],                              "capabilities": ["llm-generate", "pii-scrubbing", "file-exists"] },
+    { "id": "schema-extractor","agentFile": "./schema-extractor.agent.json","supervisorFile": "./schema-extractor.supervisor.json","dependsOn": ["code-scanner"],                "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "doc-generator",   "agentFile": "./doc-generator.agent.json",   "supervisorFile": "./doc-generator.supervisor.json",   "dependsOn": ["schema-extractor"],            "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "example-builder", "agentFile": "./example-builder.agent.json", "supervisorFile": "./example-builder.supervisor.json", "dependsOn": ["doc-generator"],               "capabilities": ["read-contract", "llm-generate"] },
+    { "id": "publisher",       "agentFile": "./publisher.agent.json",       "supervisorFile": "./publisher.supervisor.json",       "dependsOn": ["example-builder"],             "capabilities": ["read-contract", "llm-generate", "needs-human-review"] }
+  ],
+  "globalBarriers": [],
+  "capabilityRegistry": {},
+  "modelRouterFile": "../model-router.json"
+}

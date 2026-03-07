@@ -1,0 +1,31 @@
+{
+  "laneId": "deploy-configurator",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "expect": { "allContractsAvailable": true },
+      "onFail": "ESCALATE"
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "hasRollbackStrategy": true, "hasEnvironmentMatrix": true },
+      "onFail": "ESCALATE",
+      "escalateReason": "Deploy configuration missing required rollback strategy or environment matrix — cannot proceed to human review without complete configuration"
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "needs-human-review",
+      "expect": { "deployConfigApproved": true },
+      "onFail": "ESCALATE",
+      "escalateReason": "Deployment configuration must be reviewed and approved before applying to the production CI pipeline — escalating for revision",
+      "reviewPrompt": "Review the complete deployment configuration above before it is committed to the repository. Verify: (1) all environment gates are correctly configured, (2) secrets are referenced by name only (no values), (3) rollback strategies are appropriate for each environment, (4) SLA targets are achievable. APPROVE to apply configuration or DECLINE to escalate for revision."
+    }
+  ],
+  "publishContract": {
+    "key": "deploy-config",
+    "outputKeys": ["deploy-config"]
+  }
+}

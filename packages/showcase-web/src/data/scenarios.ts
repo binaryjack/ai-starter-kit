@@ -11,6 +11,7 @@ export type SimEventKind =
   | 'lane:escalate'
   | 'lane:handoff'
   | 'lane:human-review'
+  | 'lane:abort'
   | 'lane:complete'
   | 'barrier:waiting'
   | 'barrier:released'
@@ -19,13 +20,15 @@ export type SimEventKind =
   | 'verdict:issued'
   | 'cost:update'
   | 'dag:complete'
+  | 'dag:abort'
 
 export interface ScriptedEvent {
   delayMs:      number
   type:         SimEventKind
   laneId?:      string
   content?:     string
-  status?:      'pass' | 'escalated' | 'handed-off'
+  status?:      'pass' | 'escalated' | 'handed-off' | 'aborted'
+  abortReason?: string
   costUsd?:     number
   totalUsd?:    number
   attempt?:     number
