@@ -36,10 +36,10 @@ jobs:
       # Build in strict dependency order
       - name: Build packages
         run: |
-          pnpm --filter @ai-agencee/ai-kit-core            run build
-          pnpm --filter @ai-agencee/ai-kit-agent-executor  run build
-          pnpm --filter @ai-agencee/ai-kit-mcp             run build
-          pnpm --filter @ai-agencee/ai-kit-cli             run build
+          pnpm --filter @ai-agencee/core    run build
+          pnpm --filter @ai-agencee/engine  run build
+          pnpm --filter @ai-agencee/mcp     run build
+          pnpm --filter @ai-agencee/cli     run build
 
       # Resolve --dry-run flag: set when manually dispatched with dry_run=true
       - name: Set publish flags
@@ -53,23 +53,39 @@ jobs:
             echo "::notice::Running in PUBLISH mode."
           fi
 
+      # Deprecate old MVP packages (ai-kit-* names) — runs only in non-dry-run mode
+      - name: Deprecate old MVP packages on npm
+        if: steps.flags.outputs.extra == ''
+        run: |
+          for pkg in \
+            "@ai-agencee/ai-kit-core" \
+            "@ai-agencee/ai-kit-agent-executor" \
+            "@ai-agencee/ai-kit-mcp" \
+            "@ai-agencee/ai-kit-cli"; do
+            npm deprecate "$pkg" \
+              "⚠️ This MVP package is no longer maintained. Use ${pkg/ai-kit-/} instead." \
+              --registry https://registry.npmjs.org 2>/dev/null || true
+          done
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       # Publish in dependency order — workspace: refs are resolved to semver by pnpm publish
-      - name: Publish @ai-agencee/ai-kit-core
-        run: pnpm --filter @ai-agencee/ai-kit-core publish --no-git-checks ${{ steps.flags.outputs.extra }}
+      - name: Publish @ai-agencee/core
+        run: pnpm --filter @ai-agencee/core publish --no-git-checks ${{ steps.flags.outputs.extra }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish @ai-agencee/ai-kit-agent-executor
-        run: pnpm --filter @ai-agencee/ai-kit-agent-executor publish --no-git-checks ${{ steps.flags.outputs.extra }}
+      - name: Publish @ai-agencee/engine
+        run: pnpm --filter @ai-agencee/engine publish --no-git-checks ${{ steps.flags.outputs.extra }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish @ai-agencee/ai-kit-mcp
-        run: pnpm --filter @ai-agencee/ai-kit-mcp publish --no-git-checks ${{ steps.flags.outputs.extra }}
+      - name: Publish @ai-agencee/mcp
+        run: pnpm --filter @ai-agencee/mcp publish --no-git-checks ${{ steps.flags.outputs.extra }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish @ai-agencee/ai-kit-cli
-        run: pnpm --filter @ai-agencee/ai-kit-cli publish --no-git-checks ${{ steps.flags.outputs.extra }}
+      - name: Publish @ai-agencee/cli
+        run: pnpm --filter @ai-agencee/cli publish --no-git-checks ${{ steps.flags.outputs.extra }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
