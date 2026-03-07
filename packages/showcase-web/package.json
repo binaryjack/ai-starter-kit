@@ -13,10 +13,9 @@
     "@ai-agencee/ui": "workspace:*",
     "@pulsar-framework/formular.dev": "^1.0.0",
     "@xyflow/react": "^12.7.0",
-    "next": "15.3.8",
+    "next": "15.3.9",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "resend": "^6.9.3",
     "resend": "^6.9.3"
   },
   "devDependencies": {

@@ -20,7 +20,7 @@
   "dependencies": {
     "@ai-agencee/core": "workspace:^1.1.0",
     "@ai-agencee/engine": "workspace:^1.1.0",
-    "@modelcontextprotocol/sdk": "^0.7.0"
+    "@modelcontextprotocol/sdk": "^1.25.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
