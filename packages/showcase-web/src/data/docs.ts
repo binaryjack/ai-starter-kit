@@ -347,4 +347,207 @@ bus.on('lane:complete', ({ laneId, status, costUsd }) => {
     ],
     relatedSlugs: ['dag-orchestration', 'rbac'],
   },
+  {
+    id:          'streaming',
+    slug:        'streaming',
+    title:       'Real-Time Streaming',
+    description: 'Token-by-token LLM output streamed live to your UI via a simple callback — supported by Anthropic, OpenAI, Ollama, Gemini, and more.',
+    icon:        'performance',
+    category:    'orchestration',
+    sections: [
+      {
+        id:      'overview',
+        label:   'Overview',
+        content: `By default the engine awaits the full LLM response before continuing. Enable streaming to receive each token the moment the model emits it — ideal for chat UIs, live progress bars, and latency-sensitive workflows.
+
+Streaming is opt-in at the \`CheckContext\` level: set the \`onLlmStream\` callback before running a DAG and the engine switches every LLM call on that run to its streaming path automatically.`,
+      },
+      {
+        id:      'providers',
+        label:   'Supported Providers',
+        content: `| Provider | Streaming protocol |\n|----------|-------------------|\n| Anthropic | SSE (\`text_delta\` events) |\n| OpenAI | SSE (\`stream_options\` with usage) |\n| Ollama | SSE (newline-delimited JSON) |\n| Gemini | Chunked HTTP response |\n| VS Code Sampling | Fallback (batch, emits single chunk) |\n| Mock | Word-level simulation (testing) |
+
+All providers go through \`ModelRouter.streamRoute()\`, which returns an async generator of string tokens.`,
+      },
+      {
+        id:      'usage',
+        label:   'Usage',
+        content: `\`\`\`typescript
+import { AgentExecutor } from '@ai-agencee/engine'
+
+const executor = new AgentExecutor({ dagFile: 'dag.json' })
+
+await executor.run({
+  onLlmStream: (token: string) => {
+    process.stdout.write(token)   // or push to SSE, WebSocket, etc.
+  },
+})
+\`\`\`
+
+The \`onLlmStream\` callback receives individual string tokens as the model streams them. Any handler that triggers an LLM call (e.g. \`llm-generate\`, \`llm-review\`) will honour the callback automatically.`,
+      },
+      {
+        id:      'programmatic',
+        label:   'ModelRouter direct',
+        content: `\`\`\`typescript
+import { ModelRouter } from '@ai-agencee/engine'
+
+const router = new ModelRouter(config)
+
+for await (const token of router.streamRoute('code-generation', { messages })) {
+  process.stdout.write(token)
+}
+\`\`\``,
+      },
+    ],
+    relatedSlugs: ['dag-orchestration', 'event-bus', 'model-routing'],
+  },
+  {
+    id:          'multi-tenant',
+    slug:        'multi-tenant',
+    title:       'Multi-Tenant Isolation',
+    description: 'Per-tenant run sandboxing with path-isolated storage, GDPR-compliant data export and erasure, and zero cross-tenant data leakage.',
+    icon:        'enterprise',
+    category:    'enterprise',
+    sections: [
+      {
+        id:      'overview',
+        label:   'Overview',
+        content: `\`TenantRunRegistry\` extends the base run registry with per-tenant filesystem isolation. Every run is stored under a dedicated tenant subtree so that no two tenants can ever read or overwrite each other's data.
+
+This is the authoritative implementation for **GDPR Art. 17** (Right to Erasure) and **GDPR Art. 20** (Data Portability) in the engine.`,
+      },
+      {
+        id:      'layout',
+        label:   'Storage Layout',
+        content: `\`\`\`
+.agents/
+  tenants/
+    <tenantId>/
+      runs/
+        <runId>/
+          config.json       # RunMeta (status, timestamps, dagFile)
+          events.ndjson     # Append-only structured event log
+          result.json       # Final run result (written on complete)
+\`\`\`
+
+\`tenantId\` is resolved in priority order:
+1. Explicit constructor argument
+2. \`AIKIT_TENANT_ID\` environment variable
+3. \`"default"\` — single-tenant / local-dev mode`,
+      },
+      {
+        id:      'usage',
+        label:   'Usage',
+        content: `\`\`\`typescript
+import { TenantRunRegistry } from '@ai-agencee/engine'
+
+// Resolve tenant from AIKIT_TENANT_ID env var (or "default")
+const registry = new TenantRunRegistry(process.cwd())
+
+// Or pass an explicit tenant ID
+const registry = new TenantRunRegistry(process.cwd(), 'acme-corp')
+
+// Create a run
+const meta = await registry.create(runId, 'dag.json')
+
+// Mark completed
+await registry.complete(runId, 'completed', resultPayload)
+
+// Append a structured event
+await registry.appendEvent(runId, { type: 'lane:complete', laneId: 'review' })
+\`\`\``,
+      },
+      {
+        id:      'gdpr',
+        label:   'GDPR Operations',
+        content: `\`\`\`typescript
+// Export all data for a tenant (GDPR Art. 20 — Data Portability)
+const summary = await registry.exportTenant('acme-corp', '/tmp/export')
+// → { tenantId, destDir, runCount, totalBytes, exportedAt }
+
+// Permanently delete all tenant data (GDPR Art. 17 — Right to Erasure)
+const deleted = await registry.deleteTenant('acme-corp')
+// → { tenantId, runCount, totalBytesFreed, deletedAt }
+
+// List all known tenant IDs on disk
+const tenants = await registry.listTenants()
+// → ['default', 'acme-corp', 'beta-org']
+\`\`\`
+
+These operations are also exposed via the CLI:
+\`\`\`bash
+ai-kit data:export --tenant acme-corp --out ./export
+ai-kit data:delete --tenant acme-corp
+\`\`\``,
+      },
+    ],
+    relatedSlugs: ['rbac', 'audit-logging', 'dag-orchestration'],
+  },
+  {
+    id:          'pii-scrubbing',
+    slug:        'pii-scrubbing',
+    title:       'PII Scrubbing',
+    description: 'Automatic redaction of credentials and sensitive data from LLM prompts before any HTTP call leaves the process — nine built-in patterns, fully extensible.',
+    icon:        'encryption',
+    category:    'enterprise',
+    sections: [
+      {
+        id:      'overview',
+        label:   'Overview',
+        content: `The PII scrubbing middleware wraps any \`LLMProvider\` transparently. Every prompt is scanned against a set of regex patterns before it is sent to the model API. Matched secrets are replaced with audit-safe placeholders like \`[REDACTED:GITHUB_TOKEN]\`.
+
+The scrubber operates entirely in-process — no data is sent to an external service.`,
+      },
+      {
+        id:      'patterns',
+        label:   'Built-in Patterns',
+        content: `| Pattern name | Matches |\n|---|---|\n| \`AWS_ACCESS_KEY\` | \`AKIA[A-Z0-9]{16}\` |\n| \`GITHUB_TOKEN\` | \`ghp_\`, \`gho_\`, \`ghs_\`, \`ghu_\`, \`ghr_\` prefixes |\n| \`JWT\` | Three-part base64url token (\`eyJ…\`) |\n| \`SSH_PRIVATE_KEY\` | PEM-encoded RSA / EC / OpenSSH private keys |\n| \`ANTHROPIC_KEY\` | \`sk-ant-…\` |\n| \`OPENAI_KEY\` | \`sk-…\` (non-Anthropic) |\n| \`GENERIC_BEARER\` | \`Authorization: Bearer <token>\` |\n| \`ENV_ASSIGN\` | \`UPPER_KEY=<value>\` environment assignments |\n| \`CREDIT_CARD\` | Luhn-valid Visa / MC / Amex / Discover numbers |`,
+      },
+      {
+        id:      'usage',
+        label:   'Usage',
+        content: `**Drop-in provider wrapper (recommended)**
+\`\`\`typescript
+import { createPiiSafeProvider } from '@ai-agencee/engine'
+import { anthropicProvider } from './my-providers'
+
+// All calls through safeProvider are scrubbed automatically
+const safeProvider = createPiiSafeProvider(anthropicProvider)
+\`\`\`
+
+**Direct scrubber**
+\`\`\`typescript
+import { PiiScrubber } from '@ai-agencee/engine'
+
+const scrubber = new PiiScrubber()
+const { text, scrubCount, patternsMatched } = scrubber.scrub(fileContent)
+
+console.log(\`Scrubbed \${scrubCount} secret(s): \${patternsMatched.join(', ')}\`)
+\`\`\``,
+      },
+      {
+        id:      'config',
+        label:   'Configuration',
+        content: `Enable in \`model-router.json\` (or your DAG/agent JSON):
+\`\`\`json
+{
+  "piiScrubbing": {
+    "enabled": true,
+    "customPatterns": [
+      {
+        "name": "MY_INTERNAL_TOKEN",
+        "pattern": "MYT-[A-Za-z0-9]{32}",
+        "flags": "g"
+      }
+    ]
+  }
+}
+\`\`\`
+
+Custom patterns are appended after the built-ins. The \`flags\` field defaults to \`"g"\` if omitted.`,
+      },
+    ],
+    relatedSlugs: ['audit-logging', 'rbac', 'multi-tenant'],
+  },
 ]
