@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * demo.js — Zero-API-key demo of the ai-starter-kit DAG engine
+ * demo.js — Zero-API-key demo of the AI Agencee DAG engine
  *
  * Runs the 3-lane demo DAG (code-review + security-scan → summary) using the
  * built-in MockProvider so no API keys are required.
@@ -23,7 +23,7 @@ const cliJs = path.join(root, 'packages', 'cli', 'dist', 'bin', 'ai-kit.js');
 const dagFile  = process.argv[2] ?? path.join(root, 'agents', 'demo.dag.json');
 
 console.log('\n╔══════════════════════════════════════════════════════════╗');
-console.log('║          ai-starter-kit  ·  Demo Run (mock provider)    ║');
+console.log('║          AI Agencee  ·  Demo Run (mock provider)    ║');
 console.log('╚══════════════════════════════════════════════════════════╝\n');
 console.log(`  DAG file : ${dagFile}`);
 console.log(`  Provider : mock (no API key required)`);

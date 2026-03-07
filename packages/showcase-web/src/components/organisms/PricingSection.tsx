@@ -29,7 +29,7 @@ export function PricingSection() {
           year. The <strong>Free tier</strong> — full CLI, DAG engine, MCP integration, and
           Mock provider — is available right now with no account required.{' '}
           <a
-            href="https://github.com/binaryjack/ai-starter-kit"
+            href="https://github.com/binaryjack/ai-agencee"
             className="underline hover:text-warning-100"
           >
             Get started on GitHub ↗
@@ -53,7 +53,7 @@ export function PricingSection() {
           satisfies each task — keeping your token spend as low as possible without sacrificing
           output quality.{' '}
           <a
-            href="https://github.com/binaryjack/ai-starter-kit"
+            href="https://github.com/binaryjack/ai-agencee"
             className="text-brand-400 hover:underline"
           >
             Open-source CLI is always free. ↗

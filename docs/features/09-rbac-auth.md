@@ -125,7 +125,7 @@ Create `agents/rbac-policy.json`:
 ### 2. Authenticate Principal
 
 ```typescript
-import { AuthenticationManager } from '@ai-agencee/ai-kit-agent-executor';
+import { AuthenticationManager } from '@ai-agencee/engine';
 
 const authManager = new AuthenticationManager();
 

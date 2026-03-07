@@ -4,7 +4,7 @@ import { SectionLabel } from '@/components/atoms/SectionLabel'
 const CTA_SECONDARY_LINKS = [
   { label: 'Read the docs',      href: '/docs'     },
   { label: 'Browse features →',  href: '/features' },
-  { label: 'GitHub ↗',           href: 'https://github.com/binaryjack/ai-starter-kit' },
+  { label: 'GitHub ↗',           href: 'https://github.com/binaryjack/ai-agencee' },
 ]
 
 export function CtaBanner() {

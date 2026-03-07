@@ -384,7 +384,7 @@ bus.on('dag:end', () => {
 
 ```typescript
 import { WebSocketServer } from 'ws';
-import { DagOrchestrator, getGlobalEventBus } from '@ai-agencee/ai-kit-agent-executor';
+import { DagOrchestrator, getGlobalEventBus } from '@ai-agencee/engine';
 
 const wss = new WebSocketServer({ port: 8080 });
 const orchestrator = new DagOrchestrator(projectRoot);

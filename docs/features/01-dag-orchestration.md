@@ -125,7 +125,7 @@ Create `agents/my-workflow.dag.json`:
 ai-kit agent:dag agents/my-workflow.dag.json
 
 # Via TypeScript
-import { DagOrchestrator } from '@ai-agencee/ai-kit-agent-executor';
+import { DagOrchestrator } from '@ai-agencee/engine';
 
 const orchestrator = new DagOrchestrator(projectRoot);
 const result = await orchestrator.execute(dagDefinition, {
@@ -538,7 +538,7 @@ Budget enforcement:
 Subscribe to DAG events:
 
 ```typescript
-import { getGlobalEventBus } from '@ai-agencee/ai-kit-agent-executor';
+import { getGlobalEventBus } from '@ai-agencee/engine';
 
 const bus = getGlobalEventBus();
 

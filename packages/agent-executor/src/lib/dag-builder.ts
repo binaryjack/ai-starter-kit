@@ -2,7 +2,7 @@
  * G-22: TypeScript DAG Builder API — fluent, type-safe alternative to hand-writing dag.json.
  *
  * Usage:
- *   import { DagBuilder } from '@ai-agencee/ai-kit-agent-executor';
+ *   import { DagBuilder } from '@ai-agencee/engine';
  *
  *   const dag = new DagBuilder('pr-review')
  *     .budget(0.05)

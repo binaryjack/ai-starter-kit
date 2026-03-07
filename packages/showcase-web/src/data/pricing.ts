@@ -46,7 +46,7 @@ export const PRICING_TIERS: PricingTier[] = [
       'SLA',
     ],
     ctaLabel:    'Get started free',
-    ctaHref:     'https://github.com/binaryjack/ai-starter-kit',
+    ctaHref:     'https://github.com/binaryjack/ai-agencee',
     highlighted: false,
   },
   {

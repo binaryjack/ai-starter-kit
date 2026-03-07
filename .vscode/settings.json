@@ -1,5 +1,5 @@
 {
-  // JSON Schema associations for ai-starter-kit DAG and agent files
+  // JSON Schema associations for AI Agencee DAG and agent files
   "json.schemas": [
     {
       "fileMatch": ["**/agents/*.dag.json", "**/agents/dag.json"],

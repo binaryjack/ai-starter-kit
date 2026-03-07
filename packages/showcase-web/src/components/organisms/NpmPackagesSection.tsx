@@ -4,35 +4,35 @@ import { NpmPackageCard } from '@/components/molecules/NpmPackageCard'
 
 const NPM_PACKAGES = [
   {
-    name:        '@ai-agencee/ai-kit-cli',
+    name:        '@ai-agencee/cli',
     version:     '1.4.1',
     label:       'CLI',
     description: 'Global command-line interface — run DAGs, start planning sessions, and the zero-key mock demo from any terminal.',
-    npmUrl:      'https://www.npmjs.com/package/@ai-agencee/ai-kit-cli',
+    npmUrl:      'https://www.npmjs.com/package/@ai-agencee/cli',
     docs:        '/docs/cli',
   },
   {
-    name:        '@ai-agencee/ai-kit-agent-executor',
+    name:        '@ai-agencee/engine',
     version:     '1.1.0',
     label:       'Engine',
     description: 'Node.js / TypeScript orchestration engine — embed the full DAG runner and supervisor system directly in your application.',
-    npmUrl:      'https://www.npmjs.com/package/@ai-agencee/ai-kit-agent-executor',
+    npmUrl:      'https://www.npmjs.com/package/@ai-agencee/engine',
     docs:        '/docs/builder-api',
   },
   {
-    name:        '@ai-agencee/ai-kit-mcp',
+    name:        '@ai-agencee/mcp',
     version:     '1.3.5',
     label:       'MCP Server',
     description: 'Model Context Protocol bridge — expose ai-agencee tools to Claude Desktop, VS Code Copilot, and any MCP-compatible client.',
-    npmUrl:      'https://www.npmjs.com/package/@ai-agencee/ai-kit-mcp',
+    npmUrl:      'https://www.npmjs.com/package/@ai-agencee/mcp',
     docs:        '/docs/mcp',
   },
   {
-    name:        '@ai-agencee/ai-kit-core',
+    name:        '@ai-agencee/core',
     version:     '1.1.0',
     label:       'Core',
     description: 'Shared primitives — provider abstraction, schema validation, template engine, and low-level utilities consumed by the other packages.',
-    npmUrl:      'https://www.npmjs.com/package/@ai-agencee/ai-kit-core',
+    npmUrl:      'https://www.npmjs.com/package/@ai-agencee/core',
     docs:        null,
   },
 ]

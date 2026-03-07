@@ -18,7 +18,7 @@
  * Usage (in packages/mcp/src/index.ts when setting up a DAG run):
  *
  *   import { createVSCodeSamplingBridge } from './vscode-lm-bridge.js';
- *   import { VSCodeSamplingProvider } from '@ai-agencee/ai-kit-agent-executor';
+ *   import { VSCodeSamplingProvider } from '@ai-agencee/engine';
  *
  *   const bridge = createVSCodeSamplingBridge(server);
  *   const provider = new VSCodeSamplingProvider(bridge);
@@ -26,7 +26,7 @@
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { LLMMessage, SamplingCallback } from '@ai-agencee/ai-kit-agent-executor';
+import { LLMMessage, SamplingCallback } from '@ai-agencee/engine';
 
 // MCP sampling request/response types (from MCP spec)
 interface MCPSamplingMessage {

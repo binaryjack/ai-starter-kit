@@ -40,7 +40,7 @@ npm init -y
   "version": "1.0.0",
   "main": "dist/index.js",
   "peerDependencies": {
-    "@ai-agencee/ai-kit-agent-executor": ">=1.0.0"
+    "@ai-agencee/engine": ">=1.0.0"
   }
 }
 ```
@@ -49,7 +49,7 @@ npm init -y
 
 ```typescript
 // src/my-check.handler.ts
-import type { ICheckHandler, RawCheckResult, CheckContext } from '@ai-agencee/ai-kit-agent-executor';
+import type { ICheckHandler, RawCheckResult, CheckContext } from '@ai-agencee/engine';
 
 export class MyCheckHandler implements ICheckHandler {
   readonly type = 'my-org-lint' as const;
@@ -126,7 +126,7 @@ AI-Kit will scan `node_modules` and load the plugin automatically when you run a
 If you prefer explicit control:
 
 ```typescript
-import { CheckHandlerRegistry } from '@ai-agencee/ai-kit-agent-executor';
+import { CheckHandlerRegistry } from '@ai-agencee/engine';
 import { MyCheckHandler } from './my-check.handler.js';
 
 const registry = CheckHandlerRegistry.createDefault(modelRouter);
@@ -193,4 +193,4 @@ interface RawCheckResult {
 - [ ] Entry exports both `register` and `manifest`
 - [ ] `register` function is synchronous or returns a `Promise`
 - [ ] `manifest.checkTypes` lists all type strings your handlers declare
-- [ ] Peer dependency on `@ai-agencee/ai-kit-agent-executor` ≥ 1.0.0
+- [ ] Peer dependency on `@ai-agencee/engine` ≥ 1.0.0

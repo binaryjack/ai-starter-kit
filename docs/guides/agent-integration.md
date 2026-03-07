@@ -244,7 +244,7 @@ ai-kit agent:validate dist/implementation.ts
 ### Example 2: Programmatic Usage
 
 ```typescript
-import { workflowOrchestrator, agentContext } from '@ai-agencee/ai-kit-agent-executor';
+import { workflowOrchestrator, agentContext } from '@ai-agencee/engine';
 
 // Create a workflow
 const workflow = await workflowOrchestrator.createWorkflow(

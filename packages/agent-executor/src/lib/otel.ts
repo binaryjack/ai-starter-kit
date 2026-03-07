@@ -21,7 +21,7 @@
  *            @opentelemetry/exporter-trace-otlp-grpc
  *
  * ## Usage
- *   import { createRunTracer } from '@ai-agencee/ai-kit-agent-executor';
+ *   import { createRunTracer } from '@ai-agencee/engine';
  *   const tracer = createRunTracer();
  *   const rootSpan = tracer.startDagRun(runId, dagName);
  *   // ... run dag ...

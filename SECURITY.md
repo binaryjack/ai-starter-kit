@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-We release security patches for the two most recent minor versions of ai-starter-kit.
+We release security patches for the two most recent minor versions of AI Agencee.
 
 | Version | Supported |
 | ------- | --------- |
@@ -86,4 +86,4 @@ We follow a **coordinated disclosure** model:
 4. We release the fix and publicly disclose the vulnerability simultaneously
 5. We credit the reporter (unless they prefer to remain anonymous)
 
-Thank you for helping keep ai-starter-kit secure.
+Thank you for helping keep AI Agencee secure.

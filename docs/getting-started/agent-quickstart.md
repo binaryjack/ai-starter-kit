@@ -106,7 +106,7 @@ Then ask Claude to use the agent tools:
 
 ## Troubleshooting
 
-**"Cannot find module '@ai-agencee/ai-kit-agent-executor'"**
+**"Cannot find module '@ai-agencee/engine'"**
 ```bash
 pnpm install
 pnpm build

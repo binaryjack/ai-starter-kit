@@ -56,7 +56,7 @@ export function HeroSection() {
             Get started free
           </a>
           <a
-            href="https://github.com/binaryjack/ai-starter-kit"
+            href="https://github.com/binaryjack/ai-agencee"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-node border border-neutral-600 px-5 py-2.5 text-sm font-semibold text-neutral-200 hover:border-brand-500 hover:text-brand-400 transition-colors"

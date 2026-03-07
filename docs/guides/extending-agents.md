@@ -236,7 +236,7 @@ Here's a complete integration example for a custom agent:
 
 ```typescript
 // agents/custom-agent.ts
-import { workflowOrchestrator, agentContext, WorkflowState } from '@ai-agencee/ai-kit-agent-executor';
+import { workflowOrchestrator, agentContext, WorkflowState } from '@ai-agencee/engine';
 
 export async function executeCustomAgent(sessionId: string): Promise<void> {
   // 1. Load current workflow state

@@ -1,5 +1,5 @@
 {
-  "name": "@ai-agencee/ai-starter-kit-monorepo",
+  "name": "@ai-agencee/ai-agencee-monorepo",
   "private": true,
   "engines": {
     "node": ">=20.x",

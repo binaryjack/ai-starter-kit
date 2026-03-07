@@ -1,7 +1,7 @@
 {
-  "name": "@ai-agencee/ai-kit-core",
+  "name": "@ai-agencee/core",
   "version": "1.1.0",
-  "description": "Core utilities for @ai-agencee/ai-starter-kit",
+  "description": "Core utilities for AI Agencee",
   "type": "commonjs",
   "main": "./dist/src/index.js",
   "exports": {

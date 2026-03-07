@@ -14,8 +14,8 @@
  *   completely offline in heuristic mode.
  */
 
-import type { PlanPhase, PlanResult } from '@ai-agencee/ai-kit-agent-executor';
-import { ModelRouter, PlanOrchestrator } from '@ai-agencee/ai-kit-agent-executor';
+import type { PlanPhase, PlanResult } from '@ai-agencee/engine';
+import { ModelRouter, PlanOrchestrator } from '@ai-agencee/engine';
 import * as fs from 'fs';
 import * as path from 'path';
 

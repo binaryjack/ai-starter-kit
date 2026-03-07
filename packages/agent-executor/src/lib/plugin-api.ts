@@ -17,7 +17,7 @@
  *
  * ## Plugin entry point contract
  * ```typescript
- * import type { AiKitPluginManifest, AiKitPluginRegisterFn } from '@ai-agencee/ai-kit-agent-executor';
+ * import type { AiKitPluginManifest, AiKitPluginRegisterFn } from '@ai-agencee/engine';
  *
  * export const manifest: AiKitPluginManifest = {
  *   name:        'my-plugin',

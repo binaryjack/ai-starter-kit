@@ -40,7 +40,7 @@ export function SiteHeader() {
         {/* CTAs */}
         <div className="flex items-center gap-3">
           <a
-            href="https://github.com/binaryjack/ai-starter-kit"
+            href="https://github.com/binaryjack/ai-agencee"
             target="_blank"
             rel="noopener noreferrer"
             className="hidden text-sm text-neutral-400 hover:text-neutral-100 transition-colors sm:block"

@@ -1,4 +1,4 @@
-import { DagOrchestrator, DagResult } from '@ai-agencee/ai-kit-agent-executor';
+import { DagOrchestrator, DagResult } from '@ai-agencee/engine';
 import * as path from 'path';
 
 // ─── agent:dag ────────────────────────────────────────────────────────────────

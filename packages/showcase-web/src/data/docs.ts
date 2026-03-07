@@ -147,10 +147,10 @@ export const DOC_TOPICS: DocTopic[] = [
         label:   'Installation',
         content: `\`\`\`sh
 # Global install
-npm install -g @ai-agencee/ai-kit-cli
+npm install -g @ai-agencee/cli
 
 # Or as a dev dependency
-npm install -D @ai-agencee/ai-kit-cli
+npm install -D @ai-agencee/cli
 \`\`\``,
       },
       {
@@ -189,7 +189,7 @@ ai-kit agent:dag ./my-dag.json --budget 2.50
       {
         id:      'overview',
         label:   'Overview',
-        content: `The MCP package (\`@ai-agencee/ai-kit-mcp\`) exposes an SSE server that speaks the Model Context Protocol. Claude Desktop and VS Code Copilot can call ai-agencee tools directly from the chat interface.`,
+        content: `The MCP package (\`@ai-agencee/mcp\`) exposes an SSE server that speaks the Model Context Protocol. Claude Desktop and VS Code Copilot can call ai-agencee tools directly from the chat interface.`,
       },
       {
         id:      'claude-setup',
@@ -199,7 +199,7 @@ ai-kit agent:dag ./my-dag.json --budget 2.50
   "mcpServers": {
     "ai-agencee": {
       "command": "npx",
-      "args": ["@ai-agencee/ai-kit-mcp"],
+      "args": ["@ai-agencee/mcp"],
       "env": {
         "ANTHROPIC_API_KEY": "sk-..."
       }
@@ -297,7 +297,7 @@ ai-kit data:list-tenants
         id:      'example',
         label:   'Example',
         content: `\`\`\`typescript
-import { DagBuilder } from '@ai-agencee/ai-kit-agent-executor'
+import { DagBuilder } from '@ai-agencee/engine'
 
 const dag = new DagBuilder('My DAG')
   .lane('analyse', { agentFile: 'agents/01-business-analyst.agent.json' })
@@ -335,7 +335,7 @@ await orchestrator.runDag(dag)
         id:      'subscribe',
         label:   'Subscribe',
         content: `\`\`\`typescript
-import { getGlobalEventBus } from '@ai-agencee/ai-kit-agent-executor'
+import { getGlobalEventBus } from '@ai-agencee/engine'
 
 const bus = getGlobalEventBus()
 

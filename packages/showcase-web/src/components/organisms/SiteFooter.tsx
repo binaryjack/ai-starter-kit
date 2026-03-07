@@ -23,7 +23,7 @@ const FOOTER_COLUMNS = [
     links: [
       { label: 'About',   href: '/about'   },
       { label: 'Contact', href: '/contact' },
-      { label: 'GitHub',  href: 'https://github.com/binaryjack/ai-starter-kit' },
+      { label: 'GitHub',  href: 'https://github.com/binaryjack/ai-agencee' },
     ],
   },
 ]

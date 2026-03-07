@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { AuditLog, DagOrchestrator } from '@ai-agencee/ai-kit-agent-executor'
+import { AuditLog, DagOrchestrator } from '@ai-agencee/engine'
 import { Server } from '@modelcontextprotocol/sdk/server/index.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import {

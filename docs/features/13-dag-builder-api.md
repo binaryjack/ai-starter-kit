@@ -538,7 +538,7 @@ await new DagBuilder('my-workflow').saveToFile('agents/my-workflow.dag.json');
 ### Import & Extend
 
 ```typescript
-import { loadDagFromFile } from '@ai-agencee/ai-kit-agent-executor';
+import { loadDagFromFile } from '@ai-agencee/engine';
 
 const baseDag = await loadDagFromFile('agents/base-review.dag.json');
 

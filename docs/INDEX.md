@@ -200,9 +200,9 @@ ai-kit agent:status <session-id>        # check progress
 - **Blocker**: Issue preventing workflow continuation
 
 ### Packages
-- `@ai-agencee/ai-kit-agent-executor` - Core orchestration engine
-- `@ai-agencee/ai-kit-cli` - Command-line interface
-- `@ai-agencee/ai-kit-mcp` - MCP server integration
+- `@ai-agencee/engine` - Core orchestration engine
+- `@ai-agencee/cli` - Command-line interface
+- `@ai-agencee/mcp` - MCP server integration
 
 ---
 

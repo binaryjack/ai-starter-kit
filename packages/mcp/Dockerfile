@@ -25,9 +25,9 @@ RUN pnpm install --frozen-lockfile
 COPY packages/ ./packages/
 
 # Compile
-RUN pnpm --filter @ai-agencee/ai-kit-agent-executor run build \
- && pnpm --filter @ai-agencee/ai-kit-core run build \
- && pnpm --filter @ai-agencee/ai-kit-mcp run build
+RUN pnpm --filter @ai-agencee/engine run build \
+ && pnpm --filter @ai-agencee/core run build \
+ && pnpm --filter @ai-agencee/mcp run build
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────────────────
 FROM node:20-alpine AS runtime

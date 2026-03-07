@@ -6,8 +6,8 @@ jest.mock('@ai-agencee/ai-kit-core', () => ({
   checkProject: jest.fn(),
 }));
 
-import type { CheckResult } from '@ai-agencee/ai-kit-core';
-import { checkProject } from '@ai-agencee/ai-kit-core';
+import type { CheckResult } from '@ai-agencee/core';
+import { checkProject } from '@ai-agencee/core';
 
 const mockCheck = checkProject as jest.MockedFunction<typeof checkProject>;
 

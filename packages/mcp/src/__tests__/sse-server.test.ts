@@ -8,7 +8,7 @@
 import * as http from 'node:http';
 
 // The module exports startSseServer / stopSseServer — import after mocking event bus
-jest.mock('@ai-agencee/ai-kit-agent-executor', () => ({
+jest.mock('@ai-agencee/engine', () => ({
   getGlobalEventBus: () => ({
     on: jest.fn(),
     off: jest.fn(),

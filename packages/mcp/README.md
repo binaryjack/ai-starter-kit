@@ -1,6 +1,6 @@
-# @ai-agencee/ai-kit-mcp
+# @ai-agencee/mcp
 
-MCP (Model Context Protocol) Server for [@ai-agencee/ai-kit](https://www.npmjs.com/package/@ai-agencee/ai-kit-cli). This server enables AI assistants to automatically load and enforce your project's ULTRA_HIGH coding standards when working with your codebase.
+MCP (Model Context Protocol) Server for [@ai-agencee/cli](https://www.npmjs.com/package/@ai-agencee/cli). This server enables AI assistants to automatically load and enforce your project's ULTRA_HIGH coding standards when working with your codebase.
 
 ## Features
 
@@ -12,7 +12,7 @@ MCP (Model Context Protocol) Server for [@ai-agencee/ai-kit](https://www.npmjs.c
 ## Installation
 
 ```bash
-npm install @ai-agencee/ai-kit-mcp
+npm install @ai-agencee/mcp
 ```
 
 ## Quick Start
@@ -20,7 +20,7 @@ npm install @ai-agencee/ai-kit-mcp
 ### 1. Start the MCP Server
 
 ```bash
-npx @ai-agencee/ai-kit-mcp
+npx @ai-agencee/mcp
 ```
 
 The server starts on stdio and connects to your MCP client.
@@ -38,7 +38,7 @@ Edit `~/.config/Claude/claude_desktop_config.json` (or `%APPDATA%\Claude\claude_
   "mcpServers": {
     "ai-kit": {
       "command": "npx",
-      "args": ["@ai-agencee/ai-kit-mcp"]
+      "args": ["@ai-agencee/mcp"]
     }
   }
 }
@@ -232,7 +232,7 @@ The server reads files from the current working directory. Make sure you're runn
 
 ```bash
 cd /path/to/project
-npx @ai-agencee/ai-kit-mcp
+npx @ai-agencee/mcp
 ```
 
 ### File not found errors
@@ -243,10 +243,10 @@ The server looks for these paths relative to project root:
 - `src/.ai/patterns.md`
 - `.github/ai/manifest.xml`
 
-Create these files using [@ai-agencee/ai-kit-cli](https://www.npmjs.com/package/@ai-agencee/ai-kit-cli):
+Create these files using [@ai-agencee/cli](https://www.npmjs.com/package/@ai-agencee/cli):
 
 ```bash
-npx @ai-agencee/ai-kit-cli init --strict
+npx @ai-agencee/cli init --strict
 ```
 
 ## License
@@ -255,5 +255,5 @@ MIT - See [LICENSE](../../LICENSE) for details
 
 ## Related Packages
 
-- [@ai-agencee/ai-kit-cli](https://www.npmjs.com/package/@ai-agencee/ai-kit-cli) - Command-line scaffolding tool
-- [@ai-agencee/ai-kit-core](https://www.npmjs.com/package/@ai-agencee/ai-kit-core) - Shared utilities and templates
+- [@ai-agencee/cli](https://www.npmjs.com/package/@ai-agencee/cli) - Command-line scaffolding tool
+- [@ai-agencee/core](https://www.npmjs.com/package/@ai-agencee/core) - Shared utilities and templates

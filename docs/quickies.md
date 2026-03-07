@@ -1061,8 +1061,8 @@ ai-kit agent:dag agents/data-migration.dag.json --provider mock
 
 ```sh
 # ── Install ────────────────────────────────────────────────────────────────
-npm install @ai-agencee/ai-kit-agent-executor   # engine (programmatic API)
-npm install -g @ai-agencee/ai-kit-cli           # CLI
+npm install @ai-agencee/engine   # engine (programmatic API)
+npm install -g @ai-agencee/cli           # CLI
 
 # ── DAG execution ──────────────────────────────────────────────────────────
 ai-kit agent:dag <dag.json>                         # run any DAG (mock default)

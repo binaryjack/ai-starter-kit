@@ -10,8 +10,8 @@ const QUICK_STARTS = [
   },
   {
     label:   '2. Run the zero-key demo',
-    code:    `git clone https://github.com/binaryjack/ai-starter-kit
-cd ai-starter-kit
+    code:    `git clone https://github.com/binaryjack/ai-agencee
+cd ai-agencee
 pnpm install && pnpm demo`,
     comment: 'Mock provider — no API keys, no cost',
   },

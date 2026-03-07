@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/ai-starter-kit/schemas/dag.schema.json",
+  "$id": "https://github.com/ai-agencee/schemas/dag.schema.json",
   "title": "DAG Definition",
-  "description": "Schema for ai-starter-kit DAG pipeline definitions (dag.json / *.dag.json)",
+  "description": "Schema for AI Agencee DAG pipeline definitions (dag.json / *.dag.json)",
   "type": "object",
   "required": ["name", "lanes"],
   "additionalProperties": false,

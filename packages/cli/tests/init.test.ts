@@ -8,7 +8,7 @@ jest.mock('@ai-agencee/ai-kit-core', () => ({
   TEMPLATE_DIR: '/fake/template',
 }));
 
-import { copyTemplateFiles, fileExists } from '@ai-agencee/ai-kit-core';
+import { copyTemplateFiles, fileExists } from '@ai-agencee/core';
 
 const mockCopy = copyTemplateFiles as jest.MockedFunction<typeof copyTemplateFiles>;
 const mockExists = fileExists as jest.MockedFunction<typeof fileExists>;

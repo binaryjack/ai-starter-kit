@@ -19,7 +19,7 @@
  * package.json (same heuristic used by the rest of the CLI).
  */
 
-import { TenantRunRegistry } from '@ai-agencee/ai-kit-agent-executor';
+import { TenantRunRegistry } from '@ai-agencee/engine';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 

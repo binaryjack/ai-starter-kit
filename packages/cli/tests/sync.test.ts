@@ -7,8 +7,8 @@ jest.mock('@ai-agencee/ai-kit-core', () => ({
   TEMPLATE_DIR: '/fake/template',
 }));
 
-import type { SyncResult } from '@ai-agencee/ai-kit-core';
-import { syncTemplateFiles } from '@ai-agencee/ai-kit-core';
+import type { SyncResult } from '@ai-agencee/core';
+import { syncTemplateFiles } from '@ai-agencee/core';
 
 const mockSync = syncTemplateFiles as jest.MockedFunction<typeof syncTemplateFiles>;
 

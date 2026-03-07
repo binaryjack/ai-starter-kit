@@ -20,7 +20,7 @@
  *   GET /events?runId=abc123
  */
 
-import { getGlobalEventBus, type DagEventMap } from '@ai-agencee/ai-kit-agent-executor'
+import { getGlobalEventBus, type DagEventMap } from '@ai-agencee/engine'
 import * as http from 'http'
 import { createOidcMiddleware, type MinimalResponse } from './oidc-auth.js'
 

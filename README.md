@@ -1,4 +1,4 @@
-# @ai-agencee/ai-starter-kit
+# AI Agencee
 
 > **Enterprise-grade multi-agent orchestration engine** — DAG-supervised parallel agents with streaming LLM output, intelligent model routing, resilience patterns, cost tracking, RBAC, audit logging, and a zero-API-key demo mode.
 
@@ -21,7 +21,7 @@
 
 > **"I want AI to help me build real software — not just generate snippets."**
 
-Most AI coding tools stop at the file level. `ai-starter-kit` operates at the **project level**:
+Most AI coding tools stop at the file level. AI Agencee operates at the **project level**:
 
 - A structured **5-phase discovery process** turns a vague requirement into a precise, wired sprint plan — with every agent knowing their scope, dependencies, and acceptance criteria before writing a line
 - A **DAG execution engine** runs specialised agents in parallel, detects conflicts via alignment barriers, retries on failure, hands off between agents, and escalates to a human when it can't recover automatically
@@ -37,9 +37,9 @@ It ships two execution paths that compose seamlessly:
 
 ---
 
-## Why ai-agencee and not another tool?
+## Why AI Agencee and not another tool?
 
-| Need | Generic AI chat | Code-gen copilots | ai-starter-kit |
+| Need | Generic AI chat | Code-gen copilots | AI Agencee |
 |------|----------------|------------------|----------------|
 | Structured multi-step plan from a vague idea | ❌ Hallucinated | ⚠️ Single-file suggestions | ✅ 5-phase BA-led discovery → wired sprint plan |
 | Parallel agent coordination with sync points | ❌ | ❌ | ✅ DAG barriers, soft-align, read-contract |
@@ -57,8 +57,8 @@ Copy-paste recipes for the most common tasks. No reading required.
 
 | I want to… | Command |
 |------------|---------|
-| **Install the engine** in my project | `npm install @ai-agencee/ai-kit-agent-executor` |
-| **Install the CLI** globally | `npm install -g @ai-agencee/ai-kit-cli` |
+| **Install the engine** in my project | `npm install @ai-agencee/engine` |
+| **Install the CLI** globally | `npm install -g @ai-agencee/cli` |
 | **See the engine run** with no setup | clone the repo → `pnpm demo` ([↓ Explore Without Code](#explore-without-code)) |
 | **See failures, retries, escalations** | clone the repo → `pnpm demo:06` |
 | **Run a DAG** from my own project | `ai-kit agent:dag ./my-dag.json --provider mock` |
@@ -76,7 +76,7 @@ Copy-paste recipes for the most common tasks. No reading required.
 
 ## What it is (technical)
 
-`ai-starter-kit` is a TypeScript monorepo that turns JSON-defined agent graphs into production-ready AI workflows with enterprise-grade security, compliance, and observability.
+AI Agencee is a TypeScript monorepo that turns JSON-defined agent graphs into production-ready AI workflows with enterprise-grade security, compliance, and observability.
 
 **Full Documentation**: Start with [📚 Features Index](docs/features/INDEX.md) for all capabilities.
 
@@ -150,19 +150,19 @@ Multi-agent workflows with configurable retry budgets, circuit breakers, OIDC JW
 Add the engine to any Node.js / TypeScript project:
 
 ```sh
-npm install @ai-agencee/ai-kit-agent-executor
+npm install @ai-agencee/engine
 # or
-yarn add @ai-agencee/ai-kit-agent-executor
+yarn add @ai-agencee/engine
 # or
-pnpm add @ai-agencee/ai-kit-agent-executor
+pnpm add @ai-agencee/engine
 ```
 
 Install the CLI globally (or as a dev dependency):
 
 ```sh
-npm install -g @ai-agencee/ai-kit-cli
+npm install -g @ai-agencee/cli
 # or as a dev dep:
-npm install -D @ai-agencee/ai-kit-cli
+npm install -D @ai-agencee/cli
 ```
 
 ---
@@ -172,7 +172,7 @@ npm install -D @ai-agencee/ai-kit-cli
 ### Programmatic — run a DAG from TypeScript
 
 ```typescript
-import { DagOrchestrator } from '@ai-agencee/ai-kit-agent-executor';
+import { DagOrchestrator } from '@ai-agencee/engine';
 
 const orchestrator = new DagOrchestrator(process.cwd(), {
   forceProvider: 'mock',   // swap for 'anthropic' | 'openai' once you have keys
@@ -211,8 +211,8 @@ ai-kit dag:visualize ./my-dag.json
 Want to see what the engine does before writing anything? Clone the repo and run the zero-key demos:
 
 ```sh
-git clone https://github.com/binaryjack/ai-starter-kit.git
-cd ai-starter-kit
+git clone https://github.com/binaryjack/ai-agencee.git
+cd ai-agencee
 pnpm install && pnpm build
 
 # Original 3-lane demo — NO API keys required
@@ -578,8 +578,8 @@ Comprehensive feature guides are available in [`docs/features/`](docs/features/I
 
 ```sh
 # Clone and set up the monorepo
-git clone https://github.com/binaryjack/ai-starter-kit.git
-cd ai-starter-kit
+git clone https://github.com/binaryjack/ai-agencee.git
+cd ai-agencee
 pnpm install          # install all workspace deps
 pnpm build            # compile all packages (tsc)
 pnpm test             # run all Jest suites (424 tests)

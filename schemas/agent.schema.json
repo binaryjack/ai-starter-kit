@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/ai-starter-kit/schemas/agent.schema.json",
+  "$id": "https://github.com/ai-agencee/schemas/agent.schema.json",
   "title": "Agent Definition",
-  "description": "Schema for ai-starter-kit agent and supervisor JSON files (*.agent.json / *.supervisor.json)",
+  "description": "Schema for AI Agencee agent and supervisor JSON files (*.agent.json / *.supervisor.json)",
   "type": "object",
   "required": ["name", "role"],
   "additionalProperties": true,
