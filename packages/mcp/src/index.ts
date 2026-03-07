@@ -22,11 +22,9 @@ const server = new Server(
     name: 'ai-kit-mcp-server',
     version: '1.0.0',
   },
-  {
-    capabilities: {
+  {    capabilities: {
       tools: {},
       resources: {},
-      sampling: {},
     },
   }
 );

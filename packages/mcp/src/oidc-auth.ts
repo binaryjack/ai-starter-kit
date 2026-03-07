@@ -172,11 +172,12 @@ export class OidcError extends Error {
 
 // ─── JWT helpers ──────────────────────────────────────────────────────────────
 
-function base64urlDecode(input: string): Uint8Array {
+function base64urlDecode(input: string): Uint8Array<ArrayBuffer> {
   // Convert base64url to base64
   const b64 = input.replace(/-/g, '+').replace(/_/g, '/');
   const padded = b64 + '='.repeat((4 - (b64.length % 4)) % 4);
-  return Uint8Array.from(Buffer.from(padded, 'base64'));
+  // new Uint8Array(TypedArray) creates a copy backed by a fresh ArrayBuffer
+  return new Uint8Array(Buffer.from(padded, 'base64'));
 }
 
 function decodeJsonPart<T>(part: string): T {
@@ -184,7 +185,7 @@ function decodeJsonPart<T>(part: string): T {
   return JSON.parse(Buffer.from(bytes).toString('utf-8')) as T;
 }
 
-async function importRsaKey(jwk: Jwk): Promise<CryptoKey> {
+async function importRsaKey(jwk: Jwk): Promise<crypto.webcrypto.CryptoKey> {
   const keyData = {
     kty: 'RSA',
     n: jwk.n!,
@@ -202,7 +203,7 @@ async function importRsaKey(jwk: Jwk): Promise<CryptoKey> {
   );
 }
 
-async function importEcKey(jwk: Jwk): Promise<CryptoKey> {
+async function importEcKey(jwk: Jwk): Promise<crypto.webcrypto.CryptoKey> {
   const keyData = {
     kty: 'EC',
     crv: jwk.crv ?? 'P-256',
@@ -259,7 +260,7 @@ async function verifyJwt(token: string, issuer: string, audience: string | undef
     throw new OidcError(`No JWK found for kid "${header.kid}"`);
   }
 
-  let cryptoKey: CryptoKey;
+  let cryptoKey: crypto.webcrypto.CryptoKey;
   let algorithm: AlgorithmIdentifier | EcdsaParams;
 
   if (header.alg === 'RS256' || (!header.alg && jwk.kty === 'RSA')) {
