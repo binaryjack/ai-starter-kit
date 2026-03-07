@@ -1,0 +1,16 @@
+{
+  "laneId": "owasp-checklist",
+  "retryBudget": 0,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "owasp-results",
+    "outputKeys": ["owasp_results"]
+  }
+}

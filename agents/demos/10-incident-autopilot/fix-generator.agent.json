@@ -1,0 +1,23 @@
+{
+  "name": "Fix Generator",
+  "icon": "🔧",
+  "description": "Reads the root cause analysis and generates a concrete fix: code patch, config change, or runbook step. For complex database issues, hands off to the DB specialist.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "waitFor": "root-cause",
+      "contractKey": "root-cause",
+      "outputKey": "rca_input",
+      "pass": "🔗 Root cause loaded",
+      "fail": "⚠️  Root cause contract unavailable"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Generate a fix for this incident root cause:\n{rca_input}\n\nProduce:\n1. Immediate mitigation (can be applied in <5 minutes — restart, config toggle, feature flag)\n2. Code fix (TypeScript patch with file path and diff format)\n3. Validation steps (how to confirm the fix is working)\n4. Rollback procedure if fix makes things worse\n\nIf this is a PostgreSQL connection pool issue, flag it for HANDOFF to db-specialist.\n\nContext: {retryContext}",
+      "outputKey": "fix_proposal",
+      "pass": "🔧 Fix proposal generated",
+      "fail": "⚠️  Fix generation failed"
+    }
+  ]
+}

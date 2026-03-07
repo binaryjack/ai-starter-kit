@@ -1,0 +1,39 @@
+{
+  "name": "Risk Report Generator",
+  "icon": "📊",
+  "description": "Synthesises findings from all three parallel scanners into a single CVSS-scored executive risk report with prioritised remediation roadmap.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "waitFor": "cve-scan",
+      "contractKey": "cve-findings",
+      "outputKey": "cve_input",
+      "pass": "🔗 CVE findings loaded",
+      "fail": "⚠️  CVE contract unavailable"
+    },
+    {
+      "type": "read-contract",
+      "waitFor": "secrets-scan",
+      "contractKey": "secrets-findings",
+      "outputKey": "secrets_input",
+      "pass": "🔗 Secrets findings loaded",
+      "fail": "⚠️  Secrets contract unavailable"
+    },
+    {
+      "type": "read-contract",
+      "waitFor": "owasp-checklist",
+      "contractKey": "owasp-results",
+      "outputKey": "owasp_input",
+      "pass": "🔗 OWASP results loaded",
+      "fail": "⚠️  OWASP contract unavailable"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "security-review",
+      "prompt": "Synthesise the following security audit findings into an executive risk report:\n\nCVE FINDINGS: {cve_input}\nSECRETS FINDINGS: {secrets_input}\nOWASP RESULTS: {owasp_input}\n\nProduce:\n1. Executive Summary (2 paragraphs, non-technical)\n2. Risk Matrix (Critical/High/Medium/Low finding counts)\n3. Top 5 priority actions with effort estimates\n4. Overall risk posture: CRITICAL / HIGH / MEDIUM / LOW\n5. 30-day remediation roadmap\n\nContext: {retryContext}",
+      "outputKey": "risk_report",
+      "pass": "📊 Risk report generated",
+      "fail": "⚠️  Risk report generation failed"
+    }
+  ]
+}

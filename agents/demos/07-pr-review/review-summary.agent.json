@@ -1,0 +1,31 @@
+{
+  "name": "Review Summary Agent",
+  "icon": "📝",
+  "description": "Reads the contracts published by the security scanner and architecture reviewer. Synthesises a single, structured pull request review comment with an overall recommendation: APPROVE, REQUEST_CHANGES, or COMMENT.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "waitFor": "security-scan",
+      "contractKey": "security-findings",
+      "outputKey": "security_input",
+      "pass": "🔗 Security findings contract loaded",
+      "fail": "⚠️  Security contract not available"
+    },
+    {
+      "type": "read-contract",
+      "waitFor": "architecture-review",
+      "contractKey": "architecture-concerns",
+      "outputKey": "architecture_input",
+      "pass": "🔗 Architecture concerns contract loaded",
+      "fail": "⚠️  Architecture contract not available"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "You are a senior engineer writing a GitHub PR review. Synthesise the following agent findings into a single review comment:\n\nSECURITY FINDINGS: {security_input}\nARCHITECTURE CONCERNS: {architecture_input}\n\nFormat: ## 🤖 Automated Review Summary\n### Security\n### Architecture\n### Recommendation\nEnd with APPROVE, REQUEST_CHANGES, or COMMENT.",
+      "outputKey": "pr_review_comment",
+      "pass": "✅ PR review comment generated",
+      "fail": "⚠️  Review comment generation failed"
+    }
+  ]
+}

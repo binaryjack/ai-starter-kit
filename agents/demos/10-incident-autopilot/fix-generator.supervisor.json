@@ -1,0 +1,26 @@
+{
+  "laneId": "fix-generator",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": "root-cause",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Root cause contract empty. Proceed with DB connection pool exhaustion as the assumed root cause."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "HANDOFF",
+      "targetLaneId": "db-specialist",
+      "handoffContext": "Fix generation failed or flagged for DB specialist review. Root cause analysis indicates PostgreSQL connection pool exhaustion. Specialist should review pool configuration, query performance, and connection leak patterns."
+    }
+  ],
+  "publishContract": {
+    "key": "fix-proposal",
+    "outputKeys": ["fix_proposal"]
+  }
+}

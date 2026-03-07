@@ -1,0 +1,23 @@
+{
+  "name": "Release Engineer",
+  "icon": "🚀",
+  "description": "Reads all contracts from the pipeline and produces final release artefacts: CHANGELOG entry, release notes for stakeholders, semver bump recommendation, and deployment checklist.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "waitFor": "test-suite",
+      "contractKey": "test-suite",
+      "outputKey": "test_results",
+      "pass": "🔗 Test suite results loaded",
+      "fail": "⚠️  Test results unavailable"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Generate release artefacts for the notification feature delivery:\n\nTEST RESULTS: {test_results}\n\nProduce:\n1. CHANGELOG.md entry (Keep A Changelog format)\n2. Stakeholder release notes (non-technical, benefit-focused)\n3. Semver recommendation: PATCH / MINOR / MAJOR with justification\n4. Deployment checklist (migrations to run, env vars to set, rollback plan)\n5. Feature flag recommendation (should this ship behind a flag?)\n\nContext: {retryContext}",
+      "outputKey": "release_notes",
+      "pass": "🚀 Release artefacts ready for publication",
+      "fail": "⚠️  Release artefact generation failed"
+    }
+  ]
+}

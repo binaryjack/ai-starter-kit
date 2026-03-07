@@ -1,0 +1,32 @@
+{
+  "laneId": "backend-impl",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": "architecture",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Architecture contract empty — proceed with the known design: REST endpoints + SSE for notification streaming."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Backend implementation incomplete. Ensure route handler, migration SQL, event emitter, and test skeletons are all present."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "hard-barrier",
+      "barrierName": "impl-ready",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "api-spec",
+    "outputKeys": ["api_spec", "backend_implementation"]
+  }
+}

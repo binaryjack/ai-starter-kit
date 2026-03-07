@@ -1,0 +1,30 @@
+{
+  "laneId": "security-scan",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 0 },
+      "onFail": "RETRY",
+      "retryInstructions": "package.json was not found at the root. Try looking in src/ or the workspace root. The dependency check is optional — proceed with what is available."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "The security scan returned empty or unstructured output. Re-run the analysis focusing specifically on the diff content. Even if the diff is clean, output 'No findings' as a structured entry."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "security-findings",
+    "outputKeys": ["security_findings", "confirmed_findings"]
+  }
+}

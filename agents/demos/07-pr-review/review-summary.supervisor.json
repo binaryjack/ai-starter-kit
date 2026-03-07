@@ -1,0 +1,28 @@
+{
+  "laneId": "review-summary",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": "security-scan",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Security contract was empty. Proceed with a note that security findings were unavailable."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "read-contract",
+      "waitFor": "architecture-review",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Architecture contract was empty. Proceed with a note that architecture review was unavailable."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ]
+}

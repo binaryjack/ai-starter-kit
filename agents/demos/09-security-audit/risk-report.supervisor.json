@@ -1,0 +1,40 @@
+{
+  "laneId": "risk-report",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": "cve-scan",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "CVE contract empty — proceed with available data."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "read-contract",
+      "waitFor": "secrets-scan",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Secrets contract empty — proceed with available data."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "read-contract",
+      "waitFor": "owasp-checklist",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "OWASP contract empty — proceed with available data."
+    },
+    {
+      "checkpointId": "step-3",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "risk-report",
+    "outputKeys": ["risk_report"]
+  }
+}

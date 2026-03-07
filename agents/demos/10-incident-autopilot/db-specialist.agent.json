@@ -1,0 +1,15 @@
+{
+  "name": "DB Specialist",
+  "icon": "🗄️",
+  "description": "Specialist agent for database incidents. Receives handoff context from the fix generator and provides expert PostgreSQL diagnosis: connection pool tuning, query optimisation, and index recommendations.",
+  "checks": [
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "You are a PostgreSQL expert. You have received a handoff for a production database incident. Handoff context: {handoffContext}\n\nProvide expert analysis:\n1. PostgreSQL connection pool configuration recommendations (PgBouncer settings, max_connections)\n2. Top 3 queries likely causing connection hold-time (from pg_stat_activity patterns)\n3. Index recommendations for common query patterns\n4. Emergency mitigation: SQL commands to run immediately\n5. Long-term architectural recommendation (read replicas, connection pooler, query cache)\n\nContext: {retryContext}",
+      "outputKey": "db_specialist_fix",
+      "pass": "🗄️  DB specialist analysis complete",
+      "fail": "⚠️  DB analysis failed"
+    }
+  ]
+}

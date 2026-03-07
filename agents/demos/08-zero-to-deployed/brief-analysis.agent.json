@@ -1,0 +1,23 @@
+{
+  "name": "Brief Analyst",
+  "icon": "📋",
+  "description": "Receives a feature brief from a product manager and produces a structured specification: user stories, acceptance criteria, API surface, and a technical complexity estimate.",
+  "checks": [
+    {
+      "type": "llm-generate",
+      "taskType": "code-review",
+      "prompt": "You are a business analyst. Convert the following feature brief into a structured specification:\n1. User stories (as a <role>, I want <goal>, so that <reason>)\n2. Acceptance criteria (Given/When/Then)\n3. Proposed API surface (endpoints or events)\n4. Technical complexity estimate (S/M/L/XL)\n5. Dependencies on other systems\n\nFeature brief: Add a real-time notification system so users receive in-app alerts when a workflow completes or fails. Context: {retryContext}",
+      "outputKey": "feature_spec",
+      "pass": "📋 Feature specification complete",
+      "fail": "⚠️  Feature spec could not be generated"
+    },
+    {
+      "type": "llm-review",
+      "taskType": "code-review",
+      "prompt": "Review the feature spec for completeness. Ensure all acceptance criteria are testable, the API surface is well-defined, and the complexity estimate is justified. Output a revised spec if corrections are needed.",
+      "outputKey": "approved_spec",
+      "pass": "✅ Spec reviewed and approved",
+      "fail": "⚠️  Spec review failed"
+    }
+  ]
+}

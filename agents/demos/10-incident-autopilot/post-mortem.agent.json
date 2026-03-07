@@ -1,0 +1,23 @@
+{
+  "name": "Post-Mortem Writer",
+  "icon": "📄",
+  "description": "Compiles the full incident timeline into a blameless post-mortem document following the SRE post-mortem template. Also generates a runbook update.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "waitFor": "human-review-gate",
+      "contractKey": "review-outcome",
+      "outputKey": "review_outcome",
+      "pass": "🔗 Review outcome loaded",
+      "fail": "⚠️  Review outcome unavailable"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Write a blameless post-mortem document for this incident.\n\nREVIEW OUTCOME: {review_outcome}\n\nFollow this structure:\n## Incident Post-Mortem\n### Summary (2-3 sentences)\n### Impact (users affected, duration, revenue impact estimate)\n### Timeline (table: time, event, who)\n### Root Cause\n### Contributing Factors\n### Detection (how was it found? how long before detection?)\n### Resolution\n### Action Items (table: item, owner, due date, priority)\n### Lessons Learned\n### Runbook Update\n\nContext: {retryContext}",
+      "outputKey": "post_mortem",
+      "pass": "📄 Post-mortem document complete",
+      "fail": "⚠️  Post-mortem generation failed"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Solution Architect",
+  "icon": "🏛️",
+  "description": "Reads the feature specification and designs the technical architecture: system components, data flow, database schema changes, API contracts, and non-functional requirements.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "waitFor": "brief-analysis",
+      "contractKey": "feature-spec",
+      "outputKey": "spec_input",
+      "pass": "🔗 Feature spec contract loaded from BA",
+      "fail": "⚠️  Feature spec contract unavailable"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Design the technical architecture for this feature:\n{spec_input}\n\nProduce:\n1. Component diagram description (which services are involved)\n2. Database schema changes (tables, columns, indices)\n3. API contract (request/response shapes with TypeScript types)\n4. Event schema (for the notification events)\n5. Non-functional requirements (latency target, scalability notes)\n\nContext: {retryContext}",
+      "outputKey": "architecture_design",
+      "pass": "🏛️  Architecture design complete",
+      "fail": "⚠️  Architecture design failed"
+    },
+    {
+      "type": "llm-review",
+      "taskType": "architecture-decision",
+      "prompt": "Review the architecture design for: (1) scalability concerns, (2) single points of failure, (3) missing error handling paths, (4) alignment with the feature spec acceptance criteria. Output a final approved architecture document.",
+      "outputKey": "approved_architecture",
+      "pass": "✅ Architecture approved",
+      "fail": "⚠️  Architecture review failed"
+    }
+  ]
+}

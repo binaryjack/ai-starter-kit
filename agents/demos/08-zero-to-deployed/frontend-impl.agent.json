@@ -1,0 +1,31 @@
+{
+  "name": "Frontend Engineer",
+  "icon": "🎨",
+  "description": "Implements the client-side feature: UI components, SSE subscription hook, notification bell, and toast library integration. Uses a soft-align to read the backend API spec as soon as it's available.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "waitFor": "architecture",
+      "contractKey": "architecture-design",
+      "outputKey": "arch_input",
+      "pass": "🔗 Architecture design loaded",
+      "fail": "⚠️  Architecture contract unavailable"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Implement the frontend for this feature based on:\n{arch_input}\n\nGenerate:\n1. React NotificationBell component (badge count, dropdown list)\n2. useNotifications() custom hook (SSE subscription)\n3. NotificationToast component\n4. TypeScript types matching the backend API spec\n\nContext: {retryContext}",
+      "outputKey": "frontend_implementation",
+      "pass": "🎨 Frontend implementation generated",
+      "fail": "⚠️  Frontend generation failed"
+    },
+    {
+      "type": "llm-review",
+      "taskType": "code-review",
+      "prompt": "Review the frontend implementation for: accessibility (ARIA labels, keyboard navigation), SSE reconnection handling, empty state UI, and loading states. Output a final reviewed implementation.",
+      "outputKey": "reviewed_frontend",
+      "pass": "✅ Frontend reviewed and production-ready",
+      "fail": "⚠️  Frontend review failed"
+    }
+  ]
+}

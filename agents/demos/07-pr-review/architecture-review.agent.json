@@ -1,0 +1,23 @@
+{
+  "name": "Architecture Reviewer",
+  "icon": "🏗️",
+  "description": "Reviews the PR for architectural concerns: breaking API contract changes, new dependencies that violate technology standards, circular import patterns, and deviation from established design patterns.",
+  "checks": [
+    {
+      "type": "llm-generate",
+      "taskType": "architecture-decision",
+      "prompt": "Review this pull request for architectural concerns: (1) Are any public API contracts broken (changed method signatures, removed endpoints, altered response shapes)? (2) Do new dependencies introduce security or licence risks? (3) Are there any circular dependencies or layering violations? (4) Does the change deviate from the established patterns in the codebase? Output a structured list of concerns with severity and recommendation.",
+      "outputKey": "architecture_concerns",
+      "pass": "🏗️  Architecture review complete",
+      "fail": "⚠️  Architecture review failed to produce structured output"
+    },
+    {
+      "type": "llm-review",
+      "taskType": "architecture-decision",
+      "prompt": "Summarise the architecture review in 3 bullet points suitable for a PR comment. Highlight any breaking changes prominently. If there are no concerns, state 'Architecture: ✅ No concerns found.'",
+      "outputKey": "architecture_summary",
+      "pass": "✅ Architecture summary ready",
+      "fail": "⚠️  Summary generation failed"
+    }
+  ]
+}

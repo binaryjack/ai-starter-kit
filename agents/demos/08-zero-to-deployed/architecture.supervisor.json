@@ -1,0 +1,31 @@
+{
+  "laneId": "architecture",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": "brief-analysis",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Feature spec contract was empty. Proceed with the known feature brief: real-time notification system."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "Architecture design was incomplete. Ensure all 5 sections are present."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "architecture-design",
+    "outputKeys": ["architecture_design", "approved_architecture"]
+  }
+}

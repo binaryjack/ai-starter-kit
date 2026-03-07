@@ -1,0 +1,31 @@
+{
+  "name": "QA Engineer",
+  "icon": "🧪",
+  "description": "Reads both the backend API spec and frontend UI spec and generates a comprehensive test suite: unit tests, integration tests, and E2E test scenarios.",
+  "checks": [
+    {
+      "type": "read-contract",
+      "waitFor": "backend-impl",
+      "contractKey": "api-spec",
+      "outputKey": "api_spec_input",
+      "pass": "🔗 Backend API spec loaded",
+      "fail": "⚠️  API spec contract unavailable"
+    },
+    {
+      "type": "read-contract",
+      "waitFor": "frontend-impl",
+      "contractKey": "ui-spec",
+      "outputKey": "ui_spec_input",
+      "pass": "🔗 Frontend UI spec loaded",
+      "fail": "⚠️  UI spec contract unavailable"
+    },
+    {
+      "type": "llm-generate",
+      "taskType": "code-generation",
+      "prompt": "Generate a test suite for the notification feature:\nAPI SPEC: {api_spec_input}\nUI SPEC: {ui_spec_input}\n\nProduce:\n1. Vitest unit tests for the useNotifications hook\n2. Supertest integration tests for the notification API\n3. Playwright E2E scenario: user receives notification while workflow runs\n\nContext: {retryContext}",
+      "outputKey": "test_suite",
+      "pass": "🧪 Test suite generated",
+      "fail": "⚠️  Test generation failed"
+    }
+  ]
+}

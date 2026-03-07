@@ -1,0 +1,45 @@
+{
+  "name": "Demo 07 — PR Auto-Review",
+  "description": "A GitHub webhook fires on a new pull request. Three parallel agents scan for security issues, architectural concerns, and test coverage gaps — then synthesise a single structured review comment. Demonstrates: parallel lanes, PII scrubbing (secret detected in diff), ESCALATE on missing tests, read-contract for the summary agent.",
+  "lanes": [
+    {
+      "id": "security-scan",
+      "agentFile": "security-scan.agent.json",
+      "supervisorFile": "security-scan.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["security-analysis", "secret-detection"]
+    },
+    {
+      "id": "architecture-review",
+      "agentFile": "architecture-review.agent.json",
+      "supervisorFile": "architecture-review.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["architecture-analysis", "api-breaking-changes"]
+    },
+    {
+      "id": "test-coverage",
+      "agentFile": "test-coverage.agent.json",
+      "supervisorFile": "test-coverage.supervisor.json",
+      "dependsOn": [],
+      "capabilities": ["test-analysis", "coverage-report"]
+    },
+    {
+      "id": "review-summary",
+      "agentFile": "review-summary.agent.json",
+      "supervisorFile": "review-summary.supervisor.json",
+      "dependsOn": ["security-scan", "architecture-review"],
+      "capabilities": ["pr-summary", "review-comment"]
+    }
+  ],
+  "capabilityRegistry": {
+    "security-analysis":        ["security-scan"],
+    "secret-detection":         ["security-scan"],
+    "architecture-analysis":    ["architecture-review"],
+    "api-breaking-changes":     ["architecture-review"],
+    "test-analysis":            ["test-coverage"],
+    "coverage-report":          ["test-coverage"],
+    "pr-summary":               ["review-summary"],
+    "review-comment":           ["review-summary"]
+  },
+  "modelRouterFile": "../model-router.json"
+}

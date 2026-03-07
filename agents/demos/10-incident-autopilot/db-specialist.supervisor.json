@@ -1,0 +1,17 @@
+{
+  "laneId": "db-specialist",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "DB analysis incomplete. Focus on PgBouncer pool_size and max_client_conn settings as the immediate fix — these are the most common cause of connection pool exhaustion."
+    }
+  ],
+  "publishContract": {
+    "key": "fix-proposal",
+    "outputKeys": ["db_specialist_fix"]
+  }
+}

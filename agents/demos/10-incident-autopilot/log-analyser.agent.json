@@ -1,0 +1,15 @@
+{
+  "name": "Log Analyser",
+  "icon": "📋",
+  "description": "Ingests application logs from the incident window and extracts error patterns, frequency distributions, affected services, and the first occurrence timestamp.",
+  "checks": [
+    {
+      "type": "llm-generate",
+      "taskType": "file-analysis",
+      "prompt": "Analyse the following incident logs. Extract: (1) Top 5 error messages by frequency, (2) timeline of first occurrence for each unique error, (3) list of affected services and their error rates, (4) any obvious correlation patterns (e.g. errors spike after deploy at 14:32), (5) stack traces for the most critical errors. Format as structured JSON. Context: {retryContext}\n\nSAMPLE LOG DATA:\n[14:31:45] ERROR api-gateway: upstream connect error (code=503)\n[14:31:46] ERROR api-gateway: upstream connect error (code=503)\n[14:31:47] ERROR db-pool: connection timeout after 5000ms (pool size: 10/10)\n[14:31:47] ERROR db-pool: connection timeout after 5000ms (pool size: 10/10)\n[14:31:48] WARN  auth-service: JWT validation latency 2300ms (threshold: 500ms)\n[14:31:50] ERROR api-gateway: upstream connect error (code=503) x47\n[14:31:51] ERROR db-pool: max pool size reached, queueing requests\n[14:32:00] ERROR api-gateway: circuit breaker OPEN for db-pool\n[14:32:01] CRITICAL app: P1 alert — service degradation detected",
+      "outputKey": "log_analysis",
+      "pass": "📋 Log analysis complete — patterns identified",
+      "fail": "⚠️  Log analysis failed"
+    }
+  ]
+}

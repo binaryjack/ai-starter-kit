@@ -1,0 +1,32 @@
+{
+  "laneId": "test-suite",
+  "retryBudget": 1,
+  "checkpoints": [
+    {
+      "checkpointId": "step-0",
+      "mode": "read-contract",
+      "waitFor": "backend-impl",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "API spec contract was empty. Proceed with generic notification endpoint shape: GET /notifications, POST /notifications/read/:id."
+    },
+    {
+      "checkpointId": "step-1",
+      "mode": "read-contract",
+      "waitFor": "frontend-impl",
+      "expect": { "minFindings": 1 },
+      "onFail": "RETRY",
+      "retryInstructions": "UI spec contract was empty. Proceed with generic NotificationBell + useNotifications hook shape."
+    },
+    {
+      "checkpointId": "step-2",
+      "mode": "self",
+      "expect": { "minFindings": 1 },
+      "onFail": "ESCALATE"
+    }
+  ],
+  "publishContract": {
+    "key": "test-suite",
+    "outputKeys": ["test_suite"]
+  }
+}
