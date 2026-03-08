@@ -1,5 +1,5 @@
-import { execute } from './prototype/index.js';
-import type { IRunCommandHandler } from './run-command-handler.types.js';
+import { execute } from './prototype/index.js'
+import type { IRunCommandHandler } from './run-command-handler.types.js'
 
 export const RunCommandHandler = function(this: IRunCommandHandler) {
   // no-op constructor

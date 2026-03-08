@@ -1,5 +1,5 @@
-import { execute } from './prototype/index.js';
-import type { IDirExistsHandler } from './dir-exists-handler.types.js';
+import type { IDirExistsHandler } from './dir-exists-handler.types.js'
+import { execute } from './prototype/index.js'
 
 export const DirExistsHandler = function (this: IDirExistsHandler) {
 } as unknown as IDirExistsHandler;

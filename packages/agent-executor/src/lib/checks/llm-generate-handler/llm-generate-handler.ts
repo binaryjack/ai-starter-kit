@@ -1,5 +1,5 @@
-import { execute } from './prototype/index.js';
-import type { ILlmGenerateHandler } from './llm-generate-handler.types.js';
+import type { ILlmGenerateHandler } from './llm-generate-handler.types.js'
+import { execute } from './prototype/index.js'
 
 export const LlmGenerateHandler = function(this: ILlmGenerateHandler) {
   // no-op constructor

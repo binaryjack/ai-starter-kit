@@ -1,5 +1,5 @@
-import { execute } from './prototype/index.js';
-import type { ICountDirsHandler } from './count-dirs-handler.types.js';
+import type { ICountDirsHandler } from './count-dirs-handler.types.js'
+import { execute } from './prototype/index.js'
 
 export const CountDirsHandler = function (this: ICountDirsHandler) {
 } as unknown as ICountDirsHandler;

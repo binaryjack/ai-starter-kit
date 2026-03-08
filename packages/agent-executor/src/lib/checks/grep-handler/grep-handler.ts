@@ -1,5 +1,5 @@
-import { execute } from './prototype/index.js';
-import type { IGrepHandler } from './grep-handler.types.js';
+import type { IGrepHandler } from './grep-handler.types.js'
+import { execute } from './prototype/index.js'
 
 export const GrepHandler = function (this: IGrepHandler) {
 } as unknown as IGrepHandler;

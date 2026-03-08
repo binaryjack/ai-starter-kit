@@ -1,5 +1,5 @@
-import { execute } from './prototype/index.js';
-import type { IJsonHasKeyHandler } from './json-has-key-handler.types.js';
+import type { IJsonHasKeyHandler } from './json-has-key-handler.types.js'
+import { execute } from './prototype/index.js'
 
 export const JsonHasKeyHandler = function (this: IJsonHasKeyHandler) {
 } as unknown as IJsonHasKeyHandler;

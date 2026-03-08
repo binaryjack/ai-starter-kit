@@ -1,5 +1,5 @@
-import { execute } from './prototype/index.js';
-import type { ILlmToolHandler } from './llm-tool-handler.types.js';
+import type { ILlmToolHandler } from './llm-tool-handler.types.js'
+import { execute } from './prototype/index.js'
 
 export const LlmToolHandler = function(this: ILlmToolHandler) {
   // no-op constructor

@@ -1,5 +1,5 @@
-import { execute } from './prototype/index.js';
-import type { ILlmReviewHandler } from './llm-review-handler.types.js';
+import type { ILlmReviewHandler } from './llm-review-handler.types.js'
+import { execute } from './prototype/index.js'
 
 export const LlmReviewHandler = function(this: ILlmReviewHandler) {
   // no-op constructor

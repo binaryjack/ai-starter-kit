@@ -1,4 +1,4 @@
-import type { ICheckHandler, RawCheckResult } from '../check-handler.interface.js';
+import type { ICheckHandler, RawCheckResult } from '../check-handler.interface.js'
 
 export interface ILlmReviewHandler extends ICheckHandler {
   new(): ILlmReviewHandler;
