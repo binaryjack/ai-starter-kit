@@ -1,4 +1,4 @@
 {
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
-  "buildCommand": "cd ../.. && pnpm --filter @ai-agencee/engine build && pnpm --filter @ai-agencee/showcase-web build"
+  "buildCommand": "cd ../.. && pnpm --filter @ai-agencee/engine build"
 }

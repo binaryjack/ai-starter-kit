@@ -17,9 +17,8 @@ A comprehensive set of custom SVG icons designed to match the AI Agencee brand i
 pnpm sync-icons
 ```
 
-This copies all icons from `art-kit/icons/` to:
-- `packages/showcase-web/public/art-kit/icons/`
-- `packages/dag-editor/public/art-kit/icons/`
+This copies all icons from `art-kit/icons/` to consumer packages.
+The DAG editor and showcase web have moved to the private SaaS repo — configure their paths there.
 
 The sync script is located at `scripts/sync-icons.js` and runs automatically before builds, but should be run manually when:
 - Adding new icon files

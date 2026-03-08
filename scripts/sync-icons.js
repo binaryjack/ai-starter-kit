@@ -14,8 +14,7 @@ const ROOT = join(__dirname, '..')
 
 const ICON_SOURCE = join(ROOT, 'art-kit', 'icons')
 const PACKAGES_WITH_PUBLIC = [
-  'packages/showcase-web/public',
-  'packages/dag-editor/public',
+  // web apps moved to private repo — add private paths here if needed
 ]
 
 async function syncIcons() {

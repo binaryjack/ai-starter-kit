@@ -10,9 +10,7 @@
     "test": "pnpm -r run test",
     "lint": "pnpm -r run lint",
     "sync-icons": "node scripts/sync-icons.js",
-    "dev:dag-editor": "pnpm sync-icons && pnpm --filter @ai-agencee/dag-editor run dev",
-    "dev:showcase": "pnpm sync-icons && pnpm --filter @ai-agencee/showcase-web run dev",
-    "dev:sites": "pnpm sync-icons && pnpm --filter @ai-agencee/dag-editor --filter @ai-agencee/showcase-web --parallel run dev",
+
     "demo": "pnpm build && node scripts/demo.js",
     "demo:dag": "node scripts/demo.js",
     "run:dag": "node packages/cli/dist/bin/ai-kit.js agent:dag",
