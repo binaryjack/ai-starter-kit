@@ -95,7 +95,7 @@ Show me the recommended architecture for a data service.
 
 ## 🎯 What Happens
 
-1. **You send** `@init` → Claude loads your project's TADEO/ULTRA_HIGH standards
+1. **You send** `@init` → Claude loads your project's OWNER/ULTRA_HIGH standards
 2. **Server checks** → Reads from `.github/copilot-instructions.md`, `src/.ai/rules.md`, etc.
 3. **Claude knows** → Your specific naming rules, forbidden patterns, testing requirements
 4. **Better responses** → All code suggestions follow YOUR standards, not generic ones
@@ -134,7 +134,7 @@ If files are missing, you'll get helpful error messages.
 
 ## 🚀 What You Get
 
-### TADEO/ULTRA_HIGH Standards Enforced
+### OWNER/ULTRA_HIGH Standards Enforced
 
 - ✅ **Naming**: `kebab-case` only (no camelCase)
 - ✅ **Exports**: One item per file

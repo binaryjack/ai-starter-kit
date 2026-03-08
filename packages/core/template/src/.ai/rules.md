@@ -2,7 +2,7 @@
 
 ## Core Configuration
 ```
-U=TADEO
+U=OWNER
 STD=ULTRA_HIGH
 COM=BRUTAL
 VERBOSITY=0

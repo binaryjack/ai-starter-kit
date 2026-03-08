@@ -54,7 +54,7 @@ Then add the MCP server URL to your VS Code `settings.json`:
 
 | Tool | Description |
 |------|-------------|
-| `@init` | Initialise an AI session with TADEO/ULTRA_HIGH standards |
+| `@init` | Initialise an AI session with OWNER/ULTRA_HIGH standards |
 | `@check` | Validate the current project structure against agent checks |
 | `@rules` | Display the active coding rules and standards |
 | `@patterns` | Browse recommended design patterns |

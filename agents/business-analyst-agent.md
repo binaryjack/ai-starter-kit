@@ -2,7 +2,7 @@
 
 **Role**: Orchestrator & Workflow Coordinator  
 **Authority**: Strategic breakdown, dependency mapping, agent assignment, workflow sequencing  
-**Reports To**: User (TADEO) → Provides breakdown recommendations  
+**Reports To**: User (OWNER) → Provides breakdown recommendations  
 **Supervises**: All implementation agents (Architecture, Backend, Frontend, Testing, E2E)  
 **Supervised By**: Supervisor Agent (quality gates before agent dispatch)
 
@@ -604,7 +604,7 @@ If dependency: BA adjusts sequencing
   ↓
 If agent capability: BA escalates to Supervisor for re-invoke decision
   ↓
-Supervisor decides: Re-invoke Agent or escalate to User (TADEO)
+Supervisor decides: Re-invoke Agent or escalate to User (OWNER)
 ```
 
 ---

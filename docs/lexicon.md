@@ -355,8 +355,8 @@ A point in the DAG where lane execution pauses and the Supervisor Agent evaluate
 
 ## T
 
-**TADEO**  
-The project owner/user identity. Referenced in the `copilot-instructions.md` manifest as `U=TADEO`. The Supervisor Agent acts as "TADEO's Virtual Representative", applying ULTRA_HIGH standards with BRUTAL communication: no verbosity, no stubs, no `any` types, no hallucinations.
+**OWNER**  
+The project owner/user identity. Referenced in the `copilot-instructions.md` manifest as `U=OWNER`. The Supervisor Agent acts as "OWNER's Virtual Representative", applying ULTRA_HIGH standards with BRUTAL communication: no verbosity, no stubs, no `any` types, no hallucinations.
 
 **Task Type**  
 The semantic classification of a check's intent. Used by the Model Router to select the appropriate LLM tier. Values: `validation`, `code-analysis`, `code-generation`, `code-review`, `security-review`, `architecture-decision`, `complex-reasoning`.

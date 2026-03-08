@@ -249,7 +249,7 @@ MIT — see [LICENSE](https://github.com/binaryjack/ai-agencee/blob/main/LICENSE
 # AI SESSION INITIALIZED
 
 ## Configuration
-U=TADEO
+U=OWNER
 STD=ULTRA_HIGH
 ...
 

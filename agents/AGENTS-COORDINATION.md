@@ -11,7 +11,7 @@ This document defines how specialized AI agents communicate, coordinate, and han
 ## Operational Workflow
 
 ```
-PRODUCT SPEC (TADEO)
+PRODUCT SPEC (OWNER)
         ↓
 @Agent:BusinessAnalyst (BREAKS DOWN SPEC)
         ↓
@@ -944,7 +944,7 @@ BA analyzes:
 │ └─ YES: Escalate to Supervisor for re-invoke decision
 │
 └─ Is this a requirement clarity issue?
-└─ YES: BA clarifies with user (TADEO) or supervisor
+└─ YES: BA clarifies with user (OWNER) or supervisor
 
         ↓
 

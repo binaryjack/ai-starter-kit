@@ -20,7 +20,7 @@ Successfully created and released the **MCP (Model Context Protocol) Server** fo
 
 The server provides 5 tools for AI assistant integration:
 
-1. **@init** - Initialize AI session with TADEO/ULTRA_HIGH standards
+1. **@init** - Initialize AI session with OWNER/ULTRA_HIGH standards
    - Parameters: `strict` (boolean, optional)
    - Returns: Configuration summary and available tools
 
@@ -51,10 +51,10 @@ Provides direct file access through bootstrap:// protocol:
 
 ## Configuration Flags
 
-The MCP server enforces these TADEO/ULTRA_HIGH standards automatically:
+The MCP server enforces these OWNER/ULTRA_HIGH standards automatically:
 
 ```
-U=TADEO                 # Universe: TADEO framework
+U=OWNER                 # Universe: OWNER framework
 STD=ULTRA_HIGH          # Standard level
 COM=BRUTAL              # Communication: Direct and honest
 VERBOSITY=0             # Minimal output
@@ -250,7 +250,7 @@ Based on the project rules, how should I structure...?
 ✅ **Documentation**: Comprehensive README with examples  
 ✅ **Integration**: Claude Desktop integration documented  
 ✅ **Functionality**: All 5 tools implemented and tested  
-✅ **Standards**: TADEO/ULTRA_HIGH standards integrated  
+✅ **Standards**: OWNER/ULTRA_HIGH standards integrated  
 
 ## Summary
 

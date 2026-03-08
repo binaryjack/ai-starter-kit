@@ -27,7 +27,7 @@ Scaffold AI rule files into the current project from the bundled template.
 
 ```bash
 ai-kit init
-ai-kit init --strict   # Enable ULTRA_HIGH strict standards (TADEO rules)
+ai-kit init --strict   # Enable ULTRA_HIGH strict standards (OWNER rules)
 ```
 
 Creates the following structure (prompts before overwriting existing files):

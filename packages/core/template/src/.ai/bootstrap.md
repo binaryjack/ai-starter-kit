@@ -34,7 +34,7 @@ npm run check  # tsc + eslint + jest
 ## Core Configuration
 
 ```
-U=TADEO
+U=OWNER
 STD=ULTRA_HIGH
 COM=BRUTAL
 VERBOSITY=0

@@ -247,7 +247,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
 
 ## Configuration
 \`\`\`
-U=TADEO
+U=OWNER
 STD=ULTRA_HIGH
 COM=BRUTAL
 VERBOSITY=0

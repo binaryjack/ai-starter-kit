@@ -20,7 +20,7 @@ program
 program
   .command('init')
   .description('Scaffold AI rule files into the current project')
-  .option('-t, --strict', 'Initialize with ULTRA_HIGH strict standards (TADEO rules)')
+  .option('-t, --strict', 'Initialize with ULTRA_HIGH strict standards (OWNER rules)')
   .action((options) => runInit({ strict: options.strict }));
 
 program

@@ -7,6 +7,6 @@ module.exports = {
   },
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
-    '^@tadeo/ai-kit-core$': '<rootDir>/../core/src/index.ts',
+    '^@ai-agencee/core$': '<rootDir>/../core/src/index.ts',
   },
 };

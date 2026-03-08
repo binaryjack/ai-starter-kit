@@ -3,7 +3,7 @@ import { spawn } from 'child_process';
 export const runMcp = async (): Promise<void> => {
   console.log('Starting AI Kit MCP Server...');
   console.log('');
-  console.log('Configuration: TADEO/ULTRA_HIGH standards');
+  console.log('Configuration: OWNER/ULTRA_HIGH standards');
   console.log('Available tools:');
   console.log('  @init       - Initialize AI session with standards');
   console.log('  @check      - Validate project structure');
