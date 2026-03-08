@@ -1,7 +1,7 @@
-import * as fs from 'fs/promises';
+import * as fs from 'fs/promises'
 
-import type { IRunRegistry } from '../run-registry.js';
-import type { RunEntry, RunPaths, RunStatus } from '../run-registry.types.js';
+import type { IRunRegistry } from '../run-registry.js'
+import type { RunEntry, RunPaths, RunStatus } from '../run-registry.types.js'
 
 export async function create(
   this:    IRunRegistry,
@@ -67,7 +67,7 @@ export async function purgeOld(
   });
 
   for (const entry of toDelete) {
-    await this.deleteRun(entry.runId);
+    await this.delete(entry.runId);
   }
 
   return toDelete.map((e) => e.runId);

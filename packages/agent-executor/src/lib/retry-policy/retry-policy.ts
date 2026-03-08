@@ -27,11 +27,11 @@ export const RetryPolicy = function(this: IRetryPolicy, opts?: Partial<RetryPoli
 Object.assign(RetryPolicy.prototype, { execute, _sleep });
 
 // Static factory methods
-(RetryPolicy as Record<string, unknown>).default = function(): IRetryPolicy {
+(RetryPolicy as unknown as Record<string, unknown>).default = function(): IRetryPolicy {
   return new RetryPolicy();
 };
 
-(RetryPolicy as Record<string, unknown>).forLLM = function(): IRetryPolicy {
+(RetryPolicy as unknown as Record<string, unknown>).forLLM = function(): IRetryPolicy {
   return new RetryPolicy({
     maxAttempts:    4,
     initialDelayMs: 1_000,
@@ -42,6 +42,6 @@ Object.assign(RetryPolicy.prototype, { execute, _sleep });
   });
 };
 
-(RetryPolicy as Record<string, unknown>).none = function(): IRetryPolicy {
+(RetryPolicy as unknown as Record<string, unknown>).none = function(): IRetryPolicy {
   return new RetryPolicy({ maxAttempts: 1 });
 };

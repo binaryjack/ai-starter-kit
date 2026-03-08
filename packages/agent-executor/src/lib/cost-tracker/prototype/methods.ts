@@ -1,6 +1,6 @@
+import type { RoutedResponse } from '../../model-router.js';
 import type { ICostTracker } from '../cost-tracker.js';
 import type { LaneCostSummary, RunCostSummary } from '../cost-tracker.types.js';
-import type { RoutedResponse } from '../model-router.js';
 
 export function record(
   this: ICostTracker,

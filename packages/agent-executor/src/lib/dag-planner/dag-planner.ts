@@ -1,4 +1,4 @@
-import type { DagDefinition, LaneDefinition } from './dag-types.js';
+import type { DagDefinition, LaneDefinition } from '../dag-types.js'
 
 export interface IDagPlanner {
   new(): IDagPlanner;
@@ -6,7 +6,7 @@ export interface IDagPlanner {
 
 export const DagPlanner = function(this: IDagPlanner) {} as unknown as IDagPlanner;
 
-(DagPlanner as Record<string, unknown>).validateDag = function(dag: DagDefinition): void {
+(DagPlanner as unknown as Record<string, unknown>).validateDag = function(dag: DagDefinition): void {
   if (!dag.name) throw new Error('dag.json: missing "name"');
   if (!Array.isArray(dag.lanes) || dag.lanes.length === 0) {
     throw new Error('dag.json: "lanes" must be a non-empty array');
@@ -57,7 +57,7 @@ export const DagPlanner = function(this: IDagPlanner) {} as unknown as IDagPlann
   }
 };
 
-(DagPlanner as Record<string, unknown>).topologicalSort = function(lanes: LaneDefinition[]): LaneDefinition[][] {
+(DagPlanner as unknown as Record<string, unknown>).topologicalSort = function(lanes: LaneDefinition[]): LaneDefinition[][] {
   const remaining = new Set(lanes.map((l) => l.id));
   const completed = new Set<string>();
   const groups:    LaneDefinition[][] = [];
@@ -85,7 +85,7 @@ export const DagPlanner = function(this: IDagPlanner) {} as unknown as IDagPlann
   return groups;
 };
 
-(DagPlanner as Record<string, unknown>).buildCapabilityRegistry = function(dag: DagDefinition): Record<string, string[]> {
+(DagPlanner as unknown as Record<string, unknown>).buildCapabilityRegistry = function(dag: DagDefinition): Record<string, string[]> {
   const result: Record<string, string[]> = { ...(dag.capabilityRegistry ?? {}) };
 
   for (const lane of dag.lanes) {

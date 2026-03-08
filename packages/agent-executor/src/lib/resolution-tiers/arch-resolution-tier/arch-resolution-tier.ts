@@ -1,18 +1,18 @@
-import type { ModelRouter } from '../../model-router/index.js';
-import type { ResolutionTier, DecisionOption, PendingDecision } from '../resolution-tiers.types.js';
+import type { IModelRouter } from '../../model-router/index.js';
+import type { DecisionOption, PendingDecision, ResolutionTier } from '../resolution-tiers.types.js';
 import './prototype/index.js';
 
 export interface IArchResolutionTier extends ResolutionTier {
-  _modelRouter?: ModelRouter;
+  _modelRouter?: IModelRouter;
   canHandle(pending: PendingDecision): boolean;
   resolve(pending: PendingDecision): Promise<DecisionOption | null>;
 }
 
 export const ArchResolutionTier = function(
   this: IArchResolutionTier,
-  modelRouter?: ModelRouter,
+  modelRouter?: IModelRouter,
 ) {
   this._modelRouter = modelRouter;
 } as unknown as {
-  new(modelRouter?: ModelRouter): IArchResolutionTier;
+  new(modelRouter?: IModelRouter): IArchResolutionTier;
 };

@@ -1,7 +1,7 @@
 import { exec } from 'child_process'
 import { promisify } from 'util'
-import type { CheckContext } from '../check-context.js'
-import type { RawCheckResult } from '../check-handler.interface.js'
+import type { CheckContext } from '../../check-context.js'
+import type { RawCheckResult } from '../../check-handler.interface.js'
 
 const execAsync = promisify(exec);
 

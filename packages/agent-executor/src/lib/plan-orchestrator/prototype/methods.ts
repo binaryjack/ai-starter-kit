@@ -1,0 +1,345 @@
+import * as fs from 'fs'
+import * as path from 'path'
+import type { ChatRenderer } from '../../chat-renderer.js'
+import type { PlanDefinition, PlanPhase, StepDefinition } from '../../plan-types.js'
+import {
+    IPlanOrchestrator,
+    PlanResult,
+    PlanStepResult
+} from '../plan-orchestrator.js'
+
+// ─── run ─────────────────────────────────────────────────────────────────────
+
+export async function run(this: IPlanOrchestrator): Promise<PlanResult> {
+  const { Arbiter }           = await import('../../arbiter.js');
+  const { BacklogBoard }      = await import('../../backlog.js');
+  const { ChatRenderer }      = await import('../../chat-renderer.js');
+  const { DagOrchestrator }   = await import('../../dag-orchestrator.js');
+  const { DiscoverySession }  = await import('../../discovery-session.js');
+  const { PlanModelAdvisor }  = await import('../../plan-model-advisor.js');
+  const { PlanSynthesizer }   = await import('../../plan-synthesizer.js');
+  const { SprintPlanner }     = await import('../../sprint-planner.js');
+
+  const startMs = Date.now();
+  fs.mkdirSync(this._stateDir, { recursive: true });
+
+  const r = this._renderer;
+  r.say('system', `PlanOrchestrator  ·  project: ${this._projectRoot}`);
+  r.say('system', `Start phase: ${this._options.startFrom}`);
+  r.newline();
+
+  if (this._modelRouter) {
+    const advisor = new PlanModelAdvisor(r, this._modelRouter);
+    await advisor.display();
+  } else {
+    r.say('system', '⚠  No ModelRouter configured — phases will run in heuristic mode.');
+    r.say('system', 'Tip: set ANTHROPIC_API_KEY or OPENAI_API_KEY for LLM-backed phase reasoning.');
+  }
+  r.newline();
+
+  let discovery: import('../../plan-types.js').DiscoveryResult | null = null;
+  let plan: PlanDefinition | null = null;
+
+  // Phase 0: DISCOVER
+  if (this._shouldRun('discover')) {
+    const session = new DiscoverySession(r, this._projectRoot, this._modelRouter);
+    const saved   = DiscoverySession.load(this._projectRoot);
+    if (saved && this._options.startFrom !== 'discover') {
+      r.system('Resuming — discovery.json found, skipping Phase 0');
+      discovery = saved;
+    } else {
+      discovery = await session.run();
+    }
+  } else {
+    discovery = DiscoverySession.load(this._projectRoot);
+    if (!discovery) throw new Error('Cannot skip Phase 0: no discovery.json found in .agents/plan-state/');
+  }
+
+  // Phase 1: SYNTHESIZE
+  if (this._shouldRun('synthesize')) {
+    const synth = new PlanSynthesizer(r, this._projectRoot, this._modelRouter);
+    const saved  = PlanSynthesizer.load(this._projectRoot);
+    if (saved && this._options.startFrom !== 'synthesize') {
+      r.system('Resuming — plan.json found, skipping Phase 1');
+      plan = saved;
+    } else {
+      plan = await synth.synthesize(discovery!);
+    }
+  } else {
+    plan = PlanSynthesizer.load(this._projectRoot);
+    if (!plan) throw new Error('Cannot skip Phase 1: no plan.json found in .agents/plan-state/');
+  }
+
+  // Phase 2: DECOMPOSE
+  const board = new BacklogBoard(r, this._projectRoot);
+  if (this._shouldRun('decompose')) {
+    board.load();
+    await new SprintPlanner(r, this._projectRoot, this._modelRouter).run(plan!, discovery!, board);
+  }
+
+  // Phase 3: WIRE
+  if (this._shouldRun('wire')) {
+    r.phaseHeader('wire');
+    const arbiter = new Arbiter(r, this._projectRoot, this._modelRouter);
+    await arbiter.runStandardDecisions(plan!, board);
+
+    await arbiter.microAlign('architecture', 'backend', 'API contract ownership', 'API spec produced by Architecture, consumed by Backend');
+    await arbiter.microAlign('architecture', 'frontend', 'Auth flow handoff', 'Auth strategy from Architecture determines Frontend routing logic');
+    if (plan!.steps.some((s) => s.agent === 'backend') && plan!.steps.some((s) => s.agent === 'testing')) {
+      await arbiter.microAlign('backend', 'testing', 'Integration test boundaries', 'Backend declares which endpoints are integration-testable');
+    }
+
+    plan!.phase     = 'wire';
+    plan!.updatedAt = new Date().toISOString();
+    this._savePlan(plan!);
+
+    r.phaseSummary('wire', [
+      `${arbiter.getDecisions().length} decisions recorded`,
+      `All parallel groups confirmed`,
+      `Alignment gates positioned`,
+    ]);
+  }
+
+  // Phase 4: EXECUTE
+  const stepResults: PlanStepResult[] = [];
+  if (this._shouldRun('execute')) {
+    r.phaseHeader('execute');
+    plan!.phase = 'execute';
+    this._savePlan(plan!);
+    stepResults.push(...await this._executeSteps(plan!, r));
+  }
+
+  const allArtifacts = stepResults.flatMap((s) => s.artifacts);
+  const failed = stepResults.filter((s) => s.status === 'failed');
+  const gated  = stepResults.filter((s) => s.status === 'gated');
+
+  const status: PlanResult['status'] =
+    failed.length > 0 ? 'failed' :
+    gated.length  > 0 ? 'gated'  :
+    stepResults.some((s) => s.status === 'skipped') ? 'partial' :
+    'success';
+
+  const planObj = plan!;
+  planObj.phase     = status === 'success' ? 'complete' : planObj.phase;
+  planObj.artifacts = allArtifacts;
+  planObj.updatedAt = new Date().toISOString();
+  this._savePlan(planObj);
+
+  const result: PlanResult = {
+    planId:          planObj.id,
+    planName:        planObj.name,
+    status,
+    phase:           planObj.phase,
+    steps:           stepResults,
+    totalDurationMs: Date.now() - startMs,
+    artifacts:       allArtifacts,
+    savedTo:         this._stateDir,
+  };
+
+  this._printSummary(result, r);
+  return result;
+}
+
+// ─── _executeSteps ────────────────────────────────────────────────────────────
+
+export async function _executeSteps(
+  this: IPlanOrchestrator,
+  plan: PlanDefinition,
+  r: ChatRenderer,
+): Promise<PlanStepResult[]> {
+  const results: PlanStepResult[] = [];
+  const groups = this._topoGroups(plan.steps);
+
+  for (let gi = 0; gi < groups.length; gi++) {
+    const group = groups[gi]!;
+    r.say('system', `Group ${gi + 1}/${groups.length}: ${group.map((s) => s.id).join(', ')}`);
+
+    for (const step of group) {
+      const precedingStep = plan.steps.find(
+        (s) => s.alignmentGate && s.alignmentGate.blocksStepIds.includes(step.id),
+      );
+      if (precedingStep?.alignmentGate && !precedingStep.alignmentGate.resolved) {
+        const gate = precedingStep.alignmentGate;
+        if (gate.type === 'user') {
+          r.approvalPrompt(`Gate "${gate.id}": ${gate.description}  (type Enter to continue)`);
+          if (process.stdout.isTTY) {
+            await this._waitForAnyInput();
+          }
+          gate.resolved   = true;
+          gate.resolvedAt = new Date().toISOString();
+        } else if (gate.type === 'auto') {
+          gate.resolved   = true;
+          gate.resolvedAt = new Date().toISOString();
+        }
+      }
+    }
+
+    const parallelSteps   = group.filter((s) => s.parallel);
+    const sequentialSteps = group.filter((s) => !s.parallel);
+
+    for (const step of sequentialSteps) {
+      const res = await this._runStep(step, plan);
+      results.push(res);
+    }
+
+    if (parallelSteps.length > 0) {
+      r.say('system', `Running ${parallelSteps.length} parallel steps: ${parallelSteps.map((s) => s.id).join(', ')}`);
+      const parallelResults = await Promise.all(parallelSteps.map((s) => this._runStep(s, plan)));
+      results.push(...parallelResults);
+    }
+  }
+
+  return results;
+}
+
+// ─── _runStep ─────────────────────────────────────────────────────────────────
+
+export async function _runStep(
+  this: IPlanOrchestrator,
+  step: StepDefinition,
+  plan: PlanDefinition,
+): Promise<PlanStepResult> {
+  const { DagOrchestrator } = await import('../../dag-orchestrator.js');
+
+  const r       = this._renderer;
+  const startMs = Date.now();
+  r.say('system', `▶ Step: ${step.id} — ${step.name}`);
+
+  const dagFile = step.tasks.find((t) => t.dagFile)?.dagFile ?? this._inferDagFile(step, plan);
+
+  if (!dagFile) {
+    r.say(step.agent, `No DAG file for step "${step.id}" — marking as skipped.`);
+    return {
+      stepId: step.id, stepName: step.name,
+      status: 'skipped', durationMs: Date.now() - startMs, artifacts: [],
+    };
+  }
+
+  const dagPath = path.isAbsolute(dagFile)
+    ? dagFile
+    : path.join(this._options.agentsBaseDir, dagFile);
+
+  if (!fs.existsSync(dagPath)) {
+    r.warn(`DAG file not found: ${dagPath} — skipping step "${step.id}"`);
+    return {
+      stepId: step.id, stepName: step.name,
+      status: 'skipped', durationMs: Date.now() - startMs, artifacts: [],
+    };
+  }
+
+  try {
+    const orchestrator = new DagOrchestrator(this._projectRoot, { verbose: this._options.verbose });
+    const dagResult    = await orchestrator.run(dagPath);
+    step.status        = dagResult.status === 'success' ? 'complete' : 'failed';
+    step.completedAt   = new Date().toISOString();
+
+    r.say(step.agent,
+      dagResult.status === 'success'
+        ? `✅ ${step.name} complete — ${dagResult.lanes?.length ?? 0} lane(s)`
+        : `❌ ${step.name} failed`,
+    );
+
+    return {
+      stepId:     step.id,
+      stepName:   step.name,
+      status:     dagResult.status === 'success' ? 'success' : 'failed',
+      dagResult,
+      durationMs: Date.now() - startMs,
+      artifacts:  step.outputs,
+    };
+  } catch (err) {
+    r.error(`Step "${step.id}" threw: ${err}`);
+    step.status = 'failed';
+    return {
+      stepId: step.id, stepName: step.name,
+      status: 'failed', durationMs: Date.now() - startMs, artifacts: [],
+    };
+  }
+}
+
+// ─── _topoGroups ──────────────────────────────────────────────────────────────
+
+export function _topoGroups(
+  this: IPlanOrchestrator,
+  steps: StepDefinition[],
+): StepDefinition[][] {
+  const remaining = new Set(steps.map((s) => s.id));
+  const groups: StepDefinition[][] = [];
+  const maxIter = steps.length + 1;
+  let i = 0;
+
+  while (remaining.size > 0 && i++ < maxIter) {
+    const ready = steps.filter(
+      (s) => remaining.has(s.id) && s.dependsOn.every((d) => !remaining.has(d)),
+    );
+    if (ready.length === 0) break;
+    groups.push(ready);
+    for (const s of ready) remaining.delete(s.id);
+  }
+  return groups;
+}
+
+// ─── _shouldRun ───────────────────────────────────────────────────────────────
+
+export function _shouldRun(this: IPlanOrchestrator, phase: PlanPhase): boolean {
+  const order: PlanPhase[] = ['discover', 'synthesize', 'decompose', 'wire', 'execute', 'complete'];
+  return order.indexOf(phase) >= order.indexOf(this._options.startFrom);
+}
+
+// ─── _inferDagFile ────────────────────────────────────────────────────────────
+
+export function _inferDagFile(
+  this: IPlanOrchestrator,
+  step: StepDefinition,
+  _plan: PlanDefinition,
+): string | null {
+  const knownDags: Partial<Record<string, string>> = {
+    requirements: 'dag.json',
+    architecture: 'dag.json',
+    backend:      'dag.json',
+    frontend:     'dag.json',
+    testing:      'dag.json',
+    e2e:          'dag.json',
+    security:     'audit.dag.json',
+  };
+  return knownDags[step.id] ?? null;
+}
+
+// ─── _savePlan ────────────────────────────────────────────────────────────────
+
+export function _savePlan(this: IPlanOrchestrator, plan: PlanDefinition): void {
+  fs.mkdirSync(this._stateDir, { recursive: true });
+  fs.writeFileSync(path.join(this._stateDir, 'plan.json'), JSON.stringify(plan, null, 2));
+}
+
+// ─── _waitForAnyInput ─────────────────────────────────────────────────────────
+
+export function _waitForAnyInput(this: IPlanOrchestrator): Promise<void> {
+  return new Promise((resolve) => {
+    process.stdin.once('data', () => resolve());
+  });
+}
+
+// ─── _printSummary ────────────────────────────────────────────────────────────
+
+export function _printSummary(
+  this: IPlanOrchestrator,
+  result: PlanResult,
+  r: ChatRenderer,
+): void {
+  const statusIcon = result.status === 'success' ? '✅' : result.status === 'partial' ? '⚠️' : '❌';
+  r.newline();
+  r.separator('═');
+  r.say('system', `${statusIcon} PLAN ${result.status.toUpperCase()}: ${result.planName}`);
+  r.separator('─');
+  r.say('system', `  Steps:    ${result.steps.length}`);
+  r.say('system', `  Duration: ${(result.totalDurationMs / 1000).toFixed(1)}s`);
+  r.say('system', `  Saved to: ${result.savedTo}`);
+  r.separator('─');
+  for (const s of result.steps) {
+    const icon = s.status === 'success' ? '✅' : s.status === 'skipped' ? '⊘' : s.status === 'gated' ? '⏸' : '❌';
+    r.say('system', `  ${icon}  ${s.stepName.padEnd(28)} ${(s.durationMs / 1000).toFixed(1)}s`);
+  }
+  r.separator('═');
+  r.newline();
+}

@@ -1,4 +1,4 @@
-import type { ICompositeSecretsProvider } from './composite-secrets-provider.js';
+import type { ICompositeSecretsProvider } from '../composite-secrets-provider.js'
 
 export async function get(
   this: ICompositeSecretsProvider,

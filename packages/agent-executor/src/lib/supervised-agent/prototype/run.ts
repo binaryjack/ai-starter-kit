@@ -1,13 +1,13 @@
+import type { AgentResult } from '../../agent-types.js'
 import type { StepResult } from '../../check-runner.js'
 import { runCheckStep } from '../../check-runner.js'
 import type {
-    AgentResult,
     CheckpointMode,
     CheckpointPayload,
     ContractSnapshot,
     SupervisorVerdict,
 } from '../../dag-types.js'
-import type { RoutedResponse } from '../../model-router/index.js'
+import type { IModelRouter, RoutedResponse } from '../../model-router/index.js'
 import type { ISupervisedAgent } from '../supervised-agent.js'
 import { EscalationError } from '../supervised-agent.js'
 
@@ -16,7 +16,7 @@ export async function* run(
   projectRoot: string,
   defaultMode: CheckpointMode = 'self',
   publishContract?: () => ContractSnapshot,
-  modelRouter?: ModelRouter,
+  modelRouter?: IModelRouter,
   onLlmResponse?: (response: RoutedResponse) => void,
   onLlmStream?: (token: string) => void,
 ): AsyncGenerator<CheckpointPayload, AgentResult | null, SupervisorVerdict> {

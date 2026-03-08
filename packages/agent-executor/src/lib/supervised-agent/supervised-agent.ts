@@ -1,7 +1,7 @@
 import * as fs from 'fs/promises'
-import type { AgentDefinition } from '../agent-types.js'
-import type { AgentResult, CheckpointMode, CheckpointPayload, ContractSnapshot, SupervisorVerdict } from '../dag-types.js'
-import type { RoutedResponse } from '../model-router/index.js'
+import type { AgentDefinition, AgentResult } from '../agent-types.js'
+import type { CheckpointMode, CheckpointPayload, ContractSnapshot, SupervisorVerdict } from '../dag-types.js'
+import type { IModelRouter, RoutedResponse } from '../model-router/index.js'
 import './prototype/index.js'
 
 export interface ISupervisedAgent {
@@ -12,7 +12,7 @@ export interface ISupervisedAgent {
     projectRoot: string,
     defaultMode?: CheckpointMode,
     publishContract?: () => ContractSnapshot,
-    modelRouter?: ModelRouter,
+    modelRouter?: IModelRouter,
     onLlmResponse?: (response: RoutedResponse) => void,
     onLlmStream?: (token: string) => void,
   ): AsyncGenerator<CheckpointPayload, AgentResult | null, SupervisorVerdict>;
@@ -28,7 +28,7 @@ export const SupervisedAgent = function(
   fromFile(agentFile: string): Promise<ISupervisedAgent>;
 };
 
-(SupervisedAgent as Record<string, unknown>).fromFile = async function(agentFile: string): Promise<ISupervisedAgent> {
+(SupervisedAgent as unknown as Record<string, unknown>).fromFile = async function(agentFile: string): Promise<ISupervisedAgent> {
   const raw = await fs.readFile(agentFile, 'utf-8');
   const definition: AgentDefinition = JSON.parse(raw);
   return new SupervisedAgent(definition);

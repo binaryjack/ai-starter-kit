@@ -1,6 +1,7 @@
-import { CheckDefinition } from './agent-types.js';
-import { CheckHandlerRegistry } from './checks/check-handler-registry.js';
-import { ModelRouter, RoutedResponse } from './model-router.js';
+import { CheckDefinition } from './agent-types.js'
+import { CheckHandlerRegistry } from './checks/check-handler-registry.js'
+import type { RoutedResponse } from './model-router/index.js'
+import type { IModelRouter } from './model-router/model-router.js'
 
 // ─── StepResult ───────────────────────────────────────────────────────────────
 
@@ -32,7 +33,7 @@ export async function runCheckStep(
   check: CheckDefinition,
   projectRoot: string,
   retryInstructions?: string,
-  modelRouter?: ModelRouter,
+  modelRouter?: IModelRouter,
   onLlmResponse?: (response: RoutedResponse) => void,
   onLlmStream?: (token: string) => void,
 ): Promise<StepResult> {

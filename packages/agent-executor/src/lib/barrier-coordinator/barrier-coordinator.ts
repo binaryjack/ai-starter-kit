@@ -1,5 +1,5 @@
-import type { IContractRegistry } from './contract-registry/index.js';
-import type { BarrierResolution, CheckpointPayload } from './dag-types.js';
+import type { IContractRegistry } from '../contract-registry/index.js';
+import type { BarrierResolution, CheckpointPayload } from '../dag-types.js';
 import {
     _resolveHardBarrier,
     _resolveReadContract,
@@ -31,7 +31,7 @@ export const BarrierCoordinator = function(
 } as unknown as IBarrierCoordinator;
 
 /** Default timeout when a checkpoint does not specify one (ms) */
-(BarrierCoordinator as Record<string, unknown>).DEFAULT_TIMEOUT_MS = 5_000;
+(BarrierCoordinator as unknown as Record<string, unknown>).DEFAULT_TIMEOUT_MS = 5_000;
 
 Object.assign(BarrierCoordinator.prototype, {
   resolve,

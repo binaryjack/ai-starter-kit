@@ -7,7 +7,8 @@
 
 import type { CheckDefinition } from '../agent-types.js'
 import type { ToolExecutorFn } from '../llm-provider.js'
-import type { ModelRouter, RoutedResponse } from '../model-router.js'
+import type { RoutedResponse } from '../model-router/index.js'
+import type { IModelRouter } from '../model-router/model-router.js'
 
 export interface CheckContext {
   /** The check definition from the agent JSON. */
@@ -29,7 +30,7 @@ export interface CheckContext {
   retryInstructions?: string;
 
   /** Model router for LLM-backed check types. `undefined` when not configured. */
-  modelRouter?: ModelRouter;
+  modelRouter?: IModelRouter;
 
   /** Optional callback fired after every LLM completion (cost tracking). */
   onLlmResponse?: (response: RoutedResponse) => void;

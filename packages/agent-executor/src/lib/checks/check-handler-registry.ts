@@ -10,7 +10,8 @@ import * as path from 'path'
 import type { CheckType } from '../agent-types.js'
 import type { StepResult } from '../check-runner.js'
 import type { ToolExecutorFn } from '../llm-provider.js'
-import type { ModelRouter, RoutedResponse } from '../model-router.js'
+import type { RoutedResponse } from '../model-router/index.js'
+import type { IModelRouter } from '../model-router/model-router.js'
 import { discoverPlugins } from '../plugin-api.js'
 import type { CheckContext } from './check-context.js'
 import type { ICheckHandler } from './check-handler.interface.js'
@@ -100,7 +101,7 @@ export class CheckHandlerRegistry {
    * @param onLlmResponse   Optional callback fired after every LLM completion.
    */
   static createDefault(
-    _modelRouter?: ModelRouter,
+    _modelRouter?: IModelRouter,
     _onLlmResponse?: (response: RoutedResponse) => void,
   ): CheckHandlerRegistry {
     const registry = new CheckHandlerRegistry();
@@ -125,7 +126,7 @@ export class CheckHandlerRegistry {
     check: import('../agent-types.js').CheckDefinition,
     projectRoot: string,
     retryInstructions?: string,
-    modelRouter?: ModelRouter,
+    modelRouter?: IModelRouter,
     onLlmResponse?: (response: RoutedResponse) => void,
     onLlmStream?: (token: string) => void,
     toolExecutor?: ToolExecutorFn,

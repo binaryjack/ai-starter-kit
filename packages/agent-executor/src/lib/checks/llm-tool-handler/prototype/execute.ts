@@ -1,8 +1,8 @@
-import type { TaskType } from '../../llm-provider.js'
-import type { RoutedResponse } from '../../model-router.js'
-import { BUILTIN_TOOL_SCHEMAS, makeBuiltinExecutor } from '../../tool-executor.js'
-import type { CheckContext } from '../check-context.js'
-import type { RawCheckResult } from '../check-handler.interface.js'
+import type { TaskType } from '../../../llm-provider.js'
+import type { RoutedResponse } from '../../../model-router.js'
+import { BUILTIN_TOOL_SCHEMAS, makeBuiltinExecutor } from '../../../tool-executor.js'
+import type { CheckContext } from '../../check-context.js'
+import type { RawCheckResult } from '../../check-handler.interface.js'
 
 export async function execute(this: unknown, ctx: CheckContext): Promise<RawCheckResult> {
   const { check, projectRoot, modelRouter, onLlmResponse } = ctx;

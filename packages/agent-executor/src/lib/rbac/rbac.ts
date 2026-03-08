@@ -35,7 +35,7 @@ export const RbacPolicy = function(
   this._policyFile = policyFile;
 } as unknown as IRbacPolicy;
 
-(RbacPolicy as Record<string, unknown>).load = async function(
+(RbacPolicy as unknown as Record<string, unknown>).load = async function(
   projectRoot: string,
 ): Promise<IRbacPolicy> {
   const filePath = path.join(projectRoot, '.agents', 'rbac.json');
@@ -48,7 +48,7 @@ export const RbacPolicy = function(
   }
 };
 
-(RbacPolicy as Record<string, unknown>).permissive = function(): IRbacPolicy {
+(RbacPolicy as unknown as Record<string, unknown>).permissive = function(): IRbacPolicy {
   return new RbacPolicy({
     version:     1,
     defaultRole: 'admin',
@@ -57,7 +57,7 @@ export const RbacPolicy = function(
   });
 };
 
-(RbacPolicy as Record<string, unknown>).locked = function(): IRbacPolicy {
+(RbacPolicy as unknown as Record<string, unknown>).locked = function(): IRbacPolicy {
   return new RbacPolicy({
     version:     1,
     defaultRole: 'observer',
@@ -69,7 +69,7 @@ export const RbacPolicy = function(
   });
 };
 
-(RbacPolicy as Record<string, unknown>).resolvePrincipal = function(): string {
+(RbacPolicy as unknown as Record<string, unknown>).resolvePrincipal = function(): string {
   return (
     process.env['AIKIT_PRINCIPAL'] ||
     process.env['GIT_AUTHOR_NAME'] ||

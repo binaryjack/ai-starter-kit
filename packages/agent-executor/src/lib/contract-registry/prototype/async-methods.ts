@@ -1,5 +1,5 @@
+import type { ContractSnapshot } from '../../dag-types.js';
 import type { IContractRegistry } from '../contract-registry.js';
-import type { ContractSnapshot } from '../dag-types.js';
 
 export function waitForVersion(
   this: IContractRegistry,

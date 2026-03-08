@@ -1,16 +1,16 @@
-import * as fs from 'fs/promises';
-import { AgentDefinition, AgentResult } from './agent-types.js';
-import { StepResult, runCheckStep } from './check-runner.js';
+import * as fs from 'fs/promises'
+import { AgentDefinition, AgentResult } from './agent-types.js'
+import { StepResult, runCheckStep } from './check-runner.js'
 import {
-    CheckpointMode,
-    CheckpointPayload,
-    ContractSnapshot,
-    SupervisorVerdict,
-} from './dag-types.js';
-import { ModelRouter, RoutedResponse } from './model-router.js';
+  CheckpointMode,
+  CheckpointPayload,
+  ContractSnapshot,
+  SupervisorVerdict,
+} from './dag-types.js'
+import { ModelRouter, RoutedResponse } from './model-router.js'
 
 // Re-export StepResult so callers that imported it from here still work
-export type { StepResult };
+export type { StepResult }
 
 /**
  * An AsyncGenerator wrapper over a JSON-driven agent definition.
@@ -82,7 +82,7 @@ export class SupervisedAgent {
       let stepResult: StepResult;
 
       try {
-        stepResult = await runCheckStep(check, projectRoot, retryInstructions, modelRouter, onLlmResponse, onLlmStream);
+        stepResult = await runCheckStep(check, projectRoot, retryInstructions, modelRouter as unknown as import('./model-router/model-router.js').IModelRouter, onLlmResponse, onLlmStream);
       } catch (err) {
         stepResult = {
           findings: [`❌ Unexpected step error: ${err}`],

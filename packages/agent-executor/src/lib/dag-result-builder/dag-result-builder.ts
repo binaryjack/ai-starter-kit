@@ -1,6 +1,6 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import type { DagResult, LaneResult } from './dag-types.js';
+import type { DagResult, LaneResult } from '../dag-types.js';
 
 export interface IDagResultBuilder {
   new(): IDagResultBuilder;
@@ -8,7 +8,7 @@ export interface IDagResultBuilder {
 
 export const DagResultBuilder = function(this: IDagResultBuilder) {} as unknown as IDagResultBuilder;
 
-(DagResultBuilder as Record<string, unknown>).build = function(params: {
+(DagResultBuilder as unknown as Record<string, unknown>).build = function(params: {
   dagName: string;
   runId: string;
   laneResults: LaneResult[];
@@ -39,7 +39,7 @@ export const DagResultBuilder = function(this: IDagResultBuilder) {} as unknown 
   return { dagName, runId, status, lanes: laneResults, totalDurationMs, startedAt, completedAt, findings, recommendations };
 };
 
-(DagResultBuilder as Record<string, unknown>).save = async function(
+(DagResultBuilder as unknown as Record<string, unknown>).save = async function(
   result: DagResult,
   resultsDir: string,
   projectRoot: string,

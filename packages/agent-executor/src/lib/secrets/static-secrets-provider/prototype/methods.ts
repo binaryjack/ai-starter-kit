@@ -1,4 +1,4 @@
-import type { IStaticSecretsProvider } from './static-secrets-provider.js';
+import type { IStaticSecretsProvider } from '../static-secrets-provider.js'
 
 export function set(
   this:  IStaticSecretsProvider,

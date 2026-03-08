@@ -72,7 +72,7 @@ Object.assign(AuditLog.prototype, {
 });
 
 // Static methods
-(AuditLog as Record<string, unknown>).read = async function(
+(AuditLog as unknown as Record<string, unknown>).read = async function(
   projectRoot: string,
   runId: string,
 ): Promise<AuditEntry[]> {
@@ -81,7 +81,7 @@ Object.assign(AuditLog.prototype, {
   return raw.split('\n').filter(Boolean).map((l) => JSON.parse(l) as AuditEntry);
 };
 
-(AuditLog as Record<string, unknown>).listRuns = async function(
+(AuditLog as unknown as Record<string, unknown>).listRuns = async function(
   projectRoot: string,
 ): Promise<string[]> {
   const dir     = path.join(projectRoot, '.agents', 'audit');
@@ -89,7 +89,7 @@ Object.assign(AuditLog.prototype, {
   return entries.filter((f) => f.endsWith('.ndjson')).map((f) => f.slice(0, -6));
 };
 
-(AuditLog as Record<string, unknown>).verify = async function(
+(AuditLog as unknown as Record<string, unknown>).verify = async function(
   projectRoot: string,
   runId: string,
 ): Promise<AuditVerificationReport> {

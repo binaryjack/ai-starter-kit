@@ -1,4 +1,4 @@
-import type { ContractSnapshot } from './dag-types.js';
+import type { ContractSnapshot } from '../dag-types.js';
 import {
     clear,
     formatStatus,

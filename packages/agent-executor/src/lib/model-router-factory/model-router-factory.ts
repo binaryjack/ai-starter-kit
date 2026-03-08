@@ -1,12 +1,13 @@
-import * as path from 'path';
+import * as path from 'path'
 
-import type { SamplingCallback } from '../llm-provider.js';
-import { ModelRouter } from '../model-router/model-router.js';
-import { BedrockProvider } from '../providers/bedrock/bedrock.provider.js';
-import { GeminiProvider } from '../providers/gemini/gemini.provider.js';
-import { MockProvider } from '../providers/mock/mock.provider.js';
-import { OllamaProvider } from '../providers/ollama/ollama.provider.js';
-import { VSCodeSamplingProvider } from '../providers/vscode-sampling/vscode-sampling.provider.js';
+import type { SamplingCallback } from '../llm-provider.js'
+import type { IModelRouter } from '../model-router/model-router.js'
+import { ModelRouter } from '../model-router/model-router.js'
+import { BedrockProvider } from '../providers/bedrock.provider.js'
+import { GeminiProvider } from '../providers/gemini.provider.js'
+import { MockProvider } from '../providers/mock.provider.js'
+import { OllamaProvider } from '../providers/ollama.provider.js'
+import { VSCodeSamplingProvider } from '../providers/vscode-sampling.provider.js'
 
 export interface RouterFactoryOptions {
   routerFilePath:    string | undefined;
@@ -19,16 +20,16 @@ export interface RouterFactoryOptions {
 
 export interface IModelRouterFactory {
   new(): IModelRouterFactory;
-  create(options: RouterFactoryOptions): Promise<ModelRouter | undefined>;
+  create(options: RouterFactoryOptions): Promise<IModelRouter | undefined>;
 }
 
 export const ModelRouterFactory = function(this: IModelRouterFactory) {
   // static-only
 } as unknown as IModelRouterFactory;
 
-(ModelRouterFactory as Record<string, unknown>).create = async function(
+(ModelRouterFactory as unknown as Record<string, unknown>).create = async function(
   options: RouterFactoryOptions,
-): Promise<ModelRouter | undefined> {
+): Promise<IModelRouter | undefined> {
   const { routerFilePath, samplingCallback, agentsBaseDir, log } = options;
 
   if (!routerFilePath && !samplingCallback) return undefined;
@@ -43,7 +44,7 @@ export const ModelRouterFactory = function(this: IModelRouterFactory) {
       ? routerFilePath
       : path.resolve(agentsBaseDir, routerFilePath);
 
-    const modelRouter = await (ModelRouter as unknown as { fromFile(p: string): Promise<ModelRouter> }).fromFile(resolvedPath);
+    const modelRouter = await (ModelRouter as unknown as { fromFile(p: string): Promise<IModelRouter> }).fromFile(resolvedPath);
 
     if (samplingCallback) {
       modelRouter.registerProvider(new VSCodeSamplingProvider(samplingCallback));
@@ -79,7 +80,7 @@ export const ModelRouterFactory = function(this: IModelRouterFactory) {
     }
 
     if (options.forceProvider && options.forceProvider !== 'mock') {
-      if (!modelRouter.registeredProviders.includes(options.forceProvider)) {
+      if (!modelRouter.registeredProviders().includes(options.forceProvider)) {
         log(`   ⚠️  Forced provider '${options.forceProvider}' is not registered (missing API key?). Falling back to autoRegister.`);
         await modelRouter.autoRegister();
       } else {
@@ -89,7 +90,7 @@ export const ModelRouterFactory = function(this: IModelRouterFactory) {
 
     log(
       `   🧠 Model router loaded: ${routerFilePath} ` +
-      `(providers: ${modelRouter.registeredProviders.join(', ') || 'none'})`,
+      `(providers: ${modelRouter.registeredProviders().join(', ') || 'none'})`,
     );
 
     return modelRouter;

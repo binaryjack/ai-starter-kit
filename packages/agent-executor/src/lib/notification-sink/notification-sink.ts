@@ -54,7 +54,7 @@ export const NotificationSink = function(
   };
 } as unknown as INotificationSink;
 
-(NotificationSink as Record<string, unknown>).fromEnv = function(
+(NotificationSink as unknown as Record<string, unknown>).fromEnv = function(
   extra?: Partial<NotificationSinkOptions>,
 ): INotificationSink | undefined {
   const slackUrl = process.env['SLACK_WEBHOOK_URL'];

@@ -1,5 +1,5 @@
+import type { BarrierResolution, ContractSnapshot } from '../../dag-types.js';
 import type { IBarrierCoordinator } from '../barrier-coordinator.js';
-import type { BarrierResolution, ContractSnapshot } from '../dag-types.js';
 
 export function _resolveSelf(this: IBarrierCoordinator): BarrierResolution {
   return {

@@ -1,5 +1,5 @@
-import type { CheckType } from '../../agent-types.js'
-import type { ICheckHandler } from '../check-handler.interface.js'
+import type { CheckType } from '../../../agent-types.js'
+import type { ICheckHandler } from '../../check-handler.interface.js'
 
 export function register(
   this: { _handlers: Map<CheckType, ICheckHandler> },

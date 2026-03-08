@@ -75,7 +75,7 @@ export const ModelRouter = function(
   this._piiScrubber = new PiiScrubber(config.piiScrubbing ?? {});
 } as unknown as IModelRouter;
 
-(ModelRouter as Record<string, unknown>).fromFile = async function(
+(ModelRouter as unknown as Record<string, unknown>).fromFile = async function(
   configPath: string,
 ): Promise<IModelRouter> {
   const raw    = await fs.readFile(configPath, 'utf-8');
@@ -83,7 +83,7 @@ export const ModelRouter = function(
   return new ModelRouter(config);
 };
 
-(ModelRouter as Record<string, unknown>).fromConfig = function(
+(ModelRouter as unknown as Record<string, unknown>).fromConfig = function(
   config: ModelRouterConfig,
 ): IModelRouter {
   return new ModelRouter(config);

@@ -1,7 +1,7 @@
-import type { TaskType } from '../../llm-provider.js'
-import type { RoutedResponse } from '../../model-router.js'
-import type { CheckContext } from '../check-context.js'
-import type { RawCheckResult } from '../check-handler.interface.js'
+import type { TaskType } from '../../../llm-provider.js'
+import type { RoutedResponse } from '../../../model-router.js'
+import type { CheckContext } from '../../check-context.js'
+import type { RawCheckResult } from '../../check-handler.interface.js'
 
 export async function execute(this: unknown, ctx: CheckContext): Promise<RawCheckResult> {
   if (!ctx.modelRouter) {

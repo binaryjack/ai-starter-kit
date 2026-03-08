@@ -1,13 +1,13 @@
-import type { BacklogBoard } from '../backlog/index.js';
-import { promptUser } from '../chat-renderer/index.js';
-import type { ActorId, DiscoveryResult, PlanDefinition } from '../plan-types.js';
-import type { ISprintPlanner } from '../sprint-planner.js';
+import type { IBacklogBoard } from '../../backlog/index.js'
+import { promptUser } from '../../chat-renderer/index.js'
+import type { ActorId, DiscoveryResult, PlanDefinition } from '../../plan-types.js'
+import type { ISprintPlanner } from '../sprint-planner.js'
 
 export async function run(
   this: ISprintPlanner,
   plan: PlanDefinition,
   discovery: DiscoveryResult,
-  board: BacklogBoard,
+  board: IBacklogBoard,
 ): Promise<void> {
   const r = this._renderer;
 
