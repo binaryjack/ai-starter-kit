@@ -1,5 +1,5 @@
 import type { LLMPrompt, LLMStreamChunk } from '../../../llm-provider.js';
-import type { IBedrockProvider, ConverseStreamEvent } from '../bedrock-provider.types.js';
+import type { ConverseStreamEvent, IBedrockProvider } from '../bedrock-provider.types.js';
 import { signRequest } from '../bedrock-sigv4.js';
 
 export async function* stream(

@@ -1,7 +1,7 @@
-import { RunRegistry }                         from '../run-registry.js';
-import { create, complete, deleteRun, purgeOld } from './lifecycle.js';
-import { paths, get, list, listActive }          from './query.js';
-import { _paths, _read, _write, _upsert }        from './helpers.js';
+import { RunRegistry } from '../run-registry.js'
+import { _paths, _read, _upsert, _write } from './helpers.js'
+import { complete, create, deleteRun, purgeOld } from './lifecycle.js'
+import { get, list, listActive, paths } from './query.js'
 
 Object.assign(RunRegistry.prototype, {
   create,

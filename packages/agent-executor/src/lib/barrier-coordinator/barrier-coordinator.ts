@@ -1,12 +1,12 @@
 import type { IContractRegistry } from './contract-registry/index.js';
-import type { CheckpointPayload, BarrierResolution } from './dag-types.js';
+import type { BarrierResolution, CheckpointPayload } from './dag-types.js';
 import {
-  resolve,
-  resolveGlobalBarrier,
-  _resolveSelf,
-  _resolveReadContract,
-  _resolveSoftAlign,
-  _resolveHardBarrier,
+    _resolveHardBarrier,
+    _resolveReadContract,
+    _resolveSelf,
+    _resolveSoftAlign,
+    resolve,
+    resolveGlobalBarrier,
 } from './prototype/index.js';
 
 export interface IBarrierCoordinator {

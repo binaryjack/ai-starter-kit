@@ -1,6 +1,6 @@
-import type { LLMPrompt, TaskType, ToolExecutorFn } from '../../llm-provider.js';
-import type { RoutedResponse }                       from '../model-router.types.js';
-import type { IModelRouter }                         from '../model-router.js';
+import type { LLMPrompt, TaskType, ToolExecutorFn } from '../../llm-provider.js'
+import type { IModelRouter } from '../model-router.js'
+import type { RoutedResponse } from '../model-router.types.js'
 
 export async function route(
   this:             IModelRouter,

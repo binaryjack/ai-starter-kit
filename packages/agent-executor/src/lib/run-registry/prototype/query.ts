@@ -1,4 +1,4 @@
-import type { IRunRegistry }  from '../run-registry.js';
+import type { IRunRegistry } from '../run-registry.js';
 import type { RunEntry, RunPaths } from '../run-registry.types.js';
 
 export function paths(this: IRunRegistry, runId: string): RunPaths {

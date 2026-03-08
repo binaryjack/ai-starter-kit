@@ -1,15 +1,15 @@
 import type { ContractSnapshot } from './dag-types.js';
 import {
-  publish,
-  getSnapshot,
-  getVersion,
-  has,
-  publishedLanes,
-  getAll,
-  formatStatus,
-  clear,
-  waitForVersion,
-  waitForAll,
+    clear,
+    formatStatus,
+    getAll,
+    getSnapshot,
+    getVersion,
+    has,
+    publish,
+    publishedLanes,
+    waitForAll,
+    waitForVersion,
 } from './prototype/index.js';
 
 export interface IContractRegistry {

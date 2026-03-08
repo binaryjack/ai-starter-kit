@@ -1,6 +1,6 @@
 import * as fs from 'fs/promises';
 
-import type { IRunRegistry }  from '../run-registry.js';
+import type { IRunRegistry } from '../run-registry.js';
 import type { RunEntry, RunPaths, RunStatus } from '../run-registry.types.js';
 
 export async function create(

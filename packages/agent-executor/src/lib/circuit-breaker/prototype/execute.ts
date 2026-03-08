@@ -1,5 +1,5 @@
-import { CircuitBreakerOpenError } from '../circuit-breaker.types.js';
 import type { ICircuitBreaker } from '../circuit-breaker.js';
+import { CircuitBreakerOpenError } from '../circuit-breaker.types.js';
 
 export function execute<T>(this: ICircuitBreaker, fn: () => Promise<T>): Promise<T> {
   this._maybeTransitionToHalfOpen();

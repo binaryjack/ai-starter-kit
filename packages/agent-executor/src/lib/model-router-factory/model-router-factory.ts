@@ -1,12 +1,12 @@
 import * as path from 'path';
 
-import type { SamplingCallback }      from '../llm-provider.js';
-import { ModelRouter }                from '../model-router/model-router.js';
-import { BedrockProvider }            from '../providers/bedrock/bedrock.provider.js';
-import { GeminiProvider }             from '../providers/gemini/gemini.provider.js';
-import { MockProvider }               from '../providers/mock/mock.provider.js';
-import { OllamaProvider }             from '../providers/ollama/ollama.provider.js';
-import { VSCodeSamplingProvider }     from '../providers/vscode-sampling/vscode-sampling.provider.js';
+import type { SamplingCallback } from '../llm-provider.js';
+import { ModelRouter } from '../model-router/model-router.js';
+import { BedrockProvider } from '../providers/bedrock/bedrock.provider.js';
+import { GeminiProvider } from '../providers/gemini/gemini.provider.js';
+import { MockProvider } from '../providers/mock/mock.provider.js';
+import { OllamaProvider } from '../providers/ollama/ollama.provider.js';
+import { VSCodeSamplingProvider } from '../providers/vscode-sampling/vscode-sampling.provider.js';
 
 export interface RouterFactoryOptions {
   routerFilePath:    string | undefined;

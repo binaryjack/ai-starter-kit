@@ -1,4 +1,4 @@
-import { isAvailable, complete, stream } from './prototype/index.js';
+import { complete, isAvailable, stream } from './prototype/index.js';
 import type { IVSCodeSamplingProvider, SamplingCallback } from './vscode-sampling-provider.types.js';
 
 export type { SamplingCallback };

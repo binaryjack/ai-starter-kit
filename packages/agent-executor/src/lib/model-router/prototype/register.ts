@@ -1,10 +1,10 @@
 import {
-  AnthropicProvider,
-  type LLMProvider,
-  MockProvider,
-  OpenAIProvider,
-}                              from '../../llm-provider.js';
-import type { IModelRouter }   from '../model-router.js';
+    AnthropicProvider,
+    type LLMProvider,
+    MockProvider,
+    OpenAIProvider,
+} from '../../llm-provider.js'
+import type { IModelRouter } from '../model-router.js'
 
 export function registerProvider(
   this:     IModelRouter,

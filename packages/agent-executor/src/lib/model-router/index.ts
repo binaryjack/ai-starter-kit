@@ -1,11 +1,6 @@
-export { ModelRouter }         from './model-router.js';
-export type { IModelRouter }   from './model-router.js';
+export { ModelRouter } from './model-router.js'
+export type { IModelRouter } from './model-router.js'
 export type {
-  ModelProfile,
-  ProviderModelMap,
-  TokenCosts,
-  ProviderConfig,
-  BudgetCap,
-  ModelRouterConfig,
-  RoutedResponse,
-}                              from './model-router.types.js';
+    BudgetCap, ModelProfile, ModelRouterConfig, ProviderConfig, ProviderModelMap, RoutedResponse, TokenCosts
+} from './model-router.types.js'
+

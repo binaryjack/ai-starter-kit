@@ -1,13 +1,12 @@
-import type { ICircuitBreaker }  from '../../circuit-breaker/circuit-breaker.js';
-import { CircuitBreaker }        from '../../circuit-breaker/circuit-breaker.js';
+import type { ICircuitBreaker } from '../../circuit-breaker/circuit-breaker.js';
+import { CircuitBreaker } from '../../circuit-breaker/circuit-breaker.js';
 import type { ModelFamily, TaskType } from '../../llm-provider.js';
+import type { IModelRouter } from '../model-router.js';
+import { ModelRouter } from '../model-router.js';
 import type {
-  ModelProfile,
-  BudgetCap,
-  RoutedResponse,
-}                                from '../model-router.types.js';
-import type { IModelRouter }     from '../model-router.js';
-import { ModelRouter }           from '../model-router.js';
+    BudgetCap,
+    ModelProfile
+} from '../model-router.types.js';
 
 export function _breakerFor(
   this:         IModelRouter,

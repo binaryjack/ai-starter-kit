@@ -1,5 +1,5 @@
-import { isAvailable, complete, stream, _endpoint, _buildConverseBody } from './prototype/index.js';
-import type { IBedrockProvider } from './bedrock-provider.types.js';
+import type { IBedrockProvider } from './bedrock-provider.types.js'
+import { _buildConverseBody, _endpoint, complete, isAvailable, stream } from './prototype/index.js'
 
 export const BedrockProvider = function(
   this: IBedrockProvider,

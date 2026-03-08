@@ -1,6 +1,6 @@
-import type { ModelFamily }        from '../../llm-provider.js';
-import type { ResolvedPrompt }     from '../prompt-registry.types.js';
-import type { IPromptRegistry }    from '../prompt-registry.js';
+import type { ModelFamily } from '../../llm-provider.js';
+import type { IPromptRegistry } from '../prompt-registry.js';
+import type { ResolvedPrompt } from '../prompt-registry.types.js';
 
 export function resolve(
   this:   IPromptRegistry,

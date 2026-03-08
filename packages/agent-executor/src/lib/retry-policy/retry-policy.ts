@@ -1,6 +1,6 @@
+import { _sleep, execute } from './prototype/index.js';
 import type { RetryPolicyOptions } from './retry-policy.types.js';
 import { isTransientError } from './retry-policy.types.js';
-import { execute, _sleep } from './prototype/index.js';
 
 const DEFAULTS: RetryPolicyOptions = {
   maxAttempts:    3,

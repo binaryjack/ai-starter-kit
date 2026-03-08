@@ -1,5 +1,5 @@
-import type { ModelFamily }       from '../llm-provider.js';
-import type { PromptFrontmatter, ResolvedPrompt } from './prompt-registry.types.js';
+import type { ModelFamily } from '../llm-provider.js';
+import type { ResolvedPrompt } from './prompt-registry.types.js';
 
 import './prototype/index.js';
 

@@ -1,5 +1,5 @@
-import { NotificationSink }                                 from '../notification-sink.js';
-import { attach, detach, sendDagEnd, sendLaneEnd, sendBudgetExceeded, _post } from './methods.js';
+import { NotificationSink } from '../notification-sink.js'
+import { _post, attach, detach, sendBudgetExceeded, sendDagEnd, sendLaneEnd } from './methods.js'
 
 Object.assign(NotificationSink.prototype, {
   attach,

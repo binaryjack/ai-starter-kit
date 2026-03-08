@@ -1,4 +1,4 @@
-import type { SecretsProvider }  from '../secrets.types.js';
+import type { SecretsProvider } from '../secrets.types.js';
 
 import './prototype/index.js';
 

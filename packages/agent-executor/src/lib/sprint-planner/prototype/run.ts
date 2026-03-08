@@ -1,7 +1,7 @@
-import type { ISprintPlanner } from '../sprint-planner.js';
-import type { PlanDefinition, DiscoveryResult, ActorId } from '../plan-types.js';
 import type { BacklogBoard } from '../backlog/index.js';
 import { promptUser } from '../chat-renderer/index.js';
+import type { ActorId, DiscoveryResult, PlanDefinition } from '../plan-types.js';
+import type { ISprintPlanner } from '../sprint-planner.js';
 
 export async function run(
   this: ISprintPlanner,

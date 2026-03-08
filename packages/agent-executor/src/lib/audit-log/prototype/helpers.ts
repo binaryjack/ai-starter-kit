@@ -1,5 +1,5 @@
-import type { IAuditLog } from '../audit-log.js';
 import { iso } from '../audit-log-helpers.js';
+import type { IAuditLog } from '../audit-log.js';
 
 export async function runStart(this: IAuditLog, payload: Record<string, unknown>): Promise<void> {
   await this.write({ runId: this._runId, eventType: 'run-start', payload, timestamp: iso() });

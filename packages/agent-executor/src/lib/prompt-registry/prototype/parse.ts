@@ -1,6 +1,6 @@
-import type { ModelFamily }        from '../../llm-provider.js';
+import type { ModelFamily } from '../../llm-provider.js';
+import type { IPromptRegistry } from '../prompt-registry.js';
 import type { PromptFrontmatter, ResolvedPrompt } from '../prompt-registry.types.js';
-import type { IPromptRegistry }    from '../prompt-registry.js';
 
 export function _makeKey(this: IPromptRegistry, agent: string, family: ModelFamily): string {
   return `${agent}:${family}`;

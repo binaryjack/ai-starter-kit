@@ -1,7 +1,7 @@
 import type { IBacklogBoard } from './backlog/index.js';
 import type { IChatRenderer } from './chat-renderer/index.js';
 import type { IModelRouter } from './model-router/index.js';
-import type { PlanDefinition, DiscoveryResult } from './plan-types.js';
+import type { DiscoveryResult, PlanDefinition } from './plan-types.js';
 import { run } from './prototype/index.js';
 
 export interface ISprintPlanner {

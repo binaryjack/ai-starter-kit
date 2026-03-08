@@ -1,12 +1,12 @@
 import type {
-  BudgetExceededEvent,
-  DagEndEvent,
-  DagEventBus,
-  LaneEndEvent,
-}                               from '../dag-events/dag-events.js';
-import type { NotificationSinkOptions } from './notification-sink.types.js';
+    BudgetExceededEvent,
+    DagEndEvent,
+    DagEventBus,
+    LaneEndEvent,
+} from '../dag-events/dag-events.js'
+import type { NotificationSinkOptions } from './notification-sink.types.js'
 
-import './prototype/index.js';
+import './prototype/index.js'
 
 export interface INotificationSink {
   new(opts: NotificationSinkOptions): INotificationSink;

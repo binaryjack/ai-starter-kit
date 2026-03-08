@@ -1,8 +1,6 @@
 export { RateLimiter, type IRateLimiter } from './rate-limiter.js';
 export {
-  RateLimitExceededError,
-  type RateLimitConfig,
-  type RateLimitStatus,
-  type PrincipalState,
-  type PersistedState,
+    RateLimitExceededError, type PersistedState, type PrincipalState, type RateLimitConfig,
+    type RateLimitStatus
 } from './rate-limiter.types.js';
+

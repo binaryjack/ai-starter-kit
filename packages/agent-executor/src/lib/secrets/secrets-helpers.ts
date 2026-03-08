@@ -1,7 +1,7 @@
-import type { SecretsProvider } from './secrets.types.js';
-import { EnvSecretsProvider }   from './env-secrets-provider/env-secrets-provider.js';
-import { DotenvSecretsProvider } from './dotenv-secrets-provider/dotenv-secrets-provider.js';
 import { CompositeSecretsProvider } from './composite-secrets-provider/composite-secrets-provider.js';
+import { DotenvSecretsProvider } from './dotenv-secrets-provider/dotenv-secrets-provider.js';
+import { EnvSecretsProvider } from './env-secrets-provider/env-secrets-provider.js';
+import type { SecretsProvider } from './secrets.types.js';
 
 export function createDefaultSecretsProvider(projectRoot: string): SecretsProvider {
   return new CompositeSecretsProvider([

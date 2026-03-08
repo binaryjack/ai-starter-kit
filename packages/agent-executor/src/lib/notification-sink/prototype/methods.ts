@@ -1,15 +1,17 @@
 import type {
-  BudgetExceededEvent,
-  DagEndEvent,
-  DagEventBus,
-  LaneEndEvent,
-}                               from '../../dag-events/dag-events.js';
-import type { INotificationSink } from '../notification-sink.js';
+    BudgetExceededEvent,
+    DagEndEvent,
+    DagEventBus,
+    LaneEndEvent,
+} from '../../dag-events/dag-events.js'
 import {
-  postWebhook,
-  buildSlackDagEnd, buildSlackLaneEnd, buildSlackBudget,
-  buildTeamsDagEnd, buildTeamsLaneEnd, buildTeamsBudget,
-}                               from '../notification-sink-helpers.js';
+    buildSlackBudget,
+    buildSlackDagEnd, buildSlackLaneEnd,
+    buildTeamsBudget,
+    buildTeamsDagEnd, buildTeamsLaneEnd,
+    postWebhook,
+} from '../notification-sink-helpers.js'
+import type { INotificationSink } from '../notification-sink.js'
 
 export function attach(this: INotificationSink, bus: DagEventBus): void {
   bus.on('dag:end',         this._onDagEnd);

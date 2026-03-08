@@ -1,8 +1,8 @@
 import type { IBarrierCoordinator } from '../barrier-coordinator.js';
 import type {
-  CheckpointPayload,
-  CheckpointMode,
-  BarrierResolution,
+    BarrierResolution,
+    CheckpointMode,
+    CheckpointPayload,
 } from '../dag-types.js';
 
 const DEFAULT_TIMEOUT_MS = 5_000;

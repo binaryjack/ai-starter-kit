@@ -1,8 +1,8 @@
-import * as fs   from 'fs/promises';
-import * as path from 'path';
+import * as fs from 'fs/promises'
+import * as path from 'path'
 
-import type { IRunRegistry }  from '../run-registry.js';
-import type { RunEntry, RunPaths } from '../run-registry.types.js';
+import type { IRunRegistry } from '../run-registry.js'
+import type { RunEntry, RunPaths } from '../run-registry.types.js'
 
 export function _paths(this: IRunRegistry, runId: string): RunPaths {
   const runRoot = path.join(this._runsDir, runId);

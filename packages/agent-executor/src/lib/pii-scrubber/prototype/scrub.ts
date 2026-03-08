@@ -1,6 +1,6 @@
-import type { LLMPrompt }       from '../../llm-provider.js';
-import type { ScrubResult }     from '../pii-scrubber.types.js';
-import type { IPiiScrubber }    from '../pii-scrubber.js';
+import type { LLMPrompt } from '../../llm-provider.js'
+import type { IPiiScrubber } from '../pii-scrubber.js'
+import type { ScrubResult } from '../pii-scrubber.types.js'
 
 export function scrub(this: IPiiScrubber, text: string): ScrubResult {
   if (!this._enabled) {

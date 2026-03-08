@@ -1,8 +1,8 @@
-import * as path from 'path';
+import * as path from 'path'
 
-import type { RunEntry, RunPaths, RunStatus } from './run-registry.types.js';
+import type { RunEntry, RunPaths, RunStatus } from './run-registry.types.js'
 
-import './prototype/index.js';
+import './prototype/index.js'
 
 export interface IRunRegistry {
   new(projectRoot: string): IRunRegistry;

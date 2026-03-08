@@ -1,9 +1,9 @@
 import type {
-  BudgetExceededEvent,
-  DagEndEvent,
-  LaneEndEvent,
-}                                  from '../dag-events/dag-events.js';
-import type { NotificationSinkOptions } from './notification-sink.types.js';
+    BudgetExceededEvent,
+    DagEndEvent,
+    LaneEndEvent,
+} from '../dag-events/dag-events.js'
+import type { NotificationSinkOptions } from './notification-sink.types.js'
 
 export async function postWebhook(url: string, body: unknown): Promise<void> {
   const res = await fetch(url, {

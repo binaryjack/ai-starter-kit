@@ -1,20 +1,20 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import type { AuditEvent, AuditEntry, AuditVerificationReport } from './audit-log.types.js';
 import { sha256 } from './audit-log-helpers.js';
+import type { AuditEntry, AuditEvent, AuditVerificationReport } from './audit-log.types.js';
 import {
-  open,
-  close,
-  write,
-  runStart,
-  runEnd,
-  laneStart,
-  laneEnd,
-  checkpoint,
-  llmCall,
-  toolCall,
-  decision,
-  error,
+    checkpoint,
+    close,
+    decision,
+    error,
+    laneEnd,
+    laneStart,
+    llmCall,
+    open,
+    runEnd,
+    runStart,
+    toolCall,
+    write,
 } from './prototype/index.js';
 
 const GENESIS_HASH = '0'.repeat(64);

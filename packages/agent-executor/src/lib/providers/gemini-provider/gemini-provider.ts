@@ -1,5 +1,5 @@
-import { isAvailable, complete, stream, _buildContents } from './prototype/index.js';
 import type { IGeminiProvider } from './gemini-provider.types.js';
+import { _buildContents, complete, isAvailable, stream } from './prototype/index.js';
 
 export const GeminiProvider = function(
   this: IGeminiProvider,

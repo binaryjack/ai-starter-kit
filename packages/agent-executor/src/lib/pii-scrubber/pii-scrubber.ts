@@ -1,15 +1,15 @@
 import type {
-  LLMPrompt,
-  LLMProvider,
-  LLMResponse,
-  LLMStreamChunk,
-  ToolExecutorFn,
-}                              from '../llm-provider.js';
-import type { ScrubPattern, ScrubResult, PiiScrubberOptions } from './pii-scrubber.types.js';
+    LLMPrompt,
+    LLMProvider,
+    LLMResponse,
+    LLMStreamChunk,
+    ToolExecutorFn,
+} from '../llm-provider.js'
+import type { PiiScrubberOptions, ScrubPattern, ScrubResult } from './pii-scrubber.types.js'
 
-import './prototype/index.js';
+import './prototype/index.js'
 
-export type { ScrubPattern, ScrubResult, PiiScrubberOptions } from './pii-scrubber.types.js';
+export type { PiiScrubberOptions, ScrubPattern, ScrubResult } from './pii-scrubber.types.js'
 
 // ─── Built-in patterns ────────────────────────────────────────────────────────
 

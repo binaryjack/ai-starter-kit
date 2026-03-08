@@ -1,6 +1,6 @@
 import type { IRateLimiter } from '../rate-limiter.js';
-import { RateLimitExceededError } from '../rate-limiter.types.js';
 import type { RateLimitConfig } from '../rate-limiter.types.js';
+import { RateLimitExceededError } from '../rate-limiter.types.js';
 
 export async function assertWithinLimits(
   this: IRateLimiter,

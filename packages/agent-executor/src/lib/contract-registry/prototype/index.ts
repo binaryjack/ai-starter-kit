@@ -1,2 +1,3 @@
-export { publish, getSnapshot, getVersion, has, publishedLanes, getAll, formatStatus, clear } from './sync-methods.js';
-export { waitForVersion, waitForAll } from './async-methods.js';
+export { waitForAll, waitForVersion } from './async-methods.js';
+export { clear, formatStatus, getAll, getSnapshot, getVersion, has, publish, publishedLanes } from './sync-methods.js';
+

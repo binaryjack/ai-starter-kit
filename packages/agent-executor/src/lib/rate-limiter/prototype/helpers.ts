@@ -1,7 +1,7 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import type { IRateLimiter } from '../rate-limiter.js';
-import type { PrincipalState, PersistedState } from '../rate-limiter.types.js';
+import type { PersistedState, PrincipalState } from '../rate-limiter.types.js';
 
 export function _getState(this: IRateLimiter, principal: string): PrincipalState {
   if (!this._state[principal]) {

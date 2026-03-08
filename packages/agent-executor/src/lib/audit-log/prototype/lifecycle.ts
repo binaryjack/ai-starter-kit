@@ -1,8 +1,8 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import { iso, sha256 } from '../audit-log-helpers.js';
 import type { IAuditLog } from '../audit-log.js';
 import type { AuditEntry, AuditEvent } from '../audit-log.types.js';
-import { sha256, iso } from '../audit-log-helpers.js';
 
 export async function open(this: IAuditLog): Promise<void> {
   await fs.mkdir(path.dirname(this._filePath), { recursive: true });

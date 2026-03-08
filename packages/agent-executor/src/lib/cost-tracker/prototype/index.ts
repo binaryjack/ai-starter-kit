@@ -1,2 +1,3 @@
-export { record, totalCost, laneCost, isOverBudget, summary, formatReport } from './methods.js';
+export { formatReport, isOverBudget, laneCost, record, summary, totalCost } from './methods.js';
 export { save } from './save.js';
+

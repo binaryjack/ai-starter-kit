@@ -1,6 +1,6 @@
-import type { LLMPrompt, LLMStreamChunk, TaskType } from '../../llm-provider.js';
-import type { RoutedResponse }                       from '../model-router.types.js';
-import type { IModelRouter }                         from '../model-router.js';
+import type { LLMPrompt, LLMStreamChunk, TaskType } from '../../llm-provider.js'
+import type { IModelRouter } from '../model-router.js'
+import type { RoutedResponse } from '../model-router.types.js'
 
 export async function* streamRoute(
   this:             IModelRouter,

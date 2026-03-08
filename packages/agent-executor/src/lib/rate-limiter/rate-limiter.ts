@@ -1,18 +1,18 @@
 import * as path from 'path';
-import type { RateLimitConfig, RateLimitStatus, PrincipalState } from './rate-limiter.types.js';
 import {
-  assertWithinLimits,
-  acquireRun,
-  recordTokens,
-  getStatus,
-  reset,
-  _getState,
-  _empty,
-  _load,
-  _save,
-  _utcDate,
-  _nextMidnightMs,
+    _empty,
+    _getState,
+    _load,
+    _nextMidnightMs,
+    _save,
+    _utcDate,
+    acquireRun,
+    assertWithinLimits,
+    getStatus,
+    recordTokens,
+    reset,
 } from './prototype/index.js';
+import type { PrincipalState, RateLimitConfig, RateLimitStatus } from './rate-limiter.types.js';
 
 export interface IRateLimiter {
   new(projectRoot: string): IRateLimiter;

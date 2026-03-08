@@ -1,5 +1,5 @@
-import type { ModelFamily, TaskType, LLMResponse }  from '../llm-provider.js';
-import type { PiiScrubberOptions }                   from '../pii-scrubber/pii-scrubber.types.js';
+import type { LLMResponse, ModelFamily, TaskType } from '../llm-provider.js'
+import type { PiiScrubberOptions } from '../pii-scrubber/pii-scrubber.types.js'
 
 export interface ModelProfile {
   family:       ModelFamily;

@@ -1,12 +1,12 @@
-import type { CircuitState, CircuitBreakerOptions } from './circuit-breaker.types.js';
+import type { CircuitBreakerOptions, CircuitState } from './circuit-breaker.types.js';
 import {
-  execute,
-  stats,
-  currentState,
-  name,
-  _onSuccess,
-  _onFailure,
-  _maybeTransitionToHalfOpen,
+    _maybeTransitionToHalfOpen,
+    _onFailure,
+    _onSuccess,
+    currentState,
+    execute,
+    name,
+    stats,
 } from './prototype/index.js';
 
 export interface ICircuitBreaker {

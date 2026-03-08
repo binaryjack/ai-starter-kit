@@ -1,6 +1,6 @@
-import { RbacDeniedError }                from '../rbac.types.js';
-import type { IRbacPolicy }               from '../rbac.js';
-import type { RbacPrincipalDefinition }   from '../rbac.types.js';
+import type { IRbacPolicy } from '../rbac.js';
+import type { RbacPrincipalDefinition } from '../rbac.types.js';
+import { RbacDeniedError } from '../rbac.types.js';
 
 export function can(this: IRbacPolicy, principal: string, action: string): boolean {
   const perms = this._permissions(principal);

@@ -1,5 +1,5 @@
 import type { LLMPrompt, LLMResponse } from '../../../llm-provider.js';
-import type { IBedrockProvider, ConverseResponse } from '../bedrock-provider.types.js';
+import type { ConverseResponse, IBedrockProvider } from '../bedrock-provider.types.js';
 import { signRequest } from '../bedrock-sigv4.js';
 
 export async function complete(

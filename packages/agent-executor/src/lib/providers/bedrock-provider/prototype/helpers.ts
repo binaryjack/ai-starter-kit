@@ -1,5 +1,5 @@
-import type { IBedrockProvider, ConverseRequest } from '../bedrock-provider.types.js';
 import type { LLMPrompt } from '../../../llm-provider.js';
+import type { ConverseRequest, IBedrockProvider } from '../bedrock-provider.types.js';
 
 export function _endpoint(
   this: IBedrockProvider,

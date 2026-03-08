@@ -1,7 +1,7 @@
-import { PromptRegistry }                  from '../prompt-registry.js';
-import { loadAll, loadFile }               from './load.js';
-import { resolve, has, list, size }        from './resolve.js';
-import { _makeKey, _parseFrontmatter }     from './parse.js';
+import { PromptRegistry } from '../prompt-registry.js';
+import { loadAll, loadFile } from './load.js';
+import { _makeKey, _parseFrontmatter } from './parse.js';
+import { has, list, resolve, size } from './resolve.js';
 
 Object.assign(PromptRegistry.prototype, {
   loadAll,

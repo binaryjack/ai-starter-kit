@@ -1,9 +1,9 @@
-import * as fs   from 'fs/promises';
-import * as os   from 'os';
+import * as fs from 'fs/promises';
+import * as os from 'os';
 import * as path from 'path';
 
 import type { RbacPolicyFile, RbacPrincipalDefinition } from './rbac.types.js';
-export  { RbacDeniedError }                             from './rbac.types.js';
+export { RbacDeniedError } from './rbac.types.js';
 
 import './prototype/index.js';
 

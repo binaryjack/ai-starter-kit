@@ -1,5 +1,5 @@
-import { isAvailable, complete, stream } from './prototype/index.js';
 import type { IOllamaProvider } from './ollama-provider.types.js';
+import { complete, isAvailable, stream } from './prototype/index.js';
 
 export const OllamaProvider = function(
   this: IOllamaProvider,
