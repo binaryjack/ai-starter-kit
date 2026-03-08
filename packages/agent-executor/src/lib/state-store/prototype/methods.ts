@@ -1,7 +1,7 @@
-import * as fs from 'fs';
-import * as fsp from 'fs/promises';
-import * as path from 'path';
-import type { IStateStore } from '../state-store.js';
+import * as fs from 'fs'
+import * as fsp from 'fs/promises'
+import * as path from 'path'
+import type { IStateStore } from '../state-store.js'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type AnyStore = IStateStore<unknown>;

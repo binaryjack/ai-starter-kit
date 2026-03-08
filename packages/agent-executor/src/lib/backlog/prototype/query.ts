@@ -1,5 +1,5 @@
-import type { IBacklogBoard } from '../backlog.js';
-import type { ActorId, BacklogItem } from '../../plan-types.js';
+import type { ActorId, BacklogItem } from '../../plan-types.js'
+import type { IBacklogBoard } from '../backlog.js'
 
 export function getAll(this: IBacklogBoard): BacklogItem[] {
   return Array.from(this._items.values());

@@ -1,5 +1,5 @@
-import type { IBacklogBoard } from '../backlog.js';
-import type { BacklogItem } from '../../plan-types.js';
+import type { BacklogItem } from '../../plan-types.js'
+import type { IBacklogBoard } from '../backlog.js'
 
 export function _require(this: IBacklogBoard, id: string): BacklogItem {
   const item = this._items.get(id);

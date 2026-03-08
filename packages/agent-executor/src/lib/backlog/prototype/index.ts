@@ -1,9 +1,9 @@
-import { BacklogBoard } from '../backlog.js';
-import { add, resolve, skip } from './mutation.js';
-import { getAll, getOpen, getBlocked, getByOwner, getByStory, isReadyToExecute, progress } from './query.js';
-import { display, displayFiltered, seedStandardItems } from './display.js';
-import { save, load } from './persist.js';
-import { _require, _waitingTag } from './helpers.js';
+import { BacklogBoard } from '../backlog.js'
+import { display, displayFiltered, seedStandardItems } from './display.js'
+import { _require, _waitingTag } from './helpers.js'
+import { add, resolve, skip } from './mutation.js'
+import { load, save } from './persist.js'
+import { getAll, getBlocked, getByOwner, getByStory, getOpen, isReadyToExecute, progress } from './query.js'
 
 Object.assign((BacklogBoard as unknown as { prototype: object }).prototype, {
   add,

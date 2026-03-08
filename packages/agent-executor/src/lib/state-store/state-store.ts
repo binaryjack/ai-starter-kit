@@ -1,9 +1,9 @@
-import * as fs from 'fs';
-import * as fsp from 'fs/promises';
-import * as path from 'path';
-import './prototype/index.js';
+import * as fs from 'fs'
+import * as fsp from 'fs/promises'
+import * as path from 'path'
+import './prototype/index.js'
 
-export { fs, fsp, path };
+export { fs, fsp, path }
 
 export interface IStateStore<T> {
   _filePath: string;

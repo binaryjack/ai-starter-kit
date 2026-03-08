@@ -1,5 +1,5 @@
-import type { IBacklogBoard } from '../backlog.js';
-import type { ActorId, BacklogItemStatus, ChecklistDisplayItem } from '../../plan-types.js';
+import type { ActorId, BacklogItemStatus, ChecklistDisplayItem } from '../../plan-types.js'
+import type { IBacklogBoard } from '../backlog.js'
 
 export function display(this: IBacklogBoard, title = 'SPRINT BACKLOG', storyId?: string): void {
   const items = storyId ? this.getByStory(storyId) : this.getAll();

@@ -1,4 +1,4 @@
-import type { ISupervisedAgent } from '../supervised-agent.js';
+import type { ISupervisedAgent } from '../supervised-agent.js'
 
 export function name(this: ISupervisedAgent): string {
   return this._definition.name;

@@ -1,10 +1,8 @@
-import * as fs from 'fs/promises';
-import type { AgentDefinition } from '../agent-types.js';
-import type { SupervisorVerdict } from '../dag-types.js';
-import type { CheckpointPayload, AgentResult } from '../dag-types.js';
-import type { CheckpointMode, ContractSnapshot } from '../dag-types.js';
-import type { ModelRouter, RoutedResponse } from '../model-router/index.js';
-import './prototype/index.js';
+import * as fs from 'fs/promises'
+import type { AgentDefinition } from '../agent-types.js'
+import type { AgentResult, CheckpointMode, CheckpointPayload, ContractSnapshot, SupervisorVerdict } from '../dag-types.js'
+import type { RoutedResponse } from '../model-router/index.js'
+import './prototype/index.js'
 
 export interface ISupervisedAgent {
   _definition: AgentDefinition;

@@ -1,15 +1,15 @@
-import { runCheckStep } from '../../check-runner.js';
-import type { StepResult } from '../../check-runner.js';
+import type { StepResult } from '../../check-runner.js'
+import { runCheckStep } from '../../check-runner.js'
 import type {
-  CheckpointMode,
-  CheckpointPayload,
-  ContractSnapshot,
-  SupervisorVerdict,
-  AgentResult,
-} from '../../dag-types.js';
-import type { ModelRouter, RoutedResponse } from '../../model-router/index.js';
-import type { ISupervisedAgent } from '../supervised-agent.js';
-import { EscalationError } from '../supervised-agent.js';
+    AgentResult,
+    CheckpointMode,
+    CheckpointPayload,
+    ContractSnapshot,
+    SupervisorVerdict,
+} from '../../dag-types.js'
+import type { RoutedResponse } from '../../model-router/index.js'
+import type { ISupervisedAgent } from '../supervised-agent.js'
+import { EscalationError } from '../supervised-agent.js'
 
 export async function* run(
   this: ISupervisedAgent,

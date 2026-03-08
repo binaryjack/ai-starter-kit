@@ -1,7 +1,7 @@
-import * as path from 'path';
-import type { ChatRenderer } from '../chat-renderer.js';
-import type { BacklogItem, ActorId, BacklogItemStatus, ChecklistDisplayItem } from '../plan-types.js';
-import './prototype/index.js';
+import * as path from 'path'
+import type { ChatRenderer } from '../chat-renderer.js'
+import type { ActorId, BacklogItem, BacklogItemStatus } from '../plan-types.js'
+import './prototype/index.js'
 
 export interface IBacklogBoard {
   _renderer: ChatRenderer;

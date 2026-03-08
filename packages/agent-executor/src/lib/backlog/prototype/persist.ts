@@ -1,7 +1,7 @@
-import * as path from 'path';
-import { StateStore } from '../../state-store/index.js';
-import type { IBacklogBoard } from '../backlog.js';
-import type { BacklogItem } from '../../plan-types.js';
+import * as path from 'path'
+import type { BacklogItem } from '../../plan-types.js'
+import { StateStore } from '../../state-store/index.js'
+import type { IBacklogBoard } from '../backlog.js'
 
 export function save(this: IBacklogBoard): void {
   new StateStore<BacklogItem[]>(path.join(this._stateDir, 'backlog.json')).saveSync(Array.from(this._items.values()));
