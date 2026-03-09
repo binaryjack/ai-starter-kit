@@ -1,1 +1,2 @@
-export { createOidcMiddleware } from './oidc/index.js'
+export { createOidcMiddleware } from './oidc/index.js';
+
