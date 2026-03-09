@@ -37,7 +37,7 @@ AI Agencee is free and open-source software. Sponsorship keeps the project maint
 
 ## Legal & Tax Notes (Switzerland)
 
-All sponsorship funds are received by **Piana Tadeo** (sole individual), domiciled in Switzerland.
+All sponsorship funds are received by **AI Agencee**, based in Switzerland.
 
 - Sponsorship payments are **taxable income** for the recipient under Swiss federal and cantonal tax law (DBG Art. 16; cantonal equivalents)
 - **VAT (MWST)**: sponsorship is currently below the CHF 100,000 annual threshold for mandatory Swiss VAT registration. No VAT is added to GitHub Sponsors payments at this time. This will be updated if/when VAT registration applies.

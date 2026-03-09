@@ -26,7 +26,7 @@ This project adopts the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.m
 
 ## Legal Framework (Switzerland)
 
-AI Agencee is developed and maintained by **Piana Tadeo**, domiciled in Switzerland.
+AI Agencee is developed and maintained by **AI Agencee**, based in Switzerland.
 
 ### Applicable law
 
@@ -42,7 +42,7 @@ Contributing to this project does **not** create an employment relationship (Arb
 
 ### Intellectual property
 
-The project is released under the **MIT License** (see [LICENSE](LICENSE)). Copyright © 2026 Piana Tadeo.
+The project is released under the **MIT License** (see [LICENSE](LICENSE)). Copyright © 2026 AI Agencee.
 
 ---
 
@@ -50,7 +50,7 @@ The project is released under the **MIT License** (see [LICENSE](LICENSE)). Copy
 
 By submitting a Pull Request you agree to the following **Contributor License Agreement (CLA)**, which is governed by Swiss law (OR) and the URG/LDA:
 
-> **Grant of licence**: You grant Piana Tadeo and the AI Agencee project a perpetual, worldwide, non-exclusive, royalty-free, irrevocable licence to reproduce, prepare derivative works of, publicly display, publicly perform, sublicense, and distribute your contributions and such derivative works, under the terms of the MIT License or any future open-source licence adopted by this project.
+> **Grant of licence**: You grant the AI Agencee project a perpetual, worldwide, non-exclusive, royalty-free, irrevocable licence to reproduce, prepare derivative works of, publicly display, publicly perform, sublicense, and distribute your contributions and such derivative works, under the terms of the MIT License or any future open-source licence adopted by this project.
 >
 > **Moral rights**: To the extent permitted by applicable law (URG Art. 11), you waive or agree not to assert any moral rights you may have in your contributions against the project.
 >
