@@ -1,0 +1,44 @@
+name: Deploy env vars to server
+
+# Run manually from the Actions tab — or trigger on push to main if desired.
+on:
+  workflow_dispatch:
+    inputs:
+      service:
+        description: 'Docker Compose service to restart after env update'
+        required: false
+        default: 'showcase-web'
+
+jobs:
+  update-env:
+    name: Push secrets → server .env → restart container
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Write RESEND vars to server .env and restart
+        uses: appleboy/ssh-action@v1
+        with:
+          host:     ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key:      ${{ secrets.SERVER_SSH_KEY }}
+          # Each line is intentionally idempotent:
+          # sed removes any existing entry, then appends the new value.
+          # This means re-running the workflow is always safe.
+          script: |
+            set -euo pipefail
+            ENV_FILE=/home/tadeo/ai-agencee/.env
+
+            # ── Resend ────────────────────────────────────────────────────────
+            sed -i '/^RESEND_API_KEY=/d'      "$ENV_FILE"
+            sed -i '/^CONTACT_TO_EMAIL=/d'    "$ENV_FILE"
+            sed -i '/^CONTACT_FROM_EMAIL=/d'  "$ENV_FILE"
+
+            echo "RESEND_API_KEY=${{ secrets.RESEND_KEY }}"             >> "$ENV_FILE"
+            echo "CONTACT_TO_EMAIL=hello@ai-agencee.com"                >> "$ENV_FILE"
+            echo "CONTACT_FROM_EMAIL=contact@ai-agencee.com"            >> "$ENV_FILE"
+
+            # ── Restart service to pick up new env ────────────────────────────
+            cd /home/tadeo/ai-agencee
+            docker compose up -d --no-deps ${{ inputs.service || 'showcase-web' }}
+            echo "✅ Done — ${{ inputs.service || 'showcase-web' }} restarted with updated env."

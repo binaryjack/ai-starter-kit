@@ -146,5 +146,8 @@ vite.config.ts.timestamp-*
 # Private local workspace (git-ignored clone of private repo, never tracked here)
 _private/
 
+# Secret key files — never commit these
+*.key
+
 # Agent executor runtime data (generated checkpoints, runs, results - not source)
 .agents/
