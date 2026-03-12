@@ -3,12 +3,12 @@
  * Tests the complete indexing workflow end-to-end
  */
 
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import { createCodebaseIndexer } from '../indexer/create-codebase-indexer';
-import { createCodebaseIndexStore } from '../storage/create-codebase-index-store';
-import { createParserRegistry } from '../parsers/create-parser-registry';
-import { createTypeScriptParser } from '../parsers/create-typescript-parser';
+import * as fs from 'fs/promises'
+import * as path from 'path'
+import { createCodebaseIndexer } from '../indexer/create-codebase-indexer'
+import { createParserRegistry } from '../parsers/create-parser-registry'
+import { createTypeScriptParser } from '../parsers/create-typescript-parser'
+import { createCodebaseIndexStore } from '../storage/create-codebase-index-store'
 
 describe('E14 Code Assistant Integration', () => {
   let testProjectRoot: string;

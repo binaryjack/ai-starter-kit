@@ -182,7 +182,8 @@ CodebaseIndexer.prototype._discoverFiles = async function(this: CodebaseIndexerI
     nodir: true
   });
   
-  return files;
+  // Normalize paths to use forward slashes for cross-platform consistency
+  return files.map(file => file.replace(/\\/g, '/'));
 };
 
 CodebaseIndexer.prototype._detectChanges = async function(this: CodebaseIndexerInstance, files: string[]): Promise<string[]> {

@@ -199,12 +199,15 @@ CodebaseIndexStore.prototype.upsertDependencies = async function(this: CodebaseI
 };
 
 CodebaseIndexStore.prototype.getFileByPath = async function(this: CodebaseIndexStoreInstance, filePath: string): Promise<any> {
+  // Normalize path to use forward slashes for cross-platform consistency
+  const normalizedPath = filePath.replace(/\\/g, '/');
+  
   const stmt = this._db!.prepare(`
     SELECT * FROM codebase_files
     WHERE project_id = ? AND file_path = ?
   `);
   
-  return stmt.get(this._projectId, filePath);
+  return stmt.get(this._projectId, normalizedPath);
 };
 
 CodebaseIndexStore.prototype.getFileByHash = async function(this: CodebaseIndexStoreInstance, hash: string): Promise<any> {

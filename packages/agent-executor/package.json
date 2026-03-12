@@ -28,7 +28,8 @@
     "prepublishOnly": "pnpm run build",
     "test": "jest",
     "lint": "tsc --noEmit",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "demo:code-assistant": "node scripts/demo-code-assistant.js"
   },
   "files": [
     "dist",
