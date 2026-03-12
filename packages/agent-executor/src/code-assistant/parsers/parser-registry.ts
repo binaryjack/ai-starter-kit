@@ -3,8 +3,8 @@
  * Maps file extensions to appropriate parsers
  */
 
-import * as path from 'path';
-import type { Parser, ParserRegistryOptions } from './parser-protocol.types';
+import * as path from 'path'
+import type { Parser, ParserRegistryOptions } from './parser-protocol.types'
 
 export type ParserRegistryInstance = {
   _parsers: Map<string, Parser>;

@@ -3,10 +3,10 @@
  * Manages files, symbols, dependencies, and embeddings
  */
 
-import Database from 'better-sqlite3';
-import * as path from 'path';
-import * as fs from 'fs/promises';
-import type { CodebaseIndexStoreOptions } from './codebase-index-store.types';
+import Database from 'better-sqlite3'
+import * as fs from 'fs/promises'
+import * as path from 'path'
+import type { CodebaseIndexStoreOptions } from './codebase-index-store.types'
 
 export type CodebaseIndexStoreInstance = {
   _db: Database.Database | null;

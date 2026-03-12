@@ -2,10 +2,10 @@
  * Unit tests for CodebaseIndexStore
  */
 
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import type { CodebaseIndexStoreInstance } from './codebase-index-store.types';
-import { createCodebaseIndexStore } from './create-codebase-index-store';
+import * as fs from 'fs/promises'
+import * as path from 'path'
+import type { CodebaseIndexStoreInstance } from './codebase-index-store.types'
+import { createCodebaseIndexStore } from './create-codebase-index-store'
 
 describe('CodebaseIndexStore', () => {
   let store: CodebaseIndexStoreInstance;

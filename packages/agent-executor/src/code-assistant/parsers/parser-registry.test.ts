@@ -2,9 +2,9 @@
  * Unit tests for ParserRegistry
  */
 
-import { createParserRegistry } from './create-parser-registry';
-import { createTypeScriptParser } from './create-typescript-parser';
-import type { ParserRegistryInstance } from './parser-registry';
+import { createParserRegistry } from './create-parser-registry'
+import { createTypeScriptParser } from './create-typescript-parser'
+import type { ParserRegistryInstance } from './parser-registry'
 
 describe('ParserRegistry', () => {
   let registry: ParserRegistryInstance;

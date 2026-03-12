@@ -2,8 +2,8 @@
  * Unit tests for TypeScriptParser
  */
 
-import { createTypeScriptParser } from './create-typescript-parser';
-import type { TypeScriptParserInstance } from './typescript-parser';
+import { createTypeScriptParser } from './create-typescript-parser'
+import type { TypeScriptParserInstance } from './typescript-parser'
 
 describe('TypeScriptParser', () => {
   let parser: TypeScriptParserInstance;

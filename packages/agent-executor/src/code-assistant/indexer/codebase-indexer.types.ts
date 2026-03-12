@@ -2,9 +2,9 @@
  * Type definitions for Codebase Indexer
  */
 
-import type { FileParseResult } from '../parsers/parser-protocol.types';
+import type { FileParseResult } from '../parsers/parser-protocol.types'
 
-export type { FileParseResult } from '../parsers/parser-protocol.types';
+export type { FileParseResult } from '../parsers/parser-protocol.types'
 
 export type CodebaseIndexerOptions = {
   projectRoot: string;
