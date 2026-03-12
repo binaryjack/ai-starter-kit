@@ -5,10 +5,10 @@
     "outDir": "dist",
     "types": ["node", "jest"],
     "paths": {
-      "@ai-agencee/engine": ["../agent-executor/src/index.ts"],
-      "@ai-agencee/engine/code-assistant": ["../agent-executor/src/code-assistant/index.ts"],
-      "@ai-agencee/engine/code-assistant/storage": ["../agent-executor/src/code-assistant/storage/index.ts"],
-      "@ai-agencee/engine/code-assistant/parsers": ["../agent-executor/src/code-assistant/parsers/index.ts"]
+      "@ai-agencee/engine": ["../agent-executor/dist/index.d.ts"],
+      "@ai-agencee/engine/code-assistant": ["../agent-executor/dist/code-assistant/index.d.ts"],
+      "@ai-agencee/engine/code-assistant/storage": ["../agent-executor/dist/code-assistant/storage/index.d.ts"],
+      "@ai-agencee/engine/code-assistant/parsers": ["../agent-executor/dist/code-assistant/parsers/index.d.ts"]
     }
   },
   "include": ["bin", "src", "tests"],
