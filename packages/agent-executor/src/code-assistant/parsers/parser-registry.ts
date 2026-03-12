@@ -10,7 +10,7 @@ export type ParserRegistryInstance = {
   _parsers: Map<string, Parser>;
   register(language: string, parser: Parser): ParserRegistryInstance;
   registerParser(language: string, parser: Parser): void;
-  getParser(filePathOrLanguage: string): Parser | null;
+  getParser(filePathOrLanguage: string): Parser | undefined;
   supports(language: string): boolean;
   hasParser(language: string): boolean;
   getSupportedLanguages(): string[];
@@ -75,8 +75,13 @@ ParserRegistry.prototype.parseFile = async function(this: ParserRegistryInstance
   };
 };
 
-ParserRegistry.prototype.getParser = function(this: ParserRegistryInstance, filePathOrLanguage: string): Parser | null {
-  // Detect language from file extension
+ParserRegistry.prototype.getParser = function(this: ParserRegistryInstance, filePathOrLanguage: string): Parser | undefined {
+  // Check if it's already a language name
+  if (this._parsers.has(filePathOrLanguage)) {
+    return this._parsers.get(filePathOrLanguage);
+  }
+  
+  // Otherwise, try to detect language from file extension
   const ext = path.extname(filePathOrLanguage).slice(1);
   
   const langMap: Record<string, string> = {
@@ -93,13 +98,7 @@ ParserRegistry.prototype.getParser = function(this: ParserRegistryInstance, file
   
   const language = langMap[ext] || ext;
   
-  const parser = this._parsers.get(language);
-  if (!parser) {
-    // Return null - caller will skip this file
-    return null;
-  }
-  
-  return parser;
+  return this._parsers.get(language);
 };
 
 ParserRegistry.prototype.supports = function(this: ParserRegistryInstance, language: string): boolean {
