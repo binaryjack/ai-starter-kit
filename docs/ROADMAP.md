@@ -100,6 +100,7 @@
 | E11 | Jira/Linear sync | `lib/issue-sync.ts` | ✅ | Subscribes to `DagEventBus`; creates Jira issues via REST (`Bearer` Basic Auth) and Linear issues via GraphQL on `dag:end` failure/partial |
 | E12 | Slack/Teams notifications | `lib/notification-sink.ts` | ✅ | Incoming webhook (Slack + Teams); `failuresOnly`, `notifyLaneEnd`, `notifyBudget` options; zero SDK dependencies |
 | E13 | Run advisor (auto-tune) | `lib/run-advisor.ts` → integrated in `dag-orchestrator.ts` | ✅ | 6 recommendation types; configurable thresholds; `ai-kit advise` CLI |
+| E14 | Code Assistant (indexer) | `code-assistant/indexer/codebase-indexer.ts` + `storage/codebase-index-store.ts` + `parsers/typescript-parser.ts` | ✅ | High-performance codebase indexing: 449 files in 1.03s; symbol extraction (classes, functions, interfaces); dependency graph analysis; SQLite + FTS5 full-text search; incremental indexing; cross-platform path normalization; 581 tests (575 unit + 6 integration) |
 
 ---
 

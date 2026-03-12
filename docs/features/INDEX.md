@@ -44,6 +44,7 @@ Welcome to the comprehensive feature documentation for ai-agencee/ai-kit. This d
 - [Demo Mode & Getting Started](./25-demo-mode.md) — Zero-API-key introduction and pnpm demo
 - [JSON Schema & IDE Support](./26-json-schema.md) — IntelliSense for DAG and agent files
 - [Secrets Management](./27-secrets-management.md) — Vault integration and scoped secrets
+- [Code Assistant (E14)](./28-code-assistant.md) — High-performance codebase indexing, symbol extraction, and dependency analysis
 
 ---
 

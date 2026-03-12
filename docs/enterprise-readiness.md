@@ -1,10 +1,10 @@
 # Enterprise Readiness Roadmap
 
-Status as of latest commit. All **E1–E13** items are shipped and actively enforced at runtime.
+Status as of latest commit. All **E1–E14** items are shipped and actively enforced at runtime.
 
 ---
 
-## Completed (E1–E13)
+## Completed (E1–E14)
 
 | ID | Feature | File(s) | Status |
 |----|---------|---------|--------|
@@ -21,8 +21,9 @@ Status as of latest commit. All **E1–E13** items are shipped and actively enfo
 | E11 | Jira/Linear sync | `agent-executor/src/lib/issue-sync.ts` | ✅ `IssueSync` subscribes to `DagEventBus`; creates issues on `dag:end` failure/partial via Jira REST or Linear GraphQL |
 | E12 | Slack/Teams notifications | `agent-executor/src/lib/notification-sink.ts` | ✅ `NotificationSink` fires on `dag:end`; Slack incoming webhook + Teams incoming webhook; zero external SDK |
 | E13 | Run advisor (auto-tune) | `agent-executor/src/lib/run-advisor.ts` → **integrated into** `dag-orchestrator.js` post-execution | ✅ 6 recommendation types: HIGH_RETRY_RATE, SLOW_LANE, FLAKY_LANE, DOWNGRADE_MODEL, BUDGET_SUGGESTION, DAG_UNSTABLE |
+| E14 | Code Assistant (indexer) | `agent-executor/src/code-assistant/indexer/codebase-indexer.ts` + `storage/codebase-index-store.ts` + `parsers/` | ✅ | Production-ready code intelligence: 449 files/1s indexing; symbol extraction; dependency graph; SQLite+FTS5; incremental updates; 581 tests (100% pass); cross-platform |
 
-**Test coverage**: 519 tests passing across all packages (36 test files).
+**Test coverage**: 588 tests passing across all packages (37 test files).
 
 ---
 
