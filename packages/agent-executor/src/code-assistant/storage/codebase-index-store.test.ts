@@ -117,7 +117,7 @@ describe('CodebaseIndexStore', () => {
       });
 
       const file = await store.getFileByPath('src/test.ts');
-      expect(file.content_hash).toBe('hash2');
+      expect(file.file_hash).toBe('hash2');
       expect(file.size_bytes).toBe(2048);
     });
   });
