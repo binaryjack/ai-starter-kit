@@ -486,4 +486,40 @@ describe('CodebaseIndexer', () => {
       expect(stats.totalDependencies).toBe(result.dependenciesTracked);
     });
   });
+
+  describe('parallel parsing and FTS rebuild', () => {
+    it('produces correct symbol count with more files than concurrency', async () => {
+      for (let i = 0; i < 6; i++) {
+        await fs.writeFile(
+          path.join(testDir, `extra-${i}.ts`),
+          `export function extra${i}() { return ${i}; }`
+        );
+      }
+
+      const result = await indexer.indexProject({
+        incremental: false,
+        languages: ['typescript']
+      });
+
+      // 4 original + 6 new = 10
+      expect(result.filesIndexed).toBe(10);
+      expect(result.symbolsExtracted).toBeGreaterThan(0);
+    });
+
+    it('FTS is searchable after indexProject completes', async () => {
+      await indexer.indexProject({ incremental: false, languages: ['typescript'] });
+
+      const row = indexStore._db!.prepare(
+        `SELECT COUNT(*) as count FROM codebase_symbols_fts WHERE codebase_symbols_fts MATCH 'main'`
+      ).get() as { count: number };
+      expect(row.count).toBeGreaterThan(0);
+    });
+
+    it('symbol counts match across repeated parallel runs', async () => {
+      const r1 = await indexer.indexProject({ incremental: false, languages: ['typescript'] });
+      const r2 = await indexer.indexProject({ incremental: false, languages: ['typescript'] });
+      expect(r1.symbolsExtracted).toBe(r2.symbolsExtracted);
+      expect(r1.filesIndexed).toBe(r2.filesIndexed);
+    });
+  });
 });

@@ -219,6 +219,7 @@ describe('CodebaseIndexStore', () => {
       ];
 
       await store.upsertSymbols(fileId, symbols);
+      store.rebuildFts();
 
       // Query FTS index
       const result = store._db!.prepare(`
@@ -424,6 +425,99 @@ describe('CodebaseIndexStore', () => {
       expect(() => {
         store._db!.prepare('SELECT 1').get();
       }).toThrow();
+    });
+  });
+
+  describe('rebuildFts', () => {
+    let fileId: number;
+
+    beforeEach(async () => {
+      fileId = await store.upsertFile({
+        filePath: 'src/fts-test.ts',
+        hash: 'fts-hash',
+        language: 'typescript',
+        sizeBytes: 256
+      });
+    });
+
+    it('makes symbols searchable via FTS after upsertSymbols', async () => {
+      await store.upsertSymbols(fileId, [
+        { name: 'rebuildTarget', kind: 'function', lineStart: 1, lineEnd: 3, isExported: true }
+      ]);
+
+      const before = store._db!.prepare(
+        `SELECT COUNT(*) as count FROM codebase_symbols_fts WHERE codebase_symbols_fts MATCH 'rebuildTarget'`
+      ).get() as { count: number };
+      expect(before.count).toBe(0);
+
+      store.rebuildFts();
+
+      const after = store._db!.prepare(
+        `SELECT COUNT(*) as count FROM codebase_symbols_fts WHERE codebase_symbols_fts MATCH 'rebuildTarget'`
+      ).get() as { count: number };
+      expect(after.count).toBeGreaterThan(0);
+    });
+
+    it('is idempotent — multiple rebuilds produce correct results', async () => {
+      await store.upsertSymbols(fileId, [
+        { name: 'idempotentFunc', kind: 'function', lineStart: 1, lineEnd: 3, isExported: true }
+      ]);
+      store.rebuildFts();
+      store.rebuildFts();
+
+      const result = store._db!.prepare(
+        `SELECT COUNT(*) as count FROM codebase_symbols_fts WHERE codebase_symbols_fts MATCH 'idempotentFunc'`
+      ).get() as { count: number };
+      expect(result.count).toBeGreaterThan(0);
+    });
+  });
+
+  describe('semanticSearch', () => {
+    let fileId: number;
+
+    beforeEach(async () => {
+      fileId = await store.upsertFile({
+        filePath: 'src/semantic.ts',
+        hash: 'sem-hash',
+        language: 'typescript',
+        sizeBytes: 512
+      });
+      await store.upsertSymbols(fileId, [
+        { name: 'authCheck', kind: 'function', lineStart: 1,  lineEnd: 5,  docstring: 'Verify user auth',    isExported: true },
+        { name: 'loadData',  kind: 'function', lineStart: 10, lineEnd: 15, docstring: 'Fetch data from API', isExported: true }
+      ]);
+      store.rebuildFts();
+      const symbols = await store.getSymbolsByFile(fileId);
+      for (const sym of symbols) {
+        const vec = sym.name === 'authCheck'
+          ? new Float32Array([1, 0, 0])
+          : new Float32Array([0, 1, 0]);
+        await store.storeEmbedding(sym.id, vec);
+      }
+    });
+
+    it('returns top-K results ordered by cosine score', async () => {
+      const results = await store.semanticSearch(new Float32Array([1, 0, 0]), 2);
+      expect(results).toHaveLength(2);
+      expect(results[0].name).toBe('authCheck');
+      expect(results[0].score).toBeCloseTo(1, 5);
+      expect(results[1].name).toBe('loadData');
+    });
+
+    it('pre-filters candidates by ftsQuery when provided', async () => {
+      const results = await store.semanticSearch(new Float32Array([0.5, 0.5, 0]), 10, 'authCheck');
+      expect(results).toHaveLength(1);
+      expect(results[0].name).toBe('authCheck');
+    });
+
+    it('returns all embedded symbols when ftsQuery is omitted', async () => {
+      const results = await store.semanticSearch(new Float32Array([0.5, 0.5, 0]), 10);
+      expect(results).toHaveLength(2);
+    });
+
+    it('respects topK limit', async () => {
+      const results = await store.semanticSearch(new Float32Array([1, 0, 0]), 1);
+      expect(results).toHaveLength(1);
     });
   });
 });

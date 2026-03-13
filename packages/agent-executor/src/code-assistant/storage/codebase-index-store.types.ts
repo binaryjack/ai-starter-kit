@@ -21,6 +21,10 @@ export type CodebaseIndexStoreInstance = {
   getFileByPath(filePath: string): Promise<any>;
   getFileByHash(hash: string): Promise<any>;
   getAllFiles(): Promise<any[]>;
+  getSymbolsByFile(fileId: number): Promise<{ id: number; name: string; docstring: string | null; is_exported: number }[]>;
+  storeEmbedding(symbolId: number, vector: Float32Array): Promise<void>;
+  semanticSearch(queryVector: Float32Array, topK: number, ftsQuery?: string): Promise<import('../embeddings/embedding-provider.types').SemanticSearchResult[]>;
+  rebuildFts(): void;
   query(sql: string, params?: any[]): Promise<any>;
   getStats(): Promise<{ totalFiles: number; totalSymbols: number; totalDependencies: number }>;
   close(): Promise<void>;

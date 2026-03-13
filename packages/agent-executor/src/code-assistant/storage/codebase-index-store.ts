@@ -29,7 +29,8 @@ export type CodebaseIndexStoreInstance = {
   getAllFiles(): Promise<any[]>;
   getSymbolsByFile(fileId: number): Promise<{ id: number; name: string; docstring: string | null; is_exported: number }[]>;
   storeEmbedding(symbolId: number, vector: Float32Array): Promise<void>;
-  semanticSearch(queryVector: Float32Array, topK: number): Promise<import('../embeddings/embedding-provider.types').SemanticSearchResult[]>;
+  semanticSearch(queryVector: Float32Array, topK: number, ftsQuery?: string): Promise<import('../embeddings/embedding-provider.types').SemanticSearchResult[]>;
+  rebuildFts(): void;
   query(sql: string, params?: any[]): Promise<any>;
   getStats(): Promise<{ totalFiles: number; totalSymbols: number; totalDependencies: number }>;
   close(): Promise<void>;
@@ -158,18 +159,29 @@ CodebaseIndexStore.prototype.storeEmbedding = async function(
 CodebaseIndexStore.prototype.semanticSearch = async function(
   this: CodebaseIndexStoreInstance,
   queryVector: Float32Array,
-  topK: number
+  topK: number,
+  ftsQuery?: string
 ): Promise<import('../embeddings/embedding-provider.types').SemanticSearchResult[]> {
   type Row = {
     id: number; name: string; kind: string; signature: string | null;
     docstring: string | null; file_path: string; embedding: Buffer
   }
-  const rows = this._db!.prepare(`
-    SELECT s.id, s.name, s.kind, s.signature, s.docstring, f.file_path, s.embedding
-    FROM codebase_symbols s
-    JOIN codebase_files f ON s.file_id = f.id
-    WHERE f.project_id = ? AND s.embedding IS NOT NULL
-  `).all(this._projectId) as Row[]
+
+  const rows: Row[] = ftsQuery
+    ? this._db!.prepare(`
+        SELECT s.id, s.name, s.kind, s.signature, s.docstring, f.file_path, s.embedding
+        FROM codebase_symbols_fts fts
+        JOIN codebase_symbols s ON fts.rowid = s.id
+        JOIN codebase_files f ON s.file_id = f.id
+        WHERE f.project_id = ? AND fts MATCH ? AND s.embedding IS NOT NULL
+        LIMIT 200
+      `).all(this._projectId, ftsQuery) as Row[]
+    : this._db!.prepare(`
+        SELECT s.id, s.name, s.kind, s.signature, s.docstring, f.file_path, s.embedding
+        FROM codebase_symbols s
+        JOIN codebase_files f ON s.file_id = f.id
+        WHERE f.project_id = ? AND s.embedding IS NOT NULL
+      `).all(this._projectId) as Row[]
 
   const scored = rows.map(row => {
     const vec = new Float32Array(row.embedding.buffer, row.embedding.byteOffset, row.embedding.byteLength / 4)
@@ -179,6 +191,10 @@ CodebaseIndexStore.prototype.semanticSearch = async function(
   })
 
   return scored.sort((a, b) => b.score - a.score).slice(0, topK)
+};
+
+CodebaseIndexStore.prototype.rebuildFts = function(this: CodebaseIndexStoreInstance): void {
+  this._db!.exec("INSERT INTO codebase_symbols_fts(codebase_symbols_fts) VALUES('rebuild')");
 };
 
 CodebaseIndexStore.prototype.upsertFile = async function(this: CodebaseIndexStoreInstance, fileData: any): Promise<number> {
@@ -233,9 +249,6 @@ CodebaseIndexStore.prototype.upsertSymbols = async function(this: CodebaseIndexS
   });
   
   transaction(symbols);
-  
-  // Update FTS index
-  this._db!.exec('INSERT INTO codebase_symbols_fts(codebase_symbols_fts) VALUES(\'rebuild\')');
 };
 
 CodebaseIndexStore.prototype.upsertDependencies = async function(this: CodebaseIndexStoreInstance, dependencies: any[]): Promise<void> {

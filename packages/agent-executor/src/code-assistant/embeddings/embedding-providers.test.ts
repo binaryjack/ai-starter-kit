@@ -152,3 +152,50 @@ describe('OllamaEmbeddingProvider', () => {
     await expect(p.embed(['test'])).rejects.toThrow('Ollama embeddings error')
   })
 })
+
+// ── OllamaEmbeddingProvider concurrent embed ──────────────────────────────────
+
+describe('OllamaEmbeddingProvider concurrent embed', () => {
+  beforeEach(() => { jest.resetAllMocks() })
+
+  it('issues all requests for the full input', async () => {
+    global.fetch = jest.fn().mockImplementation(() =>
+      Promise.resolve({ ok: true, json: async () => ({ embedding: [0.1, 0.2] }) })
+    ) as any
+
+    const p = new OllamaEmbeddingProvider()
+    const result = await p.embed(['a', 'b', 'c', 'd', 'e'])
+
+    expect(global.fetch).toHaveBeenCalledTimes(5)
+    expect(result).toHaveLength(5)
+    result.forEach(r => expect(r).toBeInstanceOf(Float32Array))
+  })
+
+  it('preserves result ordering across chunk boundaries', async () => {
+    global.fetch = jest.fn().mockImplementation((_url: string, opts: any) => {
+      const idx = parseInt((JSON.parse(opts.body) as { prompt: string }).prompt, 10)
+      return Promise.resolve({ ok: true, json: async () => ({ embedding: [idx / 10] }) })
+    }) as any
+
+    const p = new OllamaEmbeddingProvider()
+    const result = await p.embed(['0', '1', '2', '3', '4', '5'])
+
+    expect(result).toHaveLength(6)
+    for (let i = 0; i < 6; i++) {
+      expect(result[i]).toBeInstanceOf(Float32Array)
+      expect(result[i][0]).toBeCloseTo(i / 10, 5)
+    }
+  })
+
+  it('propagates error from any request in the chunk', async () => {
+    global.fetch = jest.fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ embedding: [0.1] }) })
+      .mockResolvedValueOnce({
+        ok: false, status: 503, statusText: 'Service Unavailable',
+        json: async () => ({ error: 'overloaded' }),
+      }) as any
+
+    const p = new OllamaEmbeddingProvider()
+    await expect(p.embed(['ok', 'fail'])).rejects.toThrow('Ollama embeddings error')
+  })
+})

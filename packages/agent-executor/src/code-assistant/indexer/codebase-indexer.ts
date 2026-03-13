@@ -6,6 +6,7 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs/promises';
 import { glob } from 'glob';
+import * as os from 'os';
 import * as path from 'path';
 import type { CodebaseIndexerInstance, CodebaseIndexerOptions, DependencyGraph, FileParseResult, IndexProjectOptions, IndexResult } from './codebase-indexer.types';
 
@@ -92,18 +93,21 @@ CodebaseIndexer.prototype.indexProject = async function(this: CodebaseIndexerIns
     };
   }
   
-  // Phase 3: Parse files in parallel
-  const parseResults = [];
-  const errors = [];
-  
-  for (const filePath of filesToIndex) {
-    try {
-      const result = await this._parseFile(filePath);
-      if (result) {
-        parseResults.push(result);
+  // Phase 3: Parse files concurrently (capped at CPU count)
+  const parseResults: FileParseResult[] = [];
+  const errors: string[] = [];
+
+  const concurrency = os.cpus().length;
+  for (let i = 0; i < filesToIndex.length; i += concurrency) {
+    const chunk = filesToIndex.slice(i, i + concurrency);
+    const settled = await Promise.allSettled(chunk.map(fp => this._parseFile(fp)));
+    for (let j = 0; j < settled.length; j++) {
+      const outcome = settled[j];
+      if (outcome.status === 'fulfilled') {
+        if (outcome.value) parseResults.push(outcome.value);
+      } else {
+        errors.push(`${chunk[j]}: ${(outcome.reason as any)?.message || 'Unknown error'}`);
       }
-    } catch (error: any) {
-      errors.push(`${filePath}: ${error?.message || 'Unknown error'}`);
     }
   }
   
@@ -123,7 +127,12 @@ CodebaseIndexer.prototype.indexProject = async function(this: CodebaseIndexerIns
     totalSymbols += result.symbols.length;
     fileIdMap.set(result.filePath, fileId);
   }
-  
+
+  // Rebuild FTS once after all symbols are committed (not per-file)
+  if (parseResults.length > 0) {
+    this._indexStore.rebuildFts();
+  }
+
   // Phase 5: Build dependency graph
   const depGraph = await this._buildDepGraph(parseResults);
   

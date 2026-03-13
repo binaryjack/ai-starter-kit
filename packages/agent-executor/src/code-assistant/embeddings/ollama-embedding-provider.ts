@@ -11,6 +11,7 @@ import type { EmbeddingProvider, EmbeddingVector, OllamaEmbeddingProviderOptions
 export type OllamaEmbeddingProviderInstance = EmbeddingProvider & {
   _model:   string
   _baseURL: string
+  _embedOne(text: string): Promise<EmbeddingVector>
 }
 
 export const OllamaEmbeddingProvider = function(
@@ -32,30 +33,40 @@ export const OllamaEmbeddingProvider = function(
   })
 } as unknown as new (options?: OllamaEmbeddingProviderOptions) => OllamaEmbeddingProviderInstance
 
+OllamaEmbeddingProvider.prototype._embedOne = async function(
+  this: OllamaEmbeddingProviderInstance,
+  text: string
+): Promise<EmbeddingVector> {
+  const response = await fetch(`${this._baseURL}/api/embeddings`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: this._model, prompt: text }),
+  })
+
+  if (!response.ok) {
+    let message = response.statusText
+    try {
+      const body = await response.json() as { error?: string }
+      message = body.error ?? message
+    } catch { /* ignore json parse error */ }
+    throw new Error(`Ollama embeddings error ${response.status}: ${message}`)
+  }
+
+  const body = await response.json() as { embedding: number[] }
+  return new Float32Array(body.embedding)
+}
+
 OllamaEmbeddingProvider.prototype.embed = async function(
   this: OllamaEmbeddingProviderInstance,
   texts: string[]
 ): Promise<EmbeddingVector[]> {
-  const results: EmbeddingVector[] = []
+  const CONCURRENCY = 4
+  const results: EmbeddingVector[] = new Array(texts.length)
 
-  for (const text of texts) {
-    const response = await fetch(`${this._baseURL}/api/embeddings`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: this._model, prompt: text }),
-    })
-
-    if (!response.ok) {
-      let message = response.statusText
-      try {
-        const body = await response.json() as { error?: string }
-        message = body.error ?? message
-      } catch { /* ignore json parse error */ }
-      throw new Error(`Ollama embeddings error ${response.status}: ${message}`)
-    }
-
-    const body = await response.json() as { embedding: number[] }
-    results.push(new Float32Array(body.embedding))
+  for (let i = 0; i < texts.length; i += CONCURRENCY) {
+    const chunk = texts.slice(i, i + CONCURRENCY)
+    const vecs = await Promise.all(chunk.map(t => this._embedOne(t)))
+    vecs.forEach((v, j) => { results[i + j] = v })
   }
 
   return results
