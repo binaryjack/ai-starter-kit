@@ -38,7 +38,7 @@ export async function runBenchmark(options: BenchmarkOptions = {}): Promise<void
     ? new Set(options.providers.split(',').map((p) => p.trim()))
     : null;
 
-  const allProviders = router.registeredProviders();
+  const allProviders = router.registeredProviders() as unknown as string[];
   const providerNames = filterProviders
     ? allProviders.filter((p: string) => filterProviders.has(p))
     : allProviders;

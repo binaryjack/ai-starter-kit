@@ -1,4 +1,4 @@
-import type { IModelRouter, PlanPhase, PlanResult } from '@ai-agencee/engine'
+import type { PlanPhase, PlanResult } from '@ai-agencee/engine'
 import { ModelRouter, PlanOrchestrator } from '@ai-agencee/engine'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -19,7 +19,7 @@ export const runPlan = async (options: PlanOptions): Promise<void> => {
     process.exit(1);
   }
 
-  let modelRouter: IModelRouter | undefined;
+  let modelRouter: typeof ModelRouter | undefined;
   try {
     const routerConfigPath = options.modelRouterConfig
       ?? path.join(agentsBaseDir, 'model-router.json');

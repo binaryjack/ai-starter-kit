@@ -77,7 +77,7 @@ async function runFtsSearch(
      ORDER BY rank
      LIMIT ?`,
     params
-  )) as SymbolRow[];
+  )) as unknown as SymbolRow[];
 
   printResults(rows, term, json);
 }
