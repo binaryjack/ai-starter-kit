@@ -34,7 +34,7 @@ export const runPlan = async (options: PlanOptions): Promise<void> => {
 
     await router.autoRegister();
 
-    if (router.registeredProviders.length > 0) {
+    if (router.registeredProviders().length > 0) {
       modelRouter = router;
     }
   } catch {
