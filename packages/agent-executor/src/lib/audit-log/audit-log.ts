@@ -22,6 +22,10 @@ const GENESIS_HASH = '0'.repeat(64);
 
 export interface IAuditLog {
   new(projectRoot: string, runId: string, auditDir?: string): IAuditLog;
+  // Static methods
+  read(projectRoot: string, runId: string): Promise<AuditEntry[]>;
+  listRuns(projectRoot: string): Promise<string[]>;
+  verify(projectRoot: string, runId: string): Promise<AuditVerificationReport>;
   // Private state
   _filePath:  string;
   _runId:     string;
