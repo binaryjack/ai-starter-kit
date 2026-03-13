@@ -5,7 +5,7 @@
 
 ## Overview
 
-ai-agencee ships **six specialist agent roles**, each with a configured model tier, a dedicated supervisor prompt, and a JSON agent definition. You can compose them freely in a DAG or define your own roles by adding a JSON agent file.
+ai-agencee ships **eight specialist agent roles**, each with a configured model tier, a dedicated supervisor prompt, and a JSON agent definition. You can compose them freely in a DAG or define your own roles by adding a JSON agent file.
 
 ---
 
@@ -19,6 +19,8 @@ ai-agencee ships **six specialist agent roles**, each with a configured model ti
 | 04 | Frontend | `agents/04-frontend.agent.json` | Sonnet | Component design, routing, state management review |
 | 05 | Testing | `agents/05-testing.agent.json` | Sonnet | Unit/integration test coverage analysis |
 | 06 | E2E | `agents/06-e2e.agent.json` | Sonnet | End-to-end flow verification and Playwright scaffolding |
+| 07 | Supervisor | `agents/*.supervisor.json` | Sonnet | Post-lane quality gate — PASS / RETRY / HANDOFF / ESCALATE verdicts |
+| 08 | Codernic (E14) | Built-in module | — | Codebase indexing, symbol & semantic search, dependency tracking |
 
 ---
 

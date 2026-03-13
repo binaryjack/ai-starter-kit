@@ -3,7 +3,7 @@
 > **Status**: ✅ Production-ready  
 > **Category**: Enterprise Features  
 > **ID**: E14  
-> **Test Coverage**: 656 tests (648 unit + 8 integration), 100% pass rate
+> **Test Coverage**: 635 tests passing across all packages
 
 ---
 
@@ -81,7 +81,7 @@ Codernic is a codebase-aware coding agent that gives every LLM a structural unde
 - **Path Normalization**: Automatic Windows ↔ Unix conversion
 - **File System API**: Works with Node `fs` promises
 - **Database Portability**: SQLite files work everywhere
-- **Test Validation**: All 581 tests pass on Windows/Linux/macOS
+- **Test Validation**: All 635 tests pass on Windows/Linux/macOS
 
 ---
 
@@ -565,8 +565,7 @@ pnpm jest --coverage code-assistant
 
 ### Test Coverage
 
-- ✅ **581 tests passing** (575 unit + 6 integration)
-- ✅ **100% pass rate** (7 edge cases marked as TODO for future work)
+- ✅ **635 tests passing** across all packages (agent-executor 579, mcp 26, cli 30)
 - ✅ **Cross-platform validated** (Windows, Linux, macOS)
 - ✅ **Performance regression tests** (indexing speed benchmarks)
 

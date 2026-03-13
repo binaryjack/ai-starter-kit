@@ -1,6 +1,6 @@
 # Resilience Patterns: Retry & Circuit Breaker
 
-**Status**: ⏳ In Progress | **Priority**: P1 | **Roadmap**: G-10, G-11, G-12  
+**Status**: ✅ Implemented | **Priority**: P1 | **Roadmap**: G-10, G-11, G-12  
 **Related**: Model Routing, Event Bus
 
 ## Overview

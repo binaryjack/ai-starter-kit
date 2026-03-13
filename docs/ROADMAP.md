@@ -24,7 +24,7 @@
 |----|---------|---------------|--------|-------|
 | C-01 | DAG Orchestration | `agent-executor/src/lib/dag-orchestrator.ts` | ✅ | Parallel lane execution, dependency resolution, barrier sync, retry budget, cost tracking |
 | C-02 | Lane Executor | `agent-executor/src/lib/lane-executor.ts` | ✅ | Per-lane LLM loop, check runner integration, checkpoint → supervisor → verdict cycle |
-| C-03 | Intra-Lane Supervisor | `agent-executor/src/lib/intra-supervisor.ts` | ✅ | PASS / RETRY / HANDOFF / ESCALATE / APPROVE verdicts |
+| C-03 | Intra-Lane Supervisor | `agent-executor/src/lib/intra-supervisor.ts` | ✅ | APPROVE / RETRY / HANDOFF / ESCALATE verdicts |
 | C-04 | DAG Event Bus | `agent-executor/src/lib/dag-events.ts` | ✅ | Typed EventEmitter; `dag:start`, `dag:end`, `lane:start`, `lane:end`, `checkpoint:complete`, `llm:call`, `token:stream`, `budget:exceeded` |
 | C-05 | Agent Types & Roles | `agent-executor/src/lib/agent-types.ts` | ✅ | BA, Architecture, Backend, Frontend, Testing, E2E; supervisor JSON schema |
 | C-06 | Model Router | `agent-executor/src/lib/model-router.ts` + `model-router-factory.ts` | ✅ | JSON-driven tier routing (haiku/sonnet/opus); cost-per-token accounting; per-lane overrides |

@@ -30,6 +30,7 @@ pnpx @ai-agencee/cli <command>
 | `ai-kit data:export` | Export tenant run data (GDPR Art. 20) |
 | `ai-kit data:delete` | Delete tenant run data (GDPR Art. 17) |
 | `ai-kit data:list-tenants` | List all known tenant IDs |
+| `ai-kit code` | Index, search, and watch the codebase (Codernic / E14) |
 | `ai-kit mcp` | Start the MCP server |
 
 ---
@@ -200,6 +201,67 @@ ai-kit data:list-tenants
 # → acme-corp
 # → beta-org
 ```
+
+---
+
+## `ai-kit code`
+
+Codbase indexing, search, and watch commands powered by the Codernic (E14) module.  
+See [Feature 28: Codernic (E14)](./28-code-assistant.md) for full API and architecture details.
+
+### `ai-kit code index`
+
+Index (or incrementally re-index) the current project into a local SQLite store.
+
+```bash
+ai-kit code index
+ai-kit code index --project /path/to/project
+ai-kit code index --full              # force full re-index (skip incremental)
+ai-kit code index --push              # upload index to cloud dashboard
+```
+
+| Flag | Description |
+|------|-------------|
+| `--project <path>` | Root of the project to index (default: `cwd`) |
+| `--full` | Discard existing index and rebuild from scratch |
+| `--push` | Sync the local index to the cloud dashboard |
+
+### `ai-kit code search <term>`
+
+Search the index for symbols, files, or cross-references.
+
+```bash
+ai-kit code search AuthService
+ai-kit code search "createUser" --semantic
+ai-kit code search "@ai-agencee/engine" --type import
+```
+
+| Flag | Description |
+|------|-------------|
+| `--semantic` | Use vector embeddings for semantic (meaning-based) search |
+| `--type <kind>` | Filter by symbol type: `symbol`, `file`, `import` |
+| `--limit <n>` | Maximum number of results (default: `20`) |
+
+### `ai-kit code stats`
+
+Print a health summary of the current index.
+
+```bash
+ai-kit code stats
+```
+
+Outputs file count, symbol count, dependency count, index size, and last-updated timestamp.
+
+### `ai-kit code watch`
+
+Continuously re-index on file changes (useful during active development).
+
+```bash
+ai-kit code watch
+ai-kit code watch --project /path/to/project
+```
+
+Uses native file-system events — no polling. Press `Ctrl+C` to stop.
 
 ---
 
