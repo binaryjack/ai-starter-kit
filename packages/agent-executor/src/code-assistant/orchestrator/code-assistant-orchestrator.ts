@@ -10,12 +10,12 @@
  * This file intentionally contains NO business logic — only state initialisation.
  */
 
-import type { IModelRouter }              from '../../lib/model-router/index.js';
+import type { IModelRouter } from '../../lib/model-router/index.js';
 import type {
-  CodeAssistantOptions,
-  ExecutionRequest,
-  ExecutionResult,
-  FilePatch,
+    CodeAssistantOptions,
+    ExecutionRequest,
+    ExecutionResult,
+    FilePatch,
 } from '../code-assistant-orchestrator.types.js';
 import type { CodebaseIndexStoreInstance } from '../storage/codebase-index-store.types.js';
 

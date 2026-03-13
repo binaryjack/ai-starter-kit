@@ -9,8 +9,8 @@
 import './prototype/index.js';
 
 export {
-  CodeAssistantOrchestrator,
-  createCodeAssistantOrchestrator,
+    CodeAssistantOrchestrator,
+    createCodeAssistantOrchestrator
 } from './code-assistant-orchestrator.js';
 
 export type { ICodeAssistantOrchestrator } from './code-assistant-orchestrator.js';

@@ -66,7 +66,7 @@ async function runFtsSearch(
   if (kind) params.push(kind);
   params.push(limit);
 
-  const rows: SymbolRow[] = await store.query(
+  const rows = (await store.query(
     `SELECT s.name, s.kind, s.line_start, s.line_end, s.signature, f.file_path
      FROM codebase_symbols_fts fts
      JOIN codebase_symbols s ON s.id = fts.rowid
@@ -77,7 +77,7 @@ async function runFtsSearch(
      ORDER BY rank
      LIMIT ?`,
     params
-  );
+  )) as SymbolRow[];
 
   printResults(rows, term, json);
 }

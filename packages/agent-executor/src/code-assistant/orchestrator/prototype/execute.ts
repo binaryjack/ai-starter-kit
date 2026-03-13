@@ -27,9 +27,9 @@ import * as path from 'path';
 import type { TaskType } from '../../../lib/llm-provider.js';
 
 import type {
-  ExecutionRequest,
-  ExecutionResult,
-  FilePatch,
+    ExecutionRequest,
+    ExecutionResult,
+    FilePatch,
 } from '../../code-assistant-orchestrator.types.js';
 import type { CodebaseIndexStoreInstance } from '../../storage/codebase-index-store.types.js';
 import type { ICodeAssistantOrchestrator } from '../code-assistant-orchestrator.js';

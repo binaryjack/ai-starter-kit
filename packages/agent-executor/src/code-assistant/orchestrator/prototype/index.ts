@@ -11,11 +11,11 @@
  */
 
 import { CodeAssistantOrchestrator } from '../code-assistant-orchestrator.js';
-import { _buildRouter }    from './build-router.js';
-import { execute }         from './execute.js';
-import { _gatherContext }  from './gather-context.js';
-import { _openStore }      from './open-store.js';
-import { _parsePatches }   from './parse-patches.js';
+import { _buildRouter } from './build-router.js';
+import { execute } from './execute.js';
+import { _gatherContext } from './gather-context.js';
+import { _openStore } from './open-store.js';
+import { _parsePatches } from './parse-patches.js';
 
 Object.assign(
   (CodeAssistantOrchestrator as unknown as { prototype: object }).prototype,

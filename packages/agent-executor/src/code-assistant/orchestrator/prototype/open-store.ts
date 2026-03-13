@@ -8,8 +8,8 @@
 
 import * as path from 'path';
 
-import { createCodebaseIndexStore } from '../../storage/create-codebase-index-store.js';
 import type { CodebaseIndexStoreInstance } from '../../storage/codebase-index-store.types.js';
+import { createCodebaseIndexStore } from '../../storage/create-codebase-index-store.js';
 
 import type { ICodeAssistantOrchestrator } from '../code-assistant-orchestrator.js';
 

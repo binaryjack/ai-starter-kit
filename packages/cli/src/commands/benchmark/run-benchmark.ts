@@ -38,10 +38,10 @@ export async function runBenchmark(options: BenchmarkOptions = {}): Promise<void
     ? new Set(options.providers.split(',').map((p) => p.trim()))
     : null;
 
-  const providerNames = (filterProviders
-    ? router.registeredProviders.filter((p) => filterProviders.has(p))
-    : router.registeredProviders
-  );
+  const allProviders = router.registeredProviders();
+  const providerNames = filterProviders
+    ? allProviders.filter((p: string) => filterProviders.has(p))
+    : allProviders;
 
   if (providerNames.length === 0) {
     console.error('❌  No registered providers match the filter (check API keys).');

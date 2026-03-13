@@ -1,4 +1,4 @@
-import type { PlanPhase, PlanResult } from '@ai-agencee/engine';
+import type { IModelRouter, PlanPhase, PlanResult } from '@ai-agencee/engine';
 import { ModelRouter, PlanOrchestrator } from '@ai-agencee/engine';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -19,7 +19,7 @@ export const runPlan = async (options: PlanOptions): Promise<void> => {
     process.exit(1);
   }
 
-  let modelRouter: ModelRouter | undefined;
+  let modelRouter: IModelRouter | undefined;
   try {
     const routerConfigPath = options.modelRouterConfig
       ?? path.join(agentsBaseDir, 'model-router.json');
@@ -47,7 +47,7 @@ export const runPlan = async (options: PlanOptions): Promise<void> => {
   console.log(`  Agents dir   : ${agentsBaseDir}`);
   console.log(`  Start phase  : ${startFrom}`);
   if (modelRouter) {
-    console.log(`  LLM provider : ${modelRouter.registeredProviders.join(', ')} (${modelRouter.defaultProvider})`);
+    console.log(`  LLM provider : ${modelRouter.registeredProviders().join(', ')} (${modelRouter.defaultProvider()})`);
   } else {
     console.log(`  LLM provider : none — heuristic mode`);
     if (!options.provider) {
